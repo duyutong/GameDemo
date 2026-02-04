@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,33 +12,28 @@ public class UIWindow_Bag : UIWindowComponentBase
     public UIPanel_Bag_ButtonGroup buttonGroup;
 
     private Action<ItemConfig> action;
-    private void Start()
+
+    protected override void OnOpen()
     {
-        OnOpen();
+        base.OnOpen();
+        bTRuntimeComp.SendMsgToBTRuntime("UIWindow_Bag_Open");
+        OnInit();
     }
-    protected override void Init()
+    protected override void OnInit()
     {
-        base.Init();
-        BTRuntimeController.ins.SendToTag("UIWindow_Bag_Init",EBTState.½øÈë);
-        //bTRuntimeComp.SendMsgToBTRuntime("UIWindow_Bag_Init");
+        base.OnInit();
         action += descriptionView.SetData;
         action += buttonGroup.SetUseButtonShowOrHide;
         itemView.SetItemBroadcastEvent(action);
         itemView.Initialize(testItems, itemPrefab);
+
+        buttonGroup.InitUI();
     }
 
-    protected override void Uninit()
+    protected override void OnUninit()
     {
         action = null;
         itemView.Uninitialize();
-        base.Uninit();
-    }
-    public void OnItemSelect() 
-    {
-        bTRuntimeComp.SendMsgToBTRuntime("UIWindow_Bag_ItemSelect");
-    }
-    public void OnItemUnselect()
-    {
-        bTRuntimeComp.SendMsgToBTRuntime("UIWindow_Bag_ItemUnselect");
+        base.OnUninit();
     }
 }

@@ -11,6 +11,11 @@ public class BTRuntimeController : MonoBehaviour
     {
         _ins = this;
     }
+    private void OnDestroy()
+    {
+        _ins = null;
+        bTRuntimes.Clear();
+    }
     public static void AddRuntime(BTRuntime bTRuntime, Action<int> callBack)
     {
         int index = bTRuntime.GetHashCode();

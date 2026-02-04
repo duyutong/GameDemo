@@ -15,7 +15,6 @@ public class ToggleGroupState : TiggerBaseState
     public System.Boolean exit;
     public System.Boolean isAnyTogglesOn;
     public System.Boolean isAllTogglesOff;
-    public BTTargetObject toggleGroupObj;
     public System.Boolean enter;
 
     public override BTStateObject stateObj
@@ -33,7 +32,6 @@ public class ToggleGroupState : TiggerBaseState
                 _stateObj.exit = exit;
                 _stateObj.isAnyTogglesOn = isAnyTogglesOn;
                 _stateObj.isAllTogglesOff = isAllTogglesOff;
-                _stateObj.toggleGroupObj = toggleGroupObj;
                 _stateObj.enter = enter;
             }
             return _stateObj;
@@ -55,8 +53,7 @@ public class ToggleGroupState : TiggerBaseState
             exit = _stateObj.exit;
             isAnyTogglesOn = _stateObj.isAnyTogglesOn;
             isAllTogglesOff = _stateObj.isAllTogglesOff;
-            toggleGroupObj = _stateObj.toggleGroupObj;
-            enter = _stateObj.enter;
+            enter = _stateObj.enter; triggerTag = _stateObj.triggerTag;
         }
     }
     protected override ESetFieldValueResult SetFieldValue(string fieldName, object value)
@@ -66,7 +63,6 @@ public class ToggleGroupState : TiggerBaseState
         else if (StringComparer.Ordinal.Equals(fieldName, "exit") && value is System.Boolean exitValue) exit = exitValue;
         else if (StringComparer.Ordinal.Equals(fieldName, "isAnyTogglesOn") && value is System.Boolean isAnyTogglesOnValue) isAnyTogglesOn = isAnyTogglesOnValue;
         else if (StringComparer.Ordinal.Equals(fieldName, "isAllTogglesOff") && value is System.Boolean isAllTogglesOffValue) isAllTogglesOff = isAllTogglesOffValue;
-        else if (StringComparer.Ordinal.Equals(fieldName, "toggleGroupObj") && value is BTTargetObject toggleGroupObjValue) toggleGroupObj = toggleGroupObjValue;
         else if (StringComparer.Ordinal.Equals(fieldName, "enter") && value is System.Boolean enterValue) enter = enterValue;
         else return ESetFieldValueResult.Fail;
 
@@ -82,18 +78,22 @@ public class ToggleGroupState : TiggerBaseState
         exit = _stateObj.exit;
         isAnyTogglesOn = _stateObj.isAnyTogglesOn;
         isAllTogglesOff = _stateObj.isAllTogglesOff;
-        toggleGroupObj = _stateObj.toggleGroupObj;
-        enter = _stateObj.enter;
+        enter = _stateObj.enter; triggerTag = _stateObj.triggerTag;
     }
     #endregion
+
+    private Toggle toggle;
     private ToggleGroup toggleGroup;
     public override void OnEnter()
     {
         base.OnEnter();
+        if (runtime != null)
+        {
+            if (toggle == null) toggle = runtime.gameObject.GetComponent<Toggle>();
+            if (toggleGroup == null && toggle != null) toggleGroup = toggle.group;
+        }
 
-        if (toggleGroup == null) toggleGroup = toggleGroupObj.target.GetComponent<ToggleGroup>();
-
-        bool isCanExecute = enter && runtime != null;
+        bool isCanExecute = enter && runtime != null && toggleGroup != null;
         if (isCanExecute) OnExecute();
         else OnRefresh();
     }
@@ -143,7 +143,6 @@ public class ToggleGroupStateObj : BTTiggerStateObject
     public System.Boolean exit;
     public System.Boolean isAnyTogglesOn;
     public System.Boolean isAllTogglesOff;
-    public BTTargetObject toggleGroupObj;
     public System.Boolean enter;
 }
 #endregion

@@ -122,7 +122,7 @@ public class ClearAtlas : EditorWindow
         spriteAtlas.Clear();
         selectAltas.Clear();
 
-        EditorUtilityExtensions.CheckRes(config.outputDirectory, ".spriteatlas", (path) =>
+        EditorUtilityExtensions.CheckRes(config.outputDirectory, ".spriteatlasv2", (path) =>
         {
             string shortPath = EditorUtilityExtensions.ToShortPath(path);
             SpriteAtlas atlas = AssetDatabase.LoadAssetAtPath<SpriteAtlas>(shortPath);

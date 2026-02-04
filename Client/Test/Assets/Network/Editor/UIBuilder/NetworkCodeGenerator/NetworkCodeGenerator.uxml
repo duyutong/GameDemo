@@ -1,0 +1,37 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:Template name="ProtocolEditor" src="project://database/Assets/Network/Editor/UIBuilder/ProtocolEditor/ProtocolEditor.uxml?fileID=9197481963319205126&amp;guid=cdb925008f6b4dc4d8aea554d3ddf83e&amp;type=3#ProtocolEditor"/>
+    <Style src="project://database/Assets/Network/Editor/UIBuilder/NetworkCodeGenerator/NetworkCodeGenerator.uss?fileID=7433441132597879392&amp;guid=2374f9c9de5bb624ca8135af0236d27b&amp;type=3#NetworkCodeGenerator"/>
+    <Style src="project://database/Assets/Network/Editor/UIBuilder/CompalexBlockItem/CompalexBlockItem.uss?fileID=7433441132597879392&amp;guid=d92447d4fae3b8e4f8ac3e6c4da6a478&amp;type=3#CompalexBlockItem"/>
+    <ui:VisualElement style="flex-direction: row; height: 442px; position: relative; left: 0; top: 0; right: 0; bottom: 0;">
+        <ui:VisualElement style="width: 50%;">
+            <uie:Toolbar style="height: 25px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; align-items: center; justify-content: center; border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; border-left-width: 2px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 2px;">
+                <ui:DropdownField label="connectionType" index="-1" choices="System.Collections.Generic.List`1[System.String]" name="ConnectionType" style="width: 194px; flex-direction: row;"/>
+                <ui:TextField picking-mode="Ignore" label="protocolName" name="ProtocolName" style="width: 294px; justify-content: space-between; white-space: nowrap; translate: 0 0; transform-origin: right bottom; margin-right: 0;">
+                    <ui:Button display-tooltip-when-elided="true" name="ProtoSearchButton" style="width: 20px; height: 20px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; background-image: url(&quot;project://database/Assets/Network/Editor/UIBuilder/NetworkCodeGenerator/search-dark@2x.png?fileID=2800000&amp;guid=222135cec58221e4f8822a508ad983de&amp;type=3#search-dark@2x&quot;); border-top-left-radius: 0; border-bottom-left-radius: 0; border-left-width: 0; display: flex;"/>
+                </ui:TextField>
+            </uie:Toolbar>
+            <uie:Toolbar name="Toolbar" style="justify-content: flex-end; border-left-width: 2px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 2px; border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px;">
+                <ui:VisualElement style="flex-direction: row; width: 100%;">
+                    <ui:Button text="AddEvent" display-tooltip-when-elided="true" name="AddEventButton"/>
+                    <ui:Button text="ClientScript" display-tooltip-when-elided="true" name="OpenClientScript"/>
+                    <ui:Button text="ServerScript" display-tooltip-when-elided="true" name="OpenServerScript"/>
+                </ui:VisualElement>
+                <ui:Button text="SaveAll" display-tooltip-when-elided="true" name="saveButton" style="width: 200px;"/>
+            </uie:Toolbar>
+            <ui:ScrollView name="EventScrollView" style="height: initial;"/>
+        </ui:VisualElement>
+        <GridBackView focusable="true" style="height: initial; width: 50%; flex-direction: column-reverse; align-items: stretch; position: relative; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px;">
+            <ui:VisualElement style="width: 100%; height: 100%; align-items: center; justify-content: center; cursor: initial;">
+                <ui:Instance template="ProtocolEditor" name="ModelEditor" style="width: 520px; height: initial;">
+                    <ui:VisualElement style="flex-direction: row; justify-content: flex-start; width: initial; height: initial; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; top: 3px;">
+                        <ui:TextField picking-mode="Ignore" label="ModelName" name="ModelTextField" style="background-color: rgb(88, 88, 88); border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 0; border-bottom-right-radius: 0; width: 180px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: initial; flex-direction: row;"/>
+                        <ui:Button display-tooltip-when-elided="true" name="SearchButton" style="width: 20px; height: 20px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; background-image: url(&quot;project://database/Assets/Network/Editor/UIBuilder/NetworkCodeGenerator/search-dark@2x.png?fileID=2800000&amp;guid=222135cec58221e4f8822a508ad983de&amp;type=3#search-dark@2x&quot;); border-top-left-radius: 0; border-bottom-left-radius: 0; border-left-width: 0;"/>
+                        <ui:Button text="Apply" display-tooltip-when-elided="true" name="ModelApplyButton" style="width: 65px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; height: initial;"/>
+                        <ui:Button text="Clear" display-tooltip-when-elided="true" name="ModelClearButton" style="width: 65px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; height: initial; background-image: none;"/>
+                        <ui:Button text="Remove" display-tooltip-when-elided="true" name="ModelRemoveButton" style="width: 65px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; height: initial; background-image: none;"/>
+                    </ui:VisualElement>
+                </ui:Instance>
+            </ui:VisualElement>
+        </GridBackView>
+    </ui:VisualElement>
+</ui:UXML>

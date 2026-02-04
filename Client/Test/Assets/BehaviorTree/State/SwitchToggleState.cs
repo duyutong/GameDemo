@@ -1,4 +1,4 @@
-
+﻿
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,8 +16,6 @@ public class SwitchToggleState : TiggerBaseState
     public System.Boolean isOn;
     public System.Boolean isOff;
     public System.Boolean enter;
-    public BTTargetObject toggleObj;
-    public BTTargetObject toggleGroupObj;
 
     public override BTStateObject stateObj
     {
@@ -32,11 +30,9 @@ public class SwitchToggleState : TiggerBaseState
                 _stateObj.interruptTag = interruptTag;
 
                 _stateObj.exit = exit;
-                _stateObj.IsOn = isOn;
-                _stateObj.IsOff = isOff;
+                _stateObj.isOn = isOn;
+                _stateObj.isOff = isOff;
                 _stateObj.enter = enter;
-                _stateObj.toggleObj = toggleObj;
-                _stateObj.toggleGroupObj = toggleGroupObj;
             }
             return _stateObj;
         }
@@ -55,11 +51,9 @@ public class SwitchToggleState : TiggerBaseState
             output = _stateObj.output;
 
             exit = _stateObj.exit;
-            isOn = _stateObj.IsOn;
-            isOff = _stateObj.IsOff;
-            enter = _stateObj.enter;
-            toggleObj = _stateObj.toggleObj;
-            toggleGroupObj = _stateObj.toggleGroupObj; triggerTag = _stateObj.triggerTag;
+            isOn = _stateObj.isOn;
+            isOff = _stateObj.isOff;
+            enter = _stateObj.enter; triggerTag = _stateObj.triggerTag;
         }
     }
     protected override ESetFieldValueResult SetFieldValue(string fieldName, object value)
@@ -67,11 +61,9 @@ public class SwitchToggleState : TiggerBaseState
         if (StringComparer.Ordinal.Equals(fieldName, default)) return ESetFieldValueResult.Succ;
 
         else if (StringComparer.Ordinal.Equals(fieldName, "exit") && value is System.Boolean exitValue) exit = exitValue;
-        else if (StringComparer.Ordinal.Equals(fieldName, "isOn") && value is System.Boolean IsOnValue) isOn = IsOnValue;
-        else if (StringComparer.Ordinal.Equals(fieldName, "isOff") && value is System.Boolean IsOffValue) isOff = IsOffValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "isOn") && value is System.Boolean isOnValue) isOn = isOnValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "isOff") && value is System.Boolean isOffValue) isOff = isOffValue;
         else if (StringComparer.Ordinal.Equals(fieldName, "enter") && value is System.Boolean enterValue) enter = enterValue;
-        else if (StringComparer.Ordinal.Equals(fieldName, "toggleObj") && value is BTTargetObject toggleObjValue) toggleObj = toggleObjValue;
-        else if (StringComparer.Ordinal.Equals(fieldName, "toggleGroupObj") && value is BTTargetObject toggleGroupObjValue) toggleGroupObj = toggleGroupObjValue;
         else return ESetFieldValueResult.Fail;
 
         return ESetFieldValueResult.Succ;
@@ -84,31 +76,32 @@ public class SwitchToggleState : TiggerBaseState
         interruptTag = _stateObj.interruptTag;
 
         exit = _stateObj.exit;
-        isOn = _stateObj.IsOn;
-        enter = _stateObj.enter;
-        toggleObj = _stateObj.toggleObj;
-        toggleGroupObj = _stateObj.toggleGroupObj; triggerTag = _stateObj.triggerTag;
+        isOn = _stateObj.isOn;
+        isOff = _stateObj.isOff;
+        enter = _stateObj.enter; triggerTag = _stateObj.triggerTag;
     }
     #endregion
+
     private bool isExecuted;
     private Toggle toggle;
     private ToggleGroup toggleGroup;
-
     public override void OnEnter()
     {
         base.OnEnter();
-        isExecuted = false;
-        if (toggleGroup == null)
+
+        if (runtime != null)
         {
-            toggleGroup = toggleGroupObj.target.GetComponent<ToggleGroup>();
-            toggleGroup.allowSwitchOff = true;
-        }
-        if (toggle == null)
-        {
-            toggle = toggleObj.target.GetComponent<Toggle>();
-            toggle.SetIsOnWithoutNotify(false);
-            toggle.group = toggleGroup;
-            toggle.onValueChanged.AddListener((_isOn) => { OnExecute(); });
+            if (toggle == null)
+            {
+                toggle = runtime.gameObject.GetComponent<Toggle>();
+                toggle.SetIsOnWithoutNotify(false);
+                toggle.onValueChanged.AddListener((_isOn) => { OnExecute(); });
+            }
+            if (toggleGroup == null && toggle != null)
+            {
+                toggleGroup = toggle.group;
+            }
+
         }
     }
     public override void OnRefresh()
@@ -149,10 +142,8 @@ public class SwitchToggleStateObj : BTTiggerStateObject
     public EBTState state;
 
     public System.Boolean exit;
-    public System.Boolean IsOn;
-    public System.Boolean IsOff;
+    public System.Boolean isOn;
+    public System.Boolean isOff;
     public System.Boolean enter;
-    public BTTargetObject toggleObj;
-    public BTTargetObject toggleGroupObj;
 }
 #endregion

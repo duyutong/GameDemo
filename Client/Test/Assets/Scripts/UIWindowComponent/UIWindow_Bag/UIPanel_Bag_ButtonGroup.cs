@@ -1,5 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using static EnumDefinitions;
 
 public class UIPanel_Bag_ButtonGroup : MonoBehaviour
 {
@@ -7,6 +8,10 @@ public class UIPanel_Bag_ButtonGroup : MonoBehaviour
     public Button btnUse;
     public Button btnSubmit;
 
+    public void InitUI() 
+    {
+        bTRuntimeComp.SendMsgToBTRuntime("UIWindow_Bag_Open");
+    }
     public void SetUseButtonShowOrHide(ItemConfig itemConfig)
     {
         bool isClue = (EItemType)itemConfig.EItemType == EItemType.Clue;

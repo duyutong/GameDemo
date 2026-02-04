@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,6 +39,7 @@ public class UIPanel_Bag_ItemView : MonoBehaviour
             int index = i;
             int itemId = items[index];
             GameObject itemPrefab = Instantiate(prefab, slotList[index]);
+            itemPrefab.SetActive(true);
             itemPrefab.transform.Reset();
             itemPrefab.GetComponent<UIItem_Bag_Item>().SetData(itemId);
             itemPrefab.GetComponent<UIItem_Bag_Item>().ItemBroadcast = itemBroadcast;

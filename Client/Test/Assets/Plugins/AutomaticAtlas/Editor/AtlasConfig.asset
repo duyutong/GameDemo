@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cc5fae89c9612140ba6dda56919ddfd, type: 3}
   m_Name: AtlasConfig
   m_EditorClassIdentifier: Assembly-CSharp-Editor-firstpass::AtlasConfig
-  outputDirectory: 
+  outputDirectory: Assets/AddressableAssets/Art/Atlas
   packType: 0
-  checkAssetsPath: 
+  checkAssetsPath: Assets/AddressableAssets/Prefabs
   maxSize: 1024
   atlasName_Comm: Common
   atlasName_Comm_big: Common_big
-  checkTexturesPath: 
+  checkTexturesPath: Assets/Texture

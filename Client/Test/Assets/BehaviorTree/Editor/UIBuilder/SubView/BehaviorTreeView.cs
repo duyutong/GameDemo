@@ -8,7 +8,8 @@ using UnityEngine.UIElements;
 using BTBaseNode = BehaviorTreeBaseNode;
 using Edge = UnityEditor.Experimental.GraphView.Edge;
 
-public class BehaviorTreeView : GraphView
+[UxmlElement]
+public partial class BehaviorTreeView : GraphView
 {
     public Action<BTBaseNode> onSelectAction;
     public Action onUnselectAction;
@@ -24,7 +25,7 @@ public class BehaviorTreeView : GraphView
     private BTRuntime runtime;
     private Color oriColor;
 
-    public new class UxmlFactory : UxmlFactory<BehaviorTreeView, UxmlTraits> { }
+    //public new class UxmlFactory : UxmlFactory<BehaviorTreeView, UxmlTraits> { }
 
     /// <summary>
     /// 构造函数，初始化BehaviorTreeView
@@ -45,6 +46,25 @@ public class BehaviorTreeView : GraphView
         {
             SearchWindow.Open(new SearchWindowContext(contentRect.screenMousePosition), menu);
         };
+        menu.OnCreateSearchTreeAction = () => 
+        {
+            List<SearchTreeEntry> entries = new List<SearchTreeEntry>();
+            entries.Add(new SearchTreeGroupEntry(new GUIContent("创建新节点")));
+
+            entries.Add(new SearchTreeGroupEntry(new GUIContent("装饰器")) { level = 1 });
+            List<SearchTreeEntry> decorators = GetEntries<DecoratorNode>(2);
+            entries.AddRange(decorators);
+
+            entries.Add(new SearchTreeGroupEntry(new GUIContent("触发器")) { level = 1 });
+            List<SearchTreeEntry> triggers = GetEntries<TriggerNode>(2);
+            entries.AddRange(triggers);
+
+            entries.Add(new SearchTreeGroupEntry(new GUIContent("行为节点")) { level = 1 });
+            List<SearchTreeEntry> states = GetEntries<BehaviorNode>(2);
+            entries.AddRange(states);
+
+            return entries;
+        };
         menu.onSelectEntryHandler += (entry, context) =>
         {
             Type type = Type.GetType(entry.name);
@@ -58,6 +78,37 @@ public class BehaviorTreeView : GraphView
         serializeGraphElements += OnSerializeGraphElements;         //处理复制信息的序列化
         unserializeAndPaste += OnUnserializeAndPaste;               //处理粘贴信息的反序列化以及对象生成
         canPasteSerializedData += OnCanPasteSerializedData;         //处理对是否激活粘贴按钮的判断
+    }
+    /// <summary>
+    /// 获取指定类型的搜索树条目列表
+    /// </summary>
+    /// <typeparam name="T">节点类型</typeparam>
+    /// <param name="level">搜索树级别</param>
+    /// <returns>搜索树条目列表</returns>
+    public List<SearchTreeEntry> GetEntries<T>(int level)
+    {
+        List<SearchTreeEntry> entries = new List<SearchTreeEntry>();
+        var nodes = GetClassList(typeof(T));
+        foreach (var _node in nodes)
+        {
+            if (!_node.IsSubclassOf(typeof(T))) continue;
+            Type type = Type.GetType(_node.FullName);
+            entries.Add(new SearchTreeEntry(new GUIContent("  " + _node.FullName)) { level = level, userData = type });
+        }
+        return entries;
+    }
+    /// <summary>
+    /// 获取指定类型的类列表
+    /// </summary>
+    /// <param name="type">基础类型</param>
+    /// <returns>类列表</returns>
+    private List<Type> GetClassList(Type type)
+    {
+        var q = type.Assembly.GetTypes()
+             .Where(x => !x.IsAbstract)
+             .Where(x => !x.IsGenericTypeDefinition)
+             .Where(x => type.IsAssignableFrom(x));
+        return q.ToList();
     }
     private void OnMouseDown(MouseDownEvent evt)
     {
@@ -428,92 +479,6 @@ public class BehaviorTreeView : GraphView
             compatiblePorts.Add(endPort);
         });
         return compatiblePorts;
-    }
-}
-
-/// <summary>
-/// 提供搜索菜单窗口的功能
-/// </summary>
-public class SearchMenuWindowProvider : ScriptableObject, ISearchWindowProvider
-{
-    /// <summary>
-    /// 选择搜索结果时触发的委托
-    /// </summary>
-    public delegate bool OnSelectEntryHandler(SearchTreeEntry searchTreeEntry, SearchWindowContext context);
-
-    /// <summary>
-    /// 当选择搜索结果时的回调函数
-    /// </summary>
-    public OnSelectEntryHandler onSelectEntryHandler;
-
-    /// <summary>
-    /// 创建搜索树
-    /// </summary>
-    /// <param name="context">搜索窗口上下文</param>
-    /// <returns>搜索树条目列表</returns>
-    public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
-    {
-        List<SearchTreeEntry> entries = new List<SearchTreeEntry>();
-        entries.Add(new SearchTreeGroupEntry(new GUIContent("创建新节点")));
-
-        entries.Add(new SearchTreeGroupEntry(new GUIContent("装饰器")) { level = 1 });
-        List<SearchTreeEntry> decorators = GetEntries<DecoratorNode>(2);
-        entries.AddRange(decorators);
-
-        entries.Add(new SearchTreeGroupEntry(new GUIContent("触发器")) { level = 1 });
-        List<SearchTreeEntry> triggers = GetEntries<TriggerNode>(2);
-        entries.AddRange(triggers);
-
-        entries.Add(new SearchTreeGroupEntry(new GUIContent("行为节点")) { level = 1 });
-        List<SearchTreeEntry> states = GetEntries<BehaviorNode>(2);
-        entries.AddRange(states);
-
-        return entries;
-    }
-
-    /// <summary>
-    /// 获取指定类型的搜索树条目列表
-    /// </summary>
-    /// <typeparam name="T">节点类型</typeparam>
-    /// <param name="level">搜索树级别</param>
-    /// <returns>搜索树条目列表</returns>
-    private List<SearchTreeEntry> GetEntries<T>(int level)
-    {
-        List<SearchTreeEntry> entries = new List<SearchTreeEntry>();
-        var nodes = GetClassList(typeof(T));
-        foreach (var _node in nodes)
-        {
-            if (!_node.IsSubclassOf(typeof(T))) continue;
-            Type type = Type.GetType(_node.FullName);
-            entries.Add(new SearchTreeEntry(new GUIContent("  " + _node.FullName)) { level = level, userData = type });
-        }
-        return entries;
-    }
-
-    /// <summary>
-    /// 当选择搜索结果时调用
-    /// </summary>
-    /// <param name="searchTreeEntry">所选搜索树条目</param>
-    /// <param name="context">搜索窗口上下文</param>
-    /// <returns>是否成功处理了选择</returns>
-    public bool OnSelectEntry(SearchTreeEntry searchTreeEntry, SearchWindowContext context)
-    {
-        if (onSelectEntryHandler == null) return false;
-        return onSelectEntryHandler.Invoke(searchTreeEntry, context);
-    }
-
-    /// <summary>
-    /// 获取指定类型的类列表
-    /// </summary>
-    /// <param name="type">基础类型</param>
-    /// <returns>类列表</returns>
-    private List<Type> GetClassList(Type type)
-    {
-        var q = type.Assembly.GetTypes()
-             .Where(x => !x.IsAbstract)
-             .Where(x => !x.IsGenericTypeDefinition)
-             .Where(x => type.IsAssignableFrom(x));
-        return q.ToList();
     }
 }
 

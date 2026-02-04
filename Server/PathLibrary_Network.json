@@ -1,0 +1,11 @@
+{
+  "clientNetworkRoot": "Assets/Network",
+  "clientApiPath": "Assets/Network/API",
+  "clientEnumDefinitionsPath": "Assets/Network/Core/EnumDefinitions.cs",
+  "modelPath": "Models/",
+  "commModelPath": "Models/Common/",
+  "serverRoot": "FlexiServer",
+  "servicePath": "Services/",
+  "httpEndPointsPath": "Transport/Http/",
+  "serverCorePath": "Core/"
+}

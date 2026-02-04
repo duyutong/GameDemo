@@ -1,10 +1,10 @@
 ﻿using UnityEditor;
 using UnityEngine.UIElements;
-
-public class InspectorView : VisualElement
+[UxmlElement]
+public partial class InspectorView : VisualElement
 {
     public Editor editor;
-    public new class UxmlFactory : UxmlFactory<InspectorView, UxmlTraits> { }
+    //public new class UxmlFactory : UxmlFactory<InspectorView, UxmlTraits> { }
     internal void UpdateSelection(BehaviorTreeBaseNode node)
     {
         Clear();

@@ -16,12 +16,32 @@ MonoBehaviour:
   m_GUID: 0490a00a886534742ae09bb3190d2068
   m_SerializeEntries:
   - m_GUID: 24f0e36cfd3aa434490b4487dd05ee2c
-    m_Address: Assets/AddressableAssets/Prefabs/UI/UI_Window_Bag/UI_Bag_Item.prefab
+    m_Address: Assets/AddressableAssets/Prefabs/UI/UI_Window_Bag/UIItem_Bag_Item.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3a854c25c6aab0b4fbc4a6ebc0077540
+    m_Address: Assets/AddressableAssets/Art/Atlas/Food.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 40c63bcc1da884e4b9c2ebec12949d2c
+    m_Address: Assets/AddressableAssets/Art/Atlas/Survival.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d25e1b225f0ed942aa046dc2a662af4
+    m_Address: Assets/AddressableAssets/Prefabs/UI/UIRoot/UIRoot.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 91c22e773af4bc74ba8af5769d30ede5
+    m_Address: Assets/AddressableAssets/Art/Atlas/Clue.spriteatlasv2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d4f22c506a0179a49b93cb0d1d6dfbf3
-    m_Address: Assets/AddressableAssets/Prefabs/UI/UI_Window_Bag/UI_Window_Bag.prefab
+    m_Address: Assets/AddressableAssets/Prefabs/UI/UI_Window_Bag/UIWindow_Bag.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

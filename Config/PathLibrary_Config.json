@@ -1,0 +1,7 @@
+{
+  "excelPath": "ExcelData",
+  "jsonPath": "Assets/AddressableAssets/Config/Json",
+  "binaryPath": "Assets/AddressableAssets/Config/Binary",
+  "csharpPath": "Assets/ConfigData/CSharpClass",
+  "loaderPath": "Assets/ConfigData/ConfigLoader.cs"
+}

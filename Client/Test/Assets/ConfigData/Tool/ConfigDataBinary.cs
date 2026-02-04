@@ -1,4 +1,4 @@
-using System;
+锘縰sing System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -38,11 +38,11 @@ public class ConfigDataBinary<T> : IConfigDataHandler<T> where T : BaseConfig
     }
     private static MemoryStream LoadFileAsMemoryStream(string filePath)
     {
-        // 读取文件内容为字节数组
+        // 锟斤拷取锟侥硷拷锟斤拷锟斤拷为锟街斤拷锟斤拷锟斤拷
         byte[] fileBytes = File.ReadAllBytes(filePath);
-        // 使用文件内容初始化一个MemoryStream
+        // 使锟斤拷锟侥硷拷锟斤拷锟捷筹拷始锟斤拷一锟斤拷MemoryStream
         MemoryStream memoryStream = new MemoryStream(fileBytes);
-        // 将MemoryStream的读取位置设置为起始位置
+        // 锟斤拷MemoryStream锟侥讹拷取位锟斤拷锟斤拷锟斤拷为锟斤拷始位锟斤拷
         memoryStream.Seek(0, SeekOrigin.Begin);
 
         return memoryStream;
@@ -54,7 +54,7 @@ public class ConfigDataBinary<T> : IConfigDataHandler<T> where T : BaseConfig
 
         Type type = obj.GetType();
 
-        // 优先找属性：Id / ID / id
+        // 锟斤拷锟斤拷锟斤拷锟斤拷锟皆ｏ拷Id / ID / id
         var prop =
             type.GetProperty("Id") ??
             type.GetProperty("ID") ??
@@ -65,7 +65,7 @@ public class ConfigDataBinary<T> : IConfigDataHandler<T> where T : BaseConfig
             return (int)prop.GetValue(obj);
         }
 
-        // 再找字段：Id / ID / id
+        // 锟斤拷锟斤拷锟街段ｏ拷Id / ID / id
         var field =
             type.GetField("Id") ??
             type.GetField("ID") ??

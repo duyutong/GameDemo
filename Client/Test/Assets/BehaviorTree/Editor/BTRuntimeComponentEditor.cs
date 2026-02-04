@@ -7,10 +7,12 @@ public class BTRuntimeComponentEditor : Editor
     SerializedProperty btContainerProp;
     private void OnEnable()
     {
-        btContainerProp = serializedObject.FindProperty("container");
+        //btContainerProp = serializedObject?.FindProperty("container");
     }
     public override void OnInspectorGUI()
     {
+        if (target == null) return;
+
         DrawDefaultInspector();
         BTRuntimeComponent script = (BTRuntimeComponent)target;// 获取目标对象
         GUILayout.Space(10); // 添加一些空间
