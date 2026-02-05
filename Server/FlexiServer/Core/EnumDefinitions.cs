@@ -13,11 +13,18 @@ public class EnumDefinitions
         InProgress, // 持续
         Finish      // 结束
     }
-    public enum EChatMsgType 
+    public enum EChatMsgType
     {
         Private,
         Public,
         World,
+    }
+    public enum EItemType
+    {
+        None = 0,
+        Food = 1,
+        Clue = 2,
+        Survival = 3
     }
     public enum EClueType
     {
@@ -25,7 +32,7 @@ public class EnumDefinitions
         True = 1,
         False = 2
     }
-    public static List<string> GetEnumNames() 
+    public static List<string> GetEnumNames()
     {
         // 获取 EnumDefinitions 类的 Type
         Type enumDefType = typeof(EnumDefinitions);
@@ -34,7 +41,7 @@ public class EnumDefinitions
         var enumTypes = enumDefType.GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic)
                                     .Where(t => t.IsEnum);
         List<string> result = new List<string>();
-        foreach (var enumType in enumTypes) 
+        foreach (var enumType in enumTypes)
         {
             result.Add(enumType.Name);
         }

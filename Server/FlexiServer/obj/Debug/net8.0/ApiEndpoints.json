@@ -1,6 +1,30 @@
 [
   {
     "ContainingType": "FlexiServer.Transport.Http.MapPostEndpoints\u002B\u003C\u003Ec__DisplayClass0_0",
+    "Method": "\u003CMapBagEndpoints\u003Eb__0",
+    "RelativePath": "bag/acquireItem",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "msg",
+        "Type": "FlexiServer.Transport.Http.HttpMessage\u00601[[FlexiServer.Models.BagAcquireItemRequest, FlexiServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "FlexiServer.Transport.Http.HttpResult\u00601[[FlexiServer.Models.BagAcquireItemResponse, FlexiServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "FlexiServer.Transport.Http.MapPostEndpoints\u002B\u003C\u003Ec__DisplayClass1_0",
     "Method": "\u003CMapCreateAccountEndpoints\u003Eb__0",
     "RelativePath": "createAccount/create",
     "HttpMethod": "POST",
@@ -24,7 +48,7 @@
     ]
   },
   {
-    "ContainingType": "FlexiServer.Transport.Http.MapPostEndpoints\u002B\u003C\u003Ec__DisplayClass1_0",
+    "ContainingType": "FlexiServer.Transport.Http.MapPostEndpoints\u002B\u003C\u003Ec__DisplayClass2_0",
     "Method": "\u003CMapLoginEndpoints\u003Eb__0",
     "RelativePath": "login/httpLogin",
     "HttpMethod": "POST",
@@ -48,7 +72,7 @@
     ]
   },
   {
-    "ContainingType": "FlexiServer.Transport.Http.MapPostEndpoints\u002B\u003C\u003Ec__DisplayClass1_0",
+    "ContainingType": "FlexiServer.Transport.Http.MapPostEndpoints\u002B\u003C\u003Ec__DisplayClass2_0",
     "Method": "\u003CMapLoginEndpoints\u003Eb__1",
     "RelativePath": "login/validate",
     "HttpMethod": "POST",
@@ -84,78 +108,6 @@
         "Type": "System.String",
         "MediaTypes": [
           "text/plain"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "FlexiServer.Transport.Http.MapPostEndpoints\u002B\u003C\u003Ec__DisplayClass2_0",
-    "Method": "\u003CMapRoomEndpoints\u003Eb__0",
-    "RelativePath": "room/create",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "msg",
-        "Type": "FlexiServer.Transport.Http.HttpMessage\u00601[[FlexiServer.Models.RoomCreateRequest, FlexiServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "FlexiServer.Transport.Http.HttpResult\u00601[[FlexiServer.Models.RoomCreateResponse, FlexiServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "FlexiServer.Transport.Http.MapPostEndpoints\u002B\u003C\u003Ec__DisplayClass2_0",
-    "Method": "\u003CMapRoomEndpoints\u003Eb__2",
-    "RelativePath": "room/findRoom",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "msg",
-        "Type": "FlexiServer.Transport.Http.HttpMessage\u00601[[FlexiServer.Models.RoomFindRoomRequest, FlexiServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "FlexiServer.Transport.Http.HttpResult\u00601[[FlexiServer.Models.RoomFindRoomResponse, FlexiServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "FlexiServer.Transport.Http.MapPostEndpoints\u002B\u003C\u003Ec__DisplayClass2_0",
-    "Method": "\u003CMapRoomEndpoints\u003Eb__1",
-    "RelativePath": "room/getRooms",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "msg",
-        "Type": "FlexiServer.Transport.Http.HttpMessage\u00601[[FlexiServer.Models.RoomGetRoomsRequest, FlexiServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "FlexiServer.Transport.Http.HttpResult\u00601[[FlexiServer.Models.RoomGetRoomsResponse, FlexiServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "application/json"
         ],
         "StatusCode": 200
       }

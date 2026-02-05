@@ -6,7 +6,6 @@ public class UIWindow_Bag : UIWindowComponentBase
 {
     public BTRuntimeComponent bTRuntimeComp;
     public GameObject itemPrefab;
-    public List<int> testItems;
     public UIPanel_Bag_ItemView itemView;
     public UIPanel_Bag_DescriptionView descriptionView;
     public UIPanel_Bag_ButtonGroup buttonGroup;
@@ -25,7 +24,7 @@ public class UIWindow_Bag : UIWindowComponentBase
         action += descriptionView.SetData;
         action += buttonGroup.SetUseButtonShowOrHide;
         itemView.SetItemBroadcastEvent(action);
-        itemView.Initialize(testItems, itemPrefab);
+        itemView.Initialize(itemPrefab);
 
         buttonGroup.InitUI();
     }

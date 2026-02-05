@@ -20,6 +20,15 @@ namespace ConfigData
             
             return null;
         }
+        public static List<T> GetConfigDatas<T>(int count) where T : BaseConfig
+        {
+            if (configDic == null) InitConfigHandler();
+            if (!configDic.TryGetValue(typeof(T), out var handler)) return null;
+            if (handler is IConfigDataHandler<T> typedHandler)
+                return typedHandler.GetConfigData((_conf) => true, count);
+            
+            return null;
+        }
 
         private static void InitConfigHandler()
         {
@@ -42,7 +51,7 @@ namespace ConfigData
                 configDic.Add(configType, handler);
             }
         }
-
+        
         private static List<Type> GetClassList<T>()
         {
             Type type = typeof (T);

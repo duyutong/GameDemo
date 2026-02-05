@@ -79,7 +79,8 @@ namespace Network
 
             Account = response.Account;
             Token = response.Token;
-
+            Debug.Log($"Login Success! Account: {Account}");
+            
             var processes = response.ProcessInfos;
             foreach (var info in processes)
             {

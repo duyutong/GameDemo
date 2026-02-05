@@ -113,3 +113,4 @@ F:\GameDemo\Server\FlexiServer\bin\Debug\net8.0\ConfigData\Config\Json\languageC
 F:\GameDemo\Server\FlexiServer\bin\Debug\net8.0\ConfigData\Config\Json\MyNewExcel.json
 F:\GameDemo\Server\FlexiServer\bin\Debug\net8.0\protobuf-net.dll
 F:\GameDemo\Server\FlexiServer\bin\Debug\net8.0\protobuf-net.Reflection.dll
+F:\GameDemo\Server\FlexiServer\bin\Debug\net8.0\ConfigData\Config\Json\ClueConfig.json
