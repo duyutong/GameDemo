@@ -49,28 +49,6 @@ MonoBehaviour:
     typeName: Deco_Reset
     stateName: ResetState
     stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[],"enter":false,"state":0}'
-  - nodeName: Reset
-    guid: 194eaffa-2e2f-4e55-953f-c1c0ceab5806
-    lastNodes:
-    - 1bc8378b-905a-47ef-b05d-7215397e9947
-    output: []
-    nodePos: {x: 871, y: 103}
-    typeName: Deco_Reset
-    stateName: ResetState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[],"enter":false,"state":0}'
-  - nodeName: LogicGate
-    guid: 1bc8378b-905a-47ef-b05d-7215397e9947
-    lastNodes:
-    - 6fcbb528-21f8-4c2a-972c-0fbadd0d454f
-    - 9a64be7a-9f0b-4078-90e2-cbe4932c0116
-    output:
-    - fromPortName: exit
-      toPortName: enter
-      nodeId: 194eaffa-2e2f-4e55-953f-c1c0ceab5806
-    nodePos: {x: 668, y: 103}
-    typeName: Deco_LogicGate
-    stateName: LogicGateState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"194eaffa-2e2f-4e55-953f-c1c0ceab5806","toPortName":"enter","value":null}],"logicType":0,"state":0}'
   - nodeName: BTTagEventTrigger
     guid: cec080cf-73ab-4680-b944-06e533298b09
     lastNodes: []
@@ -144,44 +122,6 @@ MonoBehaviour:
     typeName: Trigger_BTTagEventTrigger
     stateName: BTTagEventTriggerState
     stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"e5173004-a0db-4dbf-aa8b-88fb2e969f98","toPortName":"enter","value":null}],"triggerTag":"UIWindow_Bag_BtnUse_Hide","exit":false,"state":0}'
-  - nodeName: BTTagEventTrigger
-    guid: dca58461-5644-4c6a-b1b9-228fb9715161
-    lastNodes: []
-    output:
-    - fromPortName: exit
-      toPortName: enter
-      nodeId: 6fcbb528-21f8-4c2a-972c-0fbadd0d454f
-    - fromPortName: exit
-      toPortName: enter
-      nodeId: 9a64be7a-9f0b-4078-90e2-cbe4932c0116
-    nodePos: {x: 227, y: 114}
-    typeName: Trigger_BTTagEventTrigger
-    stateName: BTTagEventTriggerState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"6fcbb528-21f8-4c2a-972c-0fbadd0d454f","toPortName":"enter","value":null},{"fromPortName":"exit","nodeId":"9a64be7a-9f0b-4078-90e2-cbe4932c0116","toPortName":"enter","value":null}],"triggerTag":"UIWindow_Bag_Open","exit":false,"state":0}'
-  - nodeName: MoveTo
-    guid: 6fcbb528-21f8-4c2a-972c-0fbadd0d454f
-    lastNodes:
-    - dca58461-5644-4c6a-b1b9-228fb9715161
-    output:
-    - fromPortName: exit
-      toPortName: enter
-      nodeId: 1bc8378b-905a-47ef-b05d-7215397e9947
-    nodePos: {x: 441, y: 64}
-    typeName: Behav_MoveTo
-    stateName: MoveToState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"1bc8378b-905a-47ef-b05d-7215397e9947","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[],"postWrapMode":8,"preWrapMode":8}},"directionObj":{"localPath":"posRoot\/Button_Hide","pathType":0,"scenePath":"","selfPath":"self","target":null},"enter":false,"exit":false,"state":0,"targetObj":{"localPath":"BtnSubmit","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
-  - nodeName: MoveTo
-    guid: 9a64be7a-9f0b-4078-90e2-cbe4932c0116
-    lastNodes:
-    - dca58461-5644-4c6a-b1b9-228fb9715161
-    output:
-    - fromPortName: exit
-      toPortName: enter
-      nodeId: 1bc8378b-905a-47ef-b05d-7215397e9947
-    nodePos: {x: 441, y: 153}
-    typeName: Behav_MoveTo
-    stateName: MoveToState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"1bc8378b-905a-47ef-b05d-7215397e9947","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[],"postWrapMode":8,"preWrapMode":8}},"directionObj":{"localPath":"posRoot\/Button_Hide","pathType":0,"scenePath":"","selfPath":"self","target":null},"enter":false,"exit":false,"state":0,"targetObj":{"localPath":"BtnUse","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
   - nodeName: MoveTo
     guid: 0859c0e6-350a-437f-b2d2-24ba4c7589fe
     lastNodes:
@@ -230,6 +170,90 @@ MonoBehaviour:
     typeName: Behav_MoveTo
     stateName: MoveToState
     stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"a547b4bf-c512-4060-b339-e42bb45e6027","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[{"inTangent":5,"inWeight":0,"leftTangentMode":1,"outTangent":5,"outWeight":0.333333343,"rightTangentMode":1,"time":0,"value":0,"weightedMode":0},{"inTangent":5,"inWeight":0.333333343,"leftTangentMode":1,"outTangent":5,"outWeight":0,"rightTangentMode":1,"time":0.2,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[{"inTangent":5,"inWeight":0,"outTangent":5,"outWeight":0.333333343,"tangentMode":35,"time":0,"value":0,"weightedMode":0},{"inTangent":5,"inWeight":0.333333343,"outTangent":5,"outWeight":0,"tangentMode":35,"time":0.2,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8}},"directionObj":{"localPath":"posRoot\/Button_Show","pathType":0,"scenePath":"","selfPath":"self","target":null},"enter":false,"exit":false,"state":0,"targetObj":{"localPath":"BtnUse","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
+  - nodeName: Reset
+    guid: 194eaffa-2e2f-4e55-953f-c1c0ceab5806
+    lastNodes:
+    - 1bc8378b-905a-47ef-b05d-7215397e9947
+    output: []
+    nodePos: {x: 1107, y: 76}
+    typeName: Deco_Reset
+    stateName: ResetState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[],"enter":false,"state":0}'
+  - nodeName: LogicGate
+    guid: 1bc8378b-905a-47ef-b05d-7215397e9947
+    lastNodes:
+    - 6fcbb528-21f8-4c2a-972c-0fbadd0d454f
+    - 9a64be7a-9f0b-4078-90e2-cbe4932c0116
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: 194eaffa-2e2f-4e55-953f-c1c0ceab5806
+    nodePos: {x: 904, y: 76}
+    typeName: Deco_LogicGate
+    stateName: LogicGateState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"194eaffa-2e2f-4e55-953f-c1c0ceab5806","toPortName":"enter","value":null}],"logicType":0,"state":0}'
+  - nodeName: MoveTo
+    guid: 6fcbb528-21f8-4c2a-972c-0fbadd0d454f
+    lastNodes:
+    - 78dc11f0-a7c8-43bf-9708-6b24f06afb41
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: 1bc8378b-905a-47ef-b05d-7215397e9947
+    nodePos: {x: 677, y: 37}
+    typeName: Behav_MoveTo
+    stateName: MoveToState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"1bc8378b-905a-47ef-b05d-7215397e9947","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[],"postWrapMode":8,"preWrapMode":8}},"directionObj":{"localPath":"posRoot\/Button_Hide","pathType":0,"scenePath":"","selfPath":"self","target":null},"enter":false,"exit":false,"state":0,"targetObj":{"localPath":"BtnSubmit","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
+  - nodeName: MoveTo
+    guid: 9a64be7a-9f0b-4078-90e2-cbe4932c0116
+    lastNodes:
+    - 78dc11f0-a7c8-43bf-9708-6b24f06afb41
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: 1bc8378b-905a-47ef-b05d-7215397e9947
+    nodePos: {x: 677, y: 126}
+    typeName: Behav_MoveTo
+    stateName: MoveToState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"1bc8378b-905a-47ef-b05d-7215397e9947","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[],"postWrapMode":8,"preWrapMode":8}},"directionObj":{"localPath":"posRoot\/Button_Hide","pathType":0,"scenePath":"","selfPath":"self","target":null},"enter":false,"exit":false,"state":0,"targetObj":{"localPath":"BtnUse","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
+  - nodeName: LogicGate
+    guid: 78dc11f0-a7c8-43bf-9708-6b24f06afb41
+    lastNodes:
+    - dca58461-5644-4c6a-b1b9-228fb9715161
+    - acd0583b-cd39-4f20-a169-44a894ef42ce
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: 6fcbb528-21f8-4c2a-972c-0fbadd0d454f
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: 9a64be7a-9f0b-4078-90e2-cbe4932c0116
+    nodePos: {x: 451, y: 88}
+    typeName: Deco_LogicGate
+    stateName: LogicGateState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"6fcbb528-21f8-4c2a-972c-0fbadd0d454f","toPortName":"enter","value":null},{"fromPortName":"exit","nodeId":"9a64be7a-9f0b-4078-90e2-cbe4932c0116","toPortName":"enter","value":null}],"logicType":1,"state":0}'
+  - nodeName: BTTagEventTrigger
+    guid: dca58461-5644-4c6a-b1b9-228fb9715161
+    lastNodes: []
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: 78dc11f0-a7c8-43bf-9708-6b24f06afb41
+    nodePos: {x: 236, y: 49}
+    typeName: Trigger_BTTagEventTrigger
+    stateName: BTTagEventTriggerState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"78dc11f0-a7c8-43bf-9708-6b24f06afb41","toPortName":"enter","value":null}],"triggerTag":"UIWindow_Bag_Open","exit":false,"state":0}'
+  - nodeName: BTTagEventTrigger
+    guid: acd0583b-cd39-4f20-a169-44a894ef42ce
+    lastNodes: []
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: 78dc11f0-a7c8-43bf-9708-6b24f06afb41
+    nodePos: {x: 236, y: 139}
+    typeName: Trigger_BTTagEventTrigger
+    stateName: BTTagEventTriggerState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"78dc11f0-a7c8-43bf-9708-6b24f06afb41","toPortName":"enter","value":null}],"triggerTag":"UIWindow_Bag_ItemUnselect","exit":false,"state":0}'
   edgeDatas:
   - outPortNode: 104bc5f2-beab-4cb1-ab52-78d68e43c103
     intputPortNode: fa7527f3-9e9d-4ac8-b83e-9bbf1d7e972b
@@ -279,14 +303,6 @@ MonoBehaviour:
     intputPortNode: ccfb0363-1db9-48b2-b6b7-c26ed8eff404
     outPortName: exit
     intputPortName: enter
-  - outPortNode: dca58461-5644-4c6a-b1b9-228fb9715161
-    intputPortNode: 6fcbb528-21f8-4c2a-972c-0fbadd0d454f
-    outPortName: exit
-    intputPortName: enter
-  - outPortNode: dca58461-5644-4c6a-b1b9-228fb9715161
-    intputPortNode: 9a64be7a-9f0b-4078-90e2-cbe4932c0116
-    outPortName: exit
-    intputPortName: enter
   - outPortNode: 6fcbb528-21f8-4c2a-972c-0fbadd0d454f
     intputPortNode: 1bc8378b-905a-47ef-b05d-7215397e9947
     outPortName: exit
@@ -297,5 +313,21 @@ MonoBehaviour:
     intputPortName: enter
   - outPortNode: 1bc8378b-905a-47ef-b05d-7215397e9947
     intputPortNode: 194eaffa-2e2f-4e55-953f-c1c0ceab5806
+    outPortName: exit
+    intputPortName: enter
+  - outPortNode: dca58461-5644-4c6a-b1b9-228fb9715161
+    intputPortNode: 78dc11f0-a7c8-43bf-9708-6b24f06afb41
+    outPortName: exit
+    intputPortName: enter
+  - outPortNode: acd0583b-cd39-4f20-a169-44a894ef42ce
+    intputPortNode: 78dc11f0-a7c8-43bf-9708-6b24f06afb41
+    outPortName: exit
+    intputPortName: enter
+  - outPortNode: 78dc11f0-a7c8-43bf-9708-6b24f06afb41
+    intputPortNode: 6fcbb528-21f8-4c2a-972c-0fbadd0d454f
+    outPortName: exit
+    intputPortName: enter
+  - outPortNode: 78dc11f0-a7c8-43bf-9708-6b24f06afb41
+    intputPortNode: 9a64be7a-9f0b-4078-90e2-cbe4932c0116
     outPortName: exit
     intputPortName: enter
