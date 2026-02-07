@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +11,8 @@ namespace Network.API
     {
         #region patternToType
         { "/chat", typeof(ChatApi) },
-        #endregion patternToType
+        { "/gamePlay", typeof(GamePlayApi) },
+#endregion patternToType
     };
         private static Dictionary<Type, HttpMessageApi> httpApiDict = new Dictionary<Type, HttpMessageApi>();
         private static Dictionary<Type, WebSocketMessageApi> webSoketApiDict = new Dictionary<Type, WebSocketMessageApi>();

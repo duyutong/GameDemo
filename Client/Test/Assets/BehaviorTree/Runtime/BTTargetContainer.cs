@@ -13,6 +13,7 @@ public class BTTargetContainer
     [NonSerialized]
     public BTRuntime runtime;
 
+    [NonSerialized]
     private Action<bool> loadFinish;
     public void SetContainer(Action<bool> _loadFinish = null)
     {

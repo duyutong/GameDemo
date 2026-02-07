@@ -32,13 +32,10 @@ namespace FlexiServer.Services
                 case NetworkEventPaths.GamePlay_JoinGame:
                     JoinGameHandle(ClientId, Acount, recievMsg.Path, Msg);
                     break;
-
-
                 case NetworkEventPaths.GamePlay_StartGame:
                     StartGameHandle(ClientId, recievMsg.Path, Msg);
                     break;
-
-                #endregion Switch_Handle
+                 #endregion Switch_Handle
                 default:
                     break;
             }
@@ -70,6 +67,11 @@ namespace FlexiServer.Services
             sendMsg.Type = EWsMessageType.Normal;
             string wsMsgStr = JsonConvert.SerializeObject(sendMsg);
             TransportManager.SendMessageToClient<WebSocketTransport>(ClientId, wsMsgStr);
+        }
+        
+        private void JoinGameHandle(string ClientId, string Path, string Msg)
+        {
+            
         }
         #endregion Function_Handle
     }

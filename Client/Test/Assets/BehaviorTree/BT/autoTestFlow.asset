@@ -101,30 +101,6 @@ MonoBehaviour:
     typeName: Deco_Debug
     stateName: DebugState
     stateParams: "{\"hideFlags\":0,\"name\":\"\",\"interruptTag\":\"\",\"interruptible\":false,\"output\":[{\"fromPortName\":\"exit\",\"nodeId\":\"383e7660-7725-468c-9d2e-4f92d3fc5ada\",\"toPortName\":\"enter\",\"value\":null}],\"enter\":false,\"exit\":false,\"logStr\":\"---\u5012\u8BA1\u65F6\u7ED3\u675F---\",\"state\":0}"
-  - nodeName: SubBTContainer
-    guid: 5b31f2b5-a679-4485-b07f-74161954af9f
-    lastNodes:
-    - 7b3cdf18-4ba3-4aab-b843-73fa9a1988c0
-    output:
-    - fromPortName: exit
-      toPortName: enter
-      nodeId: 7baf5797-a009-4e5e-a5e5-dd5bf48a2945
-    nodePos: {x: 947, y: 122}
-    typeName: Deco_SubBTContainer
-    stateName: SubBTContainerState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"7baf5797-a009-4e5e-a5e5-dd5bf48a2945","toPortName":"enter","value":null}],"container":{"assetPath":"Assets\/BehaviorTree\/BT\/autoTestFlow_timeCount.asset","loadFinish":null,"target":null},"enter":false,"exit":false,"state":0}'
-  - nodeName: SubBTContainer
-    guid: b1ad438d-b62f-4063-91de-b10b7d479631
-    lastNodes:
-    - 3bfc065e-b8dd-4e01-9674-8b6d48080be4
-    output:
-    - fromPortName: exit
-      toPortName: enter
-      nodeId: 4fcf9a9c-021a-43f2-a6ed-239b63cbc4cd
-    nodePos: {x: 977, y: 368}
-    typeName: Deco_SubBTContainer
-    stateName: SubBTContainerState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"4fcf9a9c-021a-43f2-a6ed-239b63cbc4cd","toPortName":"enter","value":null}],"container":{"assetPath":"Assets\/BehaviorTree\/BT\/autoTestFlow_timeCount.asset","loadFinish":null,"target":null},"enter":false,"exit":false,"state":0}'
   - nodeName: Debug
     guid: 4fcf9a9c-021a-43f2-a6ed-239b63cbc4cd
     lastNodes:
@@ -247,7 +223,7 @@ MonoBehaviour:
     nodePos: {x: 758, y: 672}
     typeName: Deco_TimeDelay
     stateName: TimeDelayState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"dab8fcd5-6981-47e5-9d40-86e9afe75b03","toPortName":"enter","value":null},{"fromPortName":"exit","nodeId":"12897f79-7192-4401-ad05-d292a2718dee","toPortName":"enter","value":null}],"delayTime":1,"state":0}'
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"dab8fcd5-6981-47e5-9d40-86e9afe75b03","toPortName":"enter","value":null},{"fromPortName":"exit","nodeId":"12897f79-7192-4401-ad05-d292a2718dee","toPortName":"enter","value":null}],"delayTime":1,"enter":false,"exit":false,"state":0}'
   - nodeName: Debug
     guid: ba0fc03d-1e1b-4b9b-b5c8-2502ffcf8977
     lastNodes:
@@ -311,7 +287,7 @@ MonoBehaviour:
     nodePos: {x: 1420, y: 672}
     typeName: Deco_TimeDelay
     stateName: TimeDelayState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"4afeed53-35e3-4da2-906e-7c1858b5052a","toPortName":"enter","value":null},{"fromPortName":"exit","nodeId":"603812e4-84dc-41bc-9b94-bb2f0dfbf2d2","toPortName":"enter","value":null}],"delayTime":1,"state":0}'
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"4afeed53-35e3-4da2-906e-7c1858b5052a","toPortName":"enter","value":null},{"fromPortName":"exit","nodeId":"603812e4-84dc-41bc-9b94-bb2f0dfbf2d2","toPortName":"enter","value":null}],"delayTime":1,"enter":false,"exit":false,"state":0}'
   - nodeName: Debug
     guid: dab8fcd5-6981-47e5-9d40-86e9afe75b03
     lastNodes:
@@ -342,6 +318,30 @@ MonoBehaviour:
     typeName: Behav_InvokeAction
     stateName: InvokeActionState
     stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[],"btEvent":{"persistentDatas":[{"assemblyTypeName":"AutoTestFlow","btTargetObject":{"localPath":null,"pathType":1,"scenePath":"Network","selfPath":"self","target":null},"methodName":"TestAction3","target":null}],"targetEvent":null},"enter":false,"exit":false,"state":0}'
+  - nodeName: SubBTContainer
+    guid: 5b31f2b5-a679-4485-b07f-74161954af9f
+    lastNodes:
+    - 7b3cdf18-4ba3-4aab-b843-73fa9a1988c0
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: 7baf5797-a009-4e5e-a5e5-dd5bf48a2945
+    nodePos: {x: 947, y: 122}
+    typeName: Deco_SubBTContainer
+    stateName: SubBTContainerState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"7baf5797-a009-4e5e-a5e5-dd5bf48a2945","toPortName":"enter","value":null}],"container":{"assetPath":"Assets\/BehaviorTree\/BT\/autoTestFlow_timeCount.asset","target":null},"enter":false,"exit":false,"state":0}'
+  - nodeName: SubBTContainer
+    guid: b1ad438d-b62f-4063-91de-b10b7d479631
+    lastNodes:
+    - 3bfc065e-b8dd-4e01-9674-8b6d48080be4
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: 4fcf9a9c-021a-43f2-a6ed-239b63cbc4cd
+    nodePos: {x: 977, y: 368}
+    typeName: Deco_SubBTContainer
+    stateName: SubBTContainerState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"4fcf9a9c-021a-43f2-a6ed-239b63cbc4cd","toPortName":"enter","value":null}],"container":{"assetPath":"Assets\/BehaviorTree\/BT\/autoTestFlow_timeCount.asset","target":null},"enter":false,"exit":false,"state":0}'
   edgeDatas:
   - outPortNode: 029c49ac-0617-4644-89fa-68edaf892290
     intputPortNode: 802f3690-05a4-42a6-ba0f-806f35af9e5c

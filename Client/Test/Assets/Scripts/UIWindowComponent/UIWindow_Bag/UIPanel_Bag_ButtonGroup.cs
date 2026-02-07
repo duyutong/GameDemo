@@ -20,23 +20,13 @@ public class UIPanel_Bag_ButtonGroup : MonoBehaviour
         bool isSurvival = (EItemType)itemConfig.EItemType == EItemType.Survival;
         bool isUnidentified = (EItemType)itemConfig.EItemType == EItemType.Unidentified;
 
-        if (isUnidentified) 
-        {
+        bTRuntimeComp.SendMsgToBTRuntime("Interrupt_bag_buttonGroup",EBTState.中断);
+        
+        if (isUnidentified)
             bTRuntimeComp.SendMsgToBTRuntime("UIWindow_Bag_BtnIdentified_Show");
-            bTRuntimeComp.SendMsgToBTRuntime("UIWindow_Bag_BtnSubmit_Hide");
-            bTRuntimeComp.SendMsgToBTRuntime("UIWindow_Bag_BtnUse_Hide");
-        }
         else if (isClue)
-        {
-            bTRuntimeComp.SendMsgToBTRuntime("UIWindow_Bag_BtnIdentified_Hide");
             bTRuntimeComp.SendMsgToBTRuntime("UIWindow_Bag_BtnSubmit_Show");
-            bTRuntimeComp.SendMsgToBTRuntime("UIWindow_Bag_BtnUse_Hide");
-        }
-        else 
-        {
-            bTRuntimeComp.SendMsgToBTRuntime("UIWindow_Bag_BtnIdentified_Hide");
-            bTRuntimeComp.SendMsgToBTRuntime("UIWindow_Bag_BtnSubmit_Hide");
+        else
             bTRuntimeComp.SendMsgToBTRuntime("UIWindow_Bag_BtnUse_Show");
-        }
     }
 }

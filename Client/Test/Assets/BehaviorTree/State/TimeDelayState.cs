@@ -10,14 +10,14 @@ using UnityEngine;
 public class TimeDelayState : BehaviorTreeBaseState
 {
     #region AutoContext
-    
-public System.Boolean exit;
-public System.Boolean enter;
-public System.Single delayTime;
 
-    public override BTStateObject stateObj 
+    public System.Boolean exit;
+    public System.Boolean enter;
+    public System.Single delayTime;
+
+    public override BTStateObject stateObj
     {
-         get 
+        get
         {
             if (_stateObj == null)
             {
@@ -26,10 +26,10 @@ public System.Single delayTime;
                 _stateObj.output = output;
                 _stateObj.interruptible = interruptible;
                 _stateObj.interruptTag = interruptTag;
-                
-_stateObj.exit = exit;
-_stateObj.enter = enter;
-_stateObj.delayTime = delayTime;
+
+                _stateObj.exit = exit;
+                _stateObj.enter = enter;
+                _stateObj.delayTime = delayTime;
             }
             return _stateObj;
         }
@@ -46,19 +46,21 @@ _stateObj.delayTime = delayTime;
             JsonUtility.FromJsonOverwrite(json, _stateObj);
 
             output = _stateObj.output;
-            
-exit = _stateObj.exit;
-enter = _stateObj.enter;
-delayTime = _stateObj.delayTime;
+            interruptible = _stateObj.interruptible;
+            interruptTag = _stateObj.interruptTag;
+
+            exit = _stateObj.exit;
+            enter = _stateObj.enter;
+            delayTime = _stateObj.delayTime;
         }
     }
-     protected override ESetFieldValueResult SetFieldValue(string fieldName, object value)
+    protected override ESetFieldValueResult SetFieldValue(string fieldName, object value)
     {
         if (StringComparer.Ordinal.Equals(fieldName, default)) return ESetFieldValueResult.Succ;
-        
-else if (StringComparer.Ordinal.Equals(fieldName, "exit") && value is System.Boolean exitValue) exit = exitValue;
-else if (StringComparer.Ordinal.Equals(fieldName, "enter") && value is System.Boolean enterValue) enter = enterValue;
-else if (StringComparer.Ordinal.Equals(fieldName, "delayTime") && value is System.Single delayTimeValue) delayTime = delayTimeValue;
+
+        else if (StringComparer.Ordinal.Equals(fieldName, "exit") && value is System.Boolean exitValue) exit = exitValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "enter") && value is System.Boolean enterValue) enter = enterValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "delayTime") && value is System.Single delayTimeValue) delayTime = delayTimeValue;
         else return ESetFieldValueResult.Fail;
 
         return ESetFieldValueResult.Succ;
@@ -69,10 +71,10 @@ else if (StringComparer.Ordinal.Equals(fieldName, "delayTime") && value is Syste
         output = _stateObj.output;
         interruptible = _stateObj.interruptible;
         interruptTag = _stateObj.interruptTag;
-        
-exit = _stateObj.exit;
-enter = _stateObj.enter;
-delayTime = _stateObj.delayTime;
+
+        exit = _stateObj.exit;
+        enter = _stateObj.enter;
+        delayTime = _stateObj.delayTime;
     }
     #endregion
     private float currTime;
@@ -105,9 +107,9 @@ delayTime = _stateObj.delayTime;
 public class TimeDelayStateObj : BTStateObject
 {
     public EBTState state;
-    
-public System.Boolean exit;
-public System.Boolean enter;
-public System.Single delayTime;
+
+    public System.Boolean exit;
+    public System.Boolean enter;
+    public System.Single delayTime;
 }
 #endregion
