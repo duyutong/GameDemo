@@ -1,21 +1,12 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class UIWindowComponentBase : MonoBehaviour
 {
-    protected virtual void Init()
-    {
+    public virtual void Open() => OnOpen();
+    public virtual void Close() => OnClose();
+    protected virtual void OnOpen()  { }
+    protected virtual void OnClose()  { }
+    protected virtual void OnInit() { }
+    protected virtual void OnUninit() { }
 
-    }
-    protected virtual void OnOpen()
-    {
-        Init();
-    }
-    protected virtual void Uninit() 
-    {
-
-    }
-    protected virtual void OnClose()
-    {
-        Uninit();
-    }
 }

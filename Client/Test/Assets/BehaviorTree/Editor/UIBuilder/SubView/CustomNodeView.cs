@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-
-public class CustomNodeView : GraphView
+[UxmlElement]
+public partial class CustomNodeView : GraphView
 {
     /// <summary>
     /// 当选择行为树节点时触发的事件
@@ -34,7 +34,7 @@ public class CustomNodeView : GraphView
     /// <summary>
     /// UXML工厂类，用于创建 CustomNodeView 实例
     /// </summary>
-    public new class UxmlFactory : UxmlFactory<CustomNodeView, UxmlTraits> { }
+   // public new class UxmlFactory : UxmlFactory<CustomNodeView, UxmlTraits> { }
 
     /// <summary>
     /// 构造函数，用于初始化 CustomNodeView 实例

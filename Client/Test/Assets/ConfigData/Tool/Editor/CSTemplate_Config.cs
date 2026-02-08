@@ -9,7 +9,7 @@ public class CSTemplate_Config
     public const string classStr_PB =
 @"
 using System.Collections.Generic;
-using UnityEngine;
+using static EnumDefinitions;
 /// <summary>
 /// #ClassDes#
 /// <summary>
@@ -21,7 +21,7 @@ public class #ClassName# : BaseConfig
     public #ClassName#() { }
     public override void Initialize(Dictionary<string, object> _dataDic)
     {#InitContext#
-        id = int.TryParse(ID, out var tempId) ? tempId : 0;
+        id = ID;
     }
 } ";
     /// <summary>
@@ -39,7 +39,7 @@ public class #ClassName# : BaseConfig
     public const string classStr_Json =
 @"
 using System.Collections.Generic;
-using UnityEngine;
+using static EnumDefinitions;
 /// <summary>
 /// #ClassDes#
 /// <summary>
@@ -84,25 +84,7 @@ namespace ConfigData
 {
     public class ConfigLoader
     {
-        #region AutoContext
-        public static PathLibrary PathLibrary 
-        {
-            get 
-            {
-                if (_pathLibrary == null)
-                {
-
-
-                    string LibraryPath = Application.dataPath + ""/ConfigData/PathLibrary.json"";
-                    string pathLibStr = File.ReadAllText(LibraryPath);
-                    _pathLibrary = JsonMapper.ToObject<PathLibrary>(pathLibStr);
-                }
-                return _pathLibrary;
-            }
-        }
-        private static PathLibrary _pathLibrary;
-        #endregion
-
+        private string binaryPath =""Assets/AddressableAssets/Config/Binary"";
         private static Dictionary<Type, IConfigDataHandler> configDic;
         public static T GetConfigData<T>(int id) where T : BaseConfig 
         {
@@ -119,7 +101,6 @@ namespace ConfigData
         {
             configDic = new Dictionary<Type, IConfigDataHandler>();
 
-            string binaryPath = PathLibrary.binaryPath;
             List<Type> types = GetClassList<BaseConfig>();
 
             foreach (var configType in types)
@@ -164,24 +145,7 @@ namespace ConfigData
 {
     public class ConfigLoader
     {
-        #region AutoContext
-        public static PathLibrary PathLibrary 
-        {
-            get 
-            {
-                if (_pathLibrary == null)
-                {
-
-
-                    string LibraryPath = Application.dataPath + ""/ConfigData/PathLibrary.json"";
-                    string pathLibStr = File.ReadAllText(LibraryPath);
-                    _pathLibrary = JsonMapper.ToObject<PathLibrary>(pathLibStr);
-                }
-                return _pathLibrary;
-            }
-        }
-        private static PathLibrary _pathLibrary;
-        #endregion
+        private static string jsonPath = ""Assets/AddressableAssets/Config/Json"";
         private static Dictionary<Type, IConfigDataHandler> configDic;
         public static T GetConfigData<T>(int id) where T : BaseConfig 
         {
@@ -194,23 +158,11 @@ namespace ConfigData
             
             return null;
         }
-        public static string GetLanguageById(int id)
-        {
-            LanguageConfig config = GetConfigData<LanguageConfig>(id);
-            if(config == null)return null;
 
-            return GlobalSetting.Instance.language switch
-            {
-                ELanguage.Chinese => config?.Chinese,
-                ELanguage.English => config?.English,
-                _ => config?.Chinese,
-            };
-        }
         private static void InitConfigHandler()
         {
             configDic = new Dictionary<Type, IConfigDataHandler>();
 
-            string jsonPath = PathLibrary.jsonPath;
             List<Type> types = GetClassList<BaseConfig>();
 
             foreach (var configType in types)

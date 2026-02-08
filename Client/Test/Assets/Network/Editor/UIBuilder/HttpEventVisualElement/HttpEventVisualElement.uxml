@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:Template name="ProtocolEditor" src="project://database/Assets/Network/Editor/UIBuilder/ProtocolEditor/ProtocolEditor.uxml?fileID=9197481963319205126&amp;guid=cdb925008f6b4dc4d8aea554d3ddf83e&amp;type=3#ProtocolEditor"/>
+    <Style src="project://database/Assets/Network/Editor/UIBuilder/HttpEventVisualElement/HttpEventVisualElement.uss?fileID=7433441132597879392&amp;guid=6d632a388452ba64f9d027e9fcf63364&amp;type=3#HttpEventVisualElement"/>
+    <HttpEventVisualElement style="height: initial; max-height: none; margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 0; padding-bottom: 0; border-bottom-width: 0; border-left-color: rgb(70, 70, 70); border-right-color: rgb(70, 70, 70); border-top-color: rgb(70, 70, 70); border-bottom-color: rgb(70, 70, 70); background-color: rgb(56, 56, 56);">
+        <uie:Toolbar style="justify-content: flex-start; border-left-color: rgb(36, 36, 36); border-right-color: rgb(36, 36, 36); border-top-color: rgb(36, 36, 36); border-bottom-color: rgb(36, 36, 36); border-top-left-radius: 2px; border-top-right-radius: 2px; background-color: rgb(53, 53, 53); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 0;">
+            <ui:TextField picking-mode="Ignore" label="pattern" value="filler text" name="PatternTextField" style="width: 90%; justify-content: flex-start; white-space: nowrap; translate: 0 0; transform-origin: right bottom;"/>
+            <ui:Button text="+" display-tooltip-when-elided="true" name="AddButton" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; width: 20px; height: 20px;"/>
+            <ui:Button text="-" display-tooltip-when-elided="true" name="RemoveButton" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; width: 20px; height: 20px;"/>
+        </uie:Toolbar>
+        <ui:Foldout text="Foldout" style="border-left-color: rgb(36, 36, 36); border-right-color: rgb(36, 36, 36); border-top-color: rgb(36, 36, 36); border-bottom-color: rgb(36, 36, 36); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; margin-top: 0; padding-top: 2px; display: flex; border-bottom-right-radius: 2px; border-bottom-left-radius: 2px;">
+            <ui:Instance template="ProtocolEditor" name="RequestProtocolEditor"/>
+            <ui:Instance template="ProtocolEditor" name="ResponseProtocolEditor"/>
+        </ui:Foldout>
+    </HttpEventVisualElement>
+</ui:UXML>

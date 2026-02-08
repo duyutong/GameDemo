@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Network/Editor/UIBuilder/CompalexBlockItem/CompalexBlockItem.uss?fileID=7433441132597879392&amp;guid=d92447d4fae3b8e4f8ac3e6c4da6a478&amp;type=3#CompalexBlockItem"/>
+    <Style src="project://database/Assets/Network/Editor/UIBuilder/NetworkCodeGenerator/NetworkCodeGenerator.uss?fileID=7433441132597879392&amp;guid=2374f9c9de5bb624ca8135af0236d27b&amp;type=3#NetworkCodeGenerator"/>
+    <CompalexBlockItem class="complex-block" style="align-items: stretch; flex-direction: row; justify-content: space-around; min-width: 500px;">
+        <ui:DropdownField label="Type：" index="-1" choices="System.Collections.Generic.List`1[System.String]" name="TypeDropdown" class="unity-label" style="width: 30%;"/>
+        <ui:TextField picking-mode="Ignore" label="Variable" name="VariableTextField" style="width: 50%;"/>
+        <ui:Toggle label="IEnumerable" name="IEnumerableToggle" style="width: 20%;"/>
+    </CompalexBlockItem>
+</ui:UXML>

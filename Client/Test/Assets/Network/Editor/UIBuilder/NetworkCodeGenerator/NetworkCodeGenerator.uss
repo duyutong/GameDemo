@@ -1,0 +1,12 @@
+GridBackground {
+    --line-color: rgba(193, 196, 192, 0.1);
+    --thick-line-color: rgba(193, 196, 192, 0.1);
+    --spacing: 15;
+}
+
+.unity-label {
+    width: initial;
+    min-width: 50px;
+    margin-left: 3px;
+    -unity-text-align: middle-left;
+}

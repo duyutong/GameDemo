@@ -1,10 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 /// <summary>
 /// 遵守配置表规则前提下，用于类型转换的工具类
 /// </summary>
 public static class ParseUtil
 {
+    /// <summary>
+    /// 将配置内容转换为枚举值
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="self"></param>
+    /// <returns></returns>
+    public static T ToEnum<T>(this object self) 
+    {
+        if (int.TryParse(self.ToString(),out int intValue)) return default(T);
+        return (T)Enum.ToObject(typeof(T), intValue);
+    }
     /// <summary>
     /// 将配置内容转换为整型
     /// </summary>
@@ -82,6 +95,13 @@ public static class ParseUtil
         if (type == "List<List<int>>") return "ToIntArrays";
         if (type == "int") return "ToInt";
         if (type == "Dictionary<int,int>") return "ToDictionary";
+        if(CheckIsEnum(type))return $"ToEnum<{type}>";
+
         return "ToString";
+    }
+    public static bool CheckIsEnum(string enumName)
+    {
+        // 规则：E + 首字母大写的若干字符 + Type
+        return Regex.IsMatch(enumName, @"^E[A-Z].*Type$");
     }
 }

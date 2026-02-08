@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine.UIElements;
-
-public class ProtSettingView : VisualElement
+[UxmlElement]
+public partial class ProtSettingView : VisualElement
 {
     private BTNodePortSetting portSetting;
     public Action<ProtSettingView> onDelPort;
@@ -22,7 +22,7 @@ public class ProtSettingView : VisualElement
 
     private EnumField directionField;
     private EnumField capacityField;
-    public new class UxmlFactory : UxmlFactory<ProtSettingView, UxmlTraits> { }
+   // public new class UxmlFactory : UxmlFactory<ProtSettingView, UxmlTraits> { }
     public void ShowProtSetting(BTNodePortSetting _portSetting, bool showAdd = false)
     {
         Type structType = typeof(BTNodePortSetting);

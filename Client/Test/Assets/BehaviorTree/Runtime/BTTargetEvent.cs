@@ -76,10 +76,9 @@ public class BTTargetEvent
                 persistentData.SerializeBTTargetObject();
                 persistentDatas.SetValue(persistentData, index);
             }
-
-            targetEvent.RemoveAllListeners();
-            targetEvent = null;
         }
+        targetEvent?.RemoveAllListeners();
+        targetEvent = null;
     }
     private void IntegrateEventInfo(int index)
     {

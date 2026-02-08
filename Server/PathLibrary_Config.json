@@ -1,0 +1,7 @@
+{
+  "excelPath": "F:\\GameDemo\\Config\\ExcelData",
+  "jsonPath": "F:\\GameDemo\\Server\\FlexiServer\\ConfigData\\Config\\Json",
+  "binaryPath": "F:\\GameDemo\\Server\\FlexiServer\\ConfigData\\Config\\Binary",
+  "csharpPath": "F:\\GameDemo\\Server\\FlexiServer\\ConfigData\\CSharpClass",
+  "loaderPath": "F:\\GameDemo\\Server\\FlexiServer\\ConfigData/ConfigLoader.cs"
+}

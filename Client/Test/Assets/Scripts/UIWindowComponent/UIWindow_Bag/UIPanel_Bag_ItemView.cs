@@ -1,16 +1,38 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class UIPanel_Bag_ItemView : MonoBehaviour
 {
+    private GameObject itemPrefab;
     private Action<ItemConfig> itemBroadcast;
     private List<RectTransform> slotList = new();
-    public void Initialize(List<int> items, GameObject prefab)
+    private List<int> currItems = new();
+    public void Initialize(GameObject prefab)
     {
+        itemPrefab = prefab;
+        currItems.Clear();
         InitSlotList();
         ClearSlots();
-        CreateItems(items, prefab);
+        RefreshItems();
+    }
+    public void AddItems(int itemId,int soltIndex)
+    {
+        if (itemId == 0) { Debug.Log("发完了！");return; }
+        currItems.Insert(soltIndex,itemId);
+        RefreshItems();
+    }
+    public void RemoveItems(int itemId)
+    {
+        currItems.Remove(itemId);
+        ClearSlots();
+        RefreshItems();
+    }
+    public void Refresh(List<int> items)
+    {
+        currItems = items;
+        ClearSlots();
+        RefreshItems();
     }
     public void SetItemBroadcastEvent(Action<ItemConfig> action) 
     {
@@ -32,19 +54,21 @@ public class UIPanel_Bag_ItemView : MonoBehaviour
             }
         }
     }
-    private void CreateItems(List<int> items, GameObject prefab)
+    private void RefreshItems()
     {
-        for (int i = 0; i < items.Count; i++)
+        for (int i = 0; i < currItems.Count; i++)
         {
             int index = i;
-            int itemId = items[index];
-            GameObject itemPrefab = Instantiate(prefab, slotList[index]);
-            itemPrefab.transform.Reset();
-            itemPrefab.GetComponent<UIItem_Bag_Item>().SetData(itemId);
-            itemPrefab.GetComponent<UIItem_Bag_Item>().ItemBroadcast = itemBroadcast;
+            int itemId = currItems[index];
+            if (slotList[index].childCount > 0) continue;
+            
+            GameObject itemObj = Instantiate(itemPrefab, slotList[index]);
+            itemObj.SetActive(true);
+            itemObj.transform.Reset();
+            itemObj.GetComponent<UIItem_Bag_Item>().SetData(itemId);
+            itemObj.GetComponent<UIItem_Bag_Item>().ItemBroadcast = itemBroadcast;
         }
     }
-
     private void ClearSlots()
     {
         foreach (RectTransform slot in slotList)

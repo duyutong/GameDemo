@@ -1,4 +1,4 @@
-using LitJson;
+﻿using LitJson;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,24 +8,7 @@ namespace ConfigData
 {
     public class ConfigLoader
     {
-        #region AutoContext
-        public static PathLibrary PathLibrary 
-        {
-            get 
-            {
-                if (_pathLibrary == null)
-                {
-
-
-                    string LibraryPath = Application.dataPath + "/ConfigData/PathLibrary.json";
-                    string pathLibStr = File.ReadAllText(LibraryPath);
-                    _pathLibrary = JsonMapper.ToObject<PathLibrary>(pathLibStr);
-                }
-                return _pathLibrary;
-            }
-        }
-        private static PathLibrary _pathLibrary;
-        #endregion
+        private static string jsonPath = "Assets/AddressableAssets/Config/Json";
         private static Dictionary<Type, IConfigDataHandler> configDic;
         public static T GetConfigData<T>(int id) where T : BaseConfig 
         {
@@ -38,23 +21,11 @@ namespace ConfigData
             
             return null;
         }
-        public static string GetLanguageById(int id)
-        {
-            LanguageConfig config = GetConfigData<LanguageConfig>(id);
-            if(config == null)return null;
 
-            return GlobalSetting.Instance.language switch
-            {
-                ELanguage.Chinese => config?.Chinese,
-                ELanguage.English => config?.English,
-                _ => config?.Chinese,
-            };
-        }
         private static void InitConfigHandler()
         {
             configDic = new Dictionary<Type, IConfigDataHandler>();
 
-            string jsonPath = PathLibrary.jsonPath;
             List<Type> types = GetClassList<BaseConfig>();
 
             foreach (var configType in types)

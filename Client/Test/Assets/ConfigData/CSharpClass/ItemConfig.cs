@@ -1,6 +1,6 @@
-
+﻿
 using System.Collections.Generic;
-using UnityEngine;
+using static EnumDefinitions;
 /// <summary>
 /// #ClassDes#
 /// <summary>
@@ -8,7 +8,7 @@ public class ItemConfig : BaseConfig
 {
 	
     /// <summary>
-    /// 编号
+    /// I
     /// </summary>
     public int ID { get; protected set; }
     /// <summary>

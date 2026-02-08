@@ -1,0 +1,9 @@
+.empty-label {
+    left: auto;
+    border-left-width: 5px;
+    border-right-width: 5px;
+    border-top-width: 5px;
+    border-bottom-width: 5px;
+    justify-content: center;
+    height: 30px;
+}

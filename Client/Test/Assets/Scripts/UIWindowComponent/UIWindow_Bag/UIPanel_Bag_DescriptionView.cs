@@ -1,5 +1,4 @@
-using ConfigData;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,8 +15,8 @@ public class UIPanel_Bag_DescriptionView : MonoBehaviour
         config = _config;
         SetIcon(config.Icon);
 
-        txtName.text = ConfigLoader.GetLanguageById(config.ItemName);
-        txtDes.text = ConfigLoader.GetLanguageById(config.ItemDesc);
+        txtName.text = ConfigLoaderUtil.GetLanguageById(config.ItemName);
+        txtDes.text = ConfigLoaderUtil.GetLanguageById(config.ItemDesc);
     }
     private void SetIcon(string spriteName)
     {

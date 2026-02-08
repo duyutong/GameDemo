@@ -171,7 +171,7 @@ public class AutomaticAtlas
             List<Sprite> sprites = keyValuePair.Value;
             if (sprites.Count == 0) continue;
 
-            string atlasPath = config.outputDirectory + "/" + atlasName + ".spriteatlas";
+            string atlasPath = config.outputDirectory + "/" + atlasName + ".spriteatlasv2";
             SpriteAtlas atlas = new SpriteAtlas(); // 创建新的SpriteAtlas
             atlas.Add(sprites.ToArray()); // 将纹理数组添加到SpriteAtlas
             atlas.SetPackingSettings(packingSettings);

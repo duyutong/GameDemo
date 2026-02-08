@@ -1,4 +1,4 @@
-using System;
+锘縰sing System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -9,15 +9,12 @@ using UnityEngine.U2D;
 
 public class ResourceLoader
 {
-    // ====== 内部资源池 ======
     private static Dictionary<string, Queue<UnityEngine.Object>> pool
         = new Dictionary<string, Queue<UnityEngine.Object>>();
 
-    // ====== 公共加载入口 ======
     public static void Load<T>(string pathOrKey, Action<T> onDone, bool usePool = false) where T : UnityEngine.Object
     {
 #if UNITY_EDITOR
-        // ========== 编辑器：保持本地使用方式 ==========
         if (typeof(T) == typeof(TextAsset))
         {
             string json = File.ReadAllText(pathOrKey);
@@ -36,13 +33,12 @@ public class ResourceLoader
 #else
          if (usePool)
         {
-            // 先尝试从池里取
             if (pool.TryGetValue(pathOrKey, out var q) && q.Count > 0)
             {
                 onDone?.Invoke(q.Dequeue() as T);
             }
         }
-        // ========== 运行时：走 Addressables ==========
+
         if (typeof(T) == typeof(Sprite)){ LoadSpriteAsync(pathOrKey,onDone);}
         else { LoadAssetAsync(pathOrKey, onDone, usePool); }
 #endif
@@ -88,13 +84,11 @@ public class ResourceLoader
 
         onDone?.Invoke(sprite as T);
     }
-    // ====== 回收接口（给“由本类管理池”的资源用） ======
     public static void Release(string key, UnityEngine.Object obj)
     {
         if (obj == null) return;
 
 #if UNITY_EDITOR
-        // 编辑器阶段不真正回收，什么都不做
 #else
         if (!pool.ContainsKey(key))
             pool[key] = new Queue<UnityEngine.Object>();

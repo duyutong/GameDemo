@@ -13,33 +13,6 @@ MonoBehaviour:
   m_Name: bagItem_toggle
   m_EditorClassIdentifier: Assembly-CSharp::BTContainer
   nodeDatas:
-  - nodeName: Reset
-    guid: 6cc40f2e-e12e-4e99-925e-6d9f222f5e40
-    lastNodes:
-    - 72d99de5-c5f8-44b2-bf7d-2e121debce48
-    output: []
-    nodePos: {x: 968, y: 417}
-    typeName: Deco_Reset
-    stateName: ResetState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[],"enter":false,"state":0}'
-  - nodeName: Reset
-    guid: 97ed69db-4571-4474-80df-95840721dd4e
-    lastNodes:
-    - f5b37c8d-e5af-4097-9dad-7f7c79aa19df
-    output: []
-    nodePos: {x: 851, y: 275}
-    typeName: Deco_Reset
-    stateName: ResetState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[],"enter":false,"state":0}'
-  - nodeName: Reset
-    guid: eb49ec95-0ae1-4e7f-98db-80d222174174
-    lastNodes:
-    - 49d8f593-ec4f-433b-946a-3d34a8b41ea3
-    output: []
-    nodePos: {x: 1167, y: 536}
-    typeName: Deco_Reset
-    stateName: ResetState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[],"enter":false,"state":0}'
   - nodeName: SwitchToggle
     guid: b9deccb8-12e6-4948-8e9e-e2d1b7cb3b45
     lastNodes: []
@@ -53,7 +26,7 @@ MonoBehaviour:
     nodePos: {x: 175, y: 341}
     typeName: Trigger_SwitchToggle
     stateName: SwitchToggleState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"isOn","nodeId":"8590e8e4-f401-41c7-9632-b40a82353176","toPortName":"enter","value":null},{"fromPortName":"isOff","nodeId":"3a2129f9-7aad-461c-a740-6238302ea790","toPortName":"enter","value":null}],"triggerTag":"","IsOff":false,"IsOn":false,"enter":false,"exit":false,"state":0,"toggleGroupObj":{"localPath":"","pathType":1,"scenePath":"UIRoot\/Canvas\/MainCanvas\/UI_Window_Bag\/BG\/ItemView","selfPath":"self","target":null},"toggleObj":{"localPath":"self","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"isOn","nodeId":"8590e8e4-f401-41c7-9632-b40a82353176","toPortName":"enter","value":null},{"fromPortName":"isOff","nodeId":"3a2129f9-7aad-461c-a740-6238302ea790","toPortName":"enter","value":null}],"triggerTag":"","enter":false,"exit":false,"isOff":false,"isOn":false,"state":0}'
   - nodeName: ScaleAnima
     guid: 8590e8e4-f401-41c7-9632-b40a82353176
     lastNodes:
@@ -83,28 +56,13 @@ MonoBehaviour:
     lastNodes:
     - 3a2129f9-7aad-461c-a740-6238302ea790
     output:
-    - fromPortName: exit
-      toPortName: enter
-      nodeId: 6cc40f2e-e12e-4e99-925e-6d9f222f5e40
     - fromPortName: isAllTogglesOff
       toPortName: enter
       nodeId: 49d8f593-ec4f-433b-946a-3d34a8b41ea3
     nodePos: {x: 664, y: 438}
     typeName: Trigger_ToggleGroup
     stateName: ToggleGroupState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"6cc40f2e-e12e-4e99-925e-6d9f222f5e40","toPortName":"enter","value":null},{"fromPortName":"isAllTogglesOff","nodeId":"49d8f593-ec4f-433b-946a-3d34a8b41ea3","toPortName":"enter","value":null}],"triggerTag":"","enter":false,"exit":false,"isAllTogglesOff":false,"isAnyTogglesOn":false,"state":0,"toggleGroupObj":{"localPath":"","pathType":1,"scenePath":"UIRoot\/Canvas\/MainCanvas\/UI_Window_Bag\/BG\/ItemView","selfPath":"self","target":null}}'
-  - nodeName: EventTagSender
-    guid: 49d8f593-ec4f-433b-946a-3d34a8b41ea3
-    lastNodes:
-    - 72d99de5-c5f8-44b2-bf7d-2e121debce48
-    output:
-    - fromPortName: exit
-      toPortName: enter
-      nodeId: eb49ec95-0ae1-4e7f-98db-80d222174174
-    nodePos: {x: 943, y: 536}
-    typeName: Deco_EventTagSender
-    stateName: EventTagSenderState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"eb49ec95-0ae1-4e7f-98db-80d222174174","toPortName":"enter","value":null}],"enter":false,"exit":false,"sendState":1,"sendTag":"UIWindow_Bag_ItemUnselect","state":0,"tagSendType":1}'
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"isAllTogglesOff","nodeId":"49d8f593-ec4f-433b-946a-3d34a8b41ea3","toPortName":"enter","value":null}],"triggerTag":"","enter":false,"exit":false,"isAllTogglesOff":false,"isAnyTogglesOn":false,"state":0}'
   - nodeName: EventTagSender
     guid: f5b37c8d-e5af-4097-9dad-7f7c79aa19df
     lastNodes:
@@ -117,6 +75,36 @@ MonoBehaviour:
     typeName: Deco_EventTagSender
     stateName: EventTagSenderState
     stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"97ed69db-4571-4474-80df-95840721dd4e","toPortName":"enter","value":null}],"enter":false,"exit":false,"sendState":1,"sendTag":"UIWindow_Bag_ItemSelect","state":0,"tagSendType":1}'
+  - nodeName: Reset
+    guid: eb49ec95-0ae1-4e7f-98db-80d222174174
+    lastNodes:
+    - 49d8f593-ec4f-433b-946a-3d34a8b41ea3
+    output: []
+    nodePos: {x: 1156, y: 515}
+    typeName: Deco_Reset
+    stateName: ResetState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[],"enter":false,"state":0}'
+  - nodeName: EventTagSender
+    guid: 49d8f593-ec4f-433b-946a-3d34a8b41ea3
+    lastNodes:
+    - 72d99de5-c5f8-44b2-bf7d-2e121debce48
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: eb49ec95-0ae1-4e7f-98db-80d222174174
+    nodePos: {x: 932, y: 515}
+    typeName: Deco_EventTagSender
+    stateName: EventTagSenderState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"eb49ec95-0ae1-4e7f-98db-80d222174174","toPortName":"enter","value":null}],"enter":false,"exit":false,"sendState":1,"sendTag":"UIWindow_Bag_ItemUnselect","state":0,"tagSendType":1}'
+  - nodeName: Reset
+    guid: 97ed69db-4571-4474-80df-95840721dd4e
+    lastNodes:
+    - f5b37c8d-e5af-4097-9dad-7f7c79aa19df
+    output: []
+    nodePos: {x: 840, y: 279}
+    typeName: Deco_Reset
+    stateName: ResetState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[],"enter":false,"state":0}'
   edgeDatas:
   - outPortNode: b9deccb8-12e6-4948-8e9e-e2d1b7cb3b45
     intputPortNode: 8590e8e4-f401-41c7-9632-b40a82353176
@@ -128,10 +116,6 @@ MonoBehaviour:
     intputPortName: enter
   - outPortNode: 3a2129f9-7aad-461c-a740-6238302ea790
     intputPortNode: 72d99de5-c5f8-44b2-bf7d-2e121debce48
-    outPortName: exit
-    intputPortName: enter
-  - outPortNode: 72d99de5-c5f8-44b2-bf7d-2e121debce48
-    intputPortNode: 6cc40f2e-e12e-4e99-925e-6d9f222f5e40
     outPortName: exit
     intputPortName: enter
   - outPortNode: 8590e8e4-f401-41c7-9632-b40a82353176

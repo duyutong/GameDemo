@@ -349,6 +349,7 @@ public static class GraphSaveUtility
             string json = "";
             using (MemoryStream stream = new System.IO.MemoryStream())
             {
+                CheckAndProcessObjectFields(baseNode.btState.stateObj);
                 jsonSerializer.WriteObject(stream, baseNode.btState.stateObj);
                 json = Encoding.UTF8.GetString(stream.ToArray());
             }
@@ -384,6 +385,8 @@ public static class GraphSaveUtility
             data.intputPortName = edge.input.portName;
             container.edgeDatas.Add(data);
         }
+
+        ResetBTTarget();
         return SerializeObject(container);
     }
 

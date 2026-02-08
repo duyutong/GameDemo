@@ -1,4 +1,4 @@
-using UnityEditor;
+Ôªøusing UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.U2D;
 using Unity.VisualScripting;
-using System.Drawing;
 using System.IO;
 
 public class ClearAtlas : EditorWindow
@@ -22,34 +21,39 @@ public class ClearAtlas : EditorWindow
     private List<AltasInfo> spriteAtlas = new List<AltasInfo>();
     private List<AltasVisualElement> altasVisuals = new List<AltasVisualElement>();
 
-   private List<string> failPaths = new List<string>();
-   private List<string> clearPaths = new List<string>();
+    private List<string> failPaths = new List<string>();
+    private List<string> clearPaths = new List<string>();
 
-    [MenuItem("Tools/AutomaticAtlas/ClearAtlas(…æ≥˝ÕººØ)")]
+    [MenuItem("Tools/AutomaticAtlas/ClearAtlas(Âà†Èô§ÂõæÈõÜ)")]
     public static void ShowExample()
     {
-        if (config == null) config = AssetDatabase.LoadAssetAtPath<AtlasConfig>(configPath);
+        if (config == null)
+            config = AssetDatabase.LoadAssetAtPath<AtlasConfig>(configPath);
+
         if (!Directory.Exists(config.outputDirectory))
         {
             EditorUtility.DisplayDialog(
-                "ƒø¬º≤ª¥Ê‘⁄",
-                $"{config.outputDirectory}\nƒø¬º≤ª¥Ê‘⁄£¨«Îœ»¥¥Ω®ƒø¬ºªÚ–ﬁ∏ƒ≈‰÷√¬∑æ∂°£",
-                "»∑∂®");
+                "ÁõÆÂΩï‰∏çÂ≠òÂú®",
+                $"{config.outputDirectory}\nÁõÆÂΩï‰∏çÂ≠òÂú®ÔºåËØ∑ÂÖàÂàõÂª∫ÁõÆÂΩïÊàñ‰øÆÊîπÈÖçÁΩÆË∑ØÂæÑ",
+                "Á°ÆÂÆö"
+            );
             return;
         }
 
         ClearAtlas wnd = GetWindow<ClearAtlas>();
         wnd.titleContent = new GUIContent("ClearAtlas");
         wnd.maxSize = new Vector2(480, 2000);
-        wnd.minSize = new Vector2(480,300);
+        wnd.minSize = new Vector2(480, 300);
     }
+
     public void CreateGUI()
     {
-        // Each editor window contains a root VisualElement object
         VisualElement root = rootVisualElement;
-        
-        // Import UXML
-        var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Plugins/AutomaticAtlas/Editor/UIBuilder/ClearAtlas.uxml");
+
+        // Âä†ËΩΩ UXML
+        var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
+            "Assets/Plugins/AutomaticAtlas/Editor/UIBuilder/ClearAtlas.uxml"
+        );
         visualTree.CloneTree(root);
 
         Label altasPath = root.Q<Label>("altasPath");
@@ -88,14 +92,15 @@ public class ClearAtlas : EditorWindow
         failPaths.Clear();
         clearPaths.Clear();
     }
+
     private void OnBtnClearSelectClick()
     {
-       
-        foreach (AltasInfo atlasInfo in selectAltas) 
+        foreach (AltasInfo atlasInfo in selectAltas)
         {
             atlasInfo.visualElement.Clear();
             clearPaths.Add(atlasInfo.shortPath);
         }
+
         AssetDatabase.DeleteAssets(clearPaths.ToArray(), failPaths);
 
         clearPaths.Clear();
@@ -104,39 +109,51 @@ public class ClearAtlas : EditorWindow
 
     private void OnTogSelectAllValueChanged(ChangeEvent<bool> evt)
     {
-        bool isOn = evt.newValue == true;
+        bool isOn = evt.newValue;
         foreach (AltasVisualElement altasVisual in altasVisuals)
         {
             altasVisual.SetSelectToggleValue(isOn);
         }
     }
-    private void OnClearSingleAltas(AltasInfo atlasInfo) 
+
+    private void OnClearSingleAltas(AltasInfo atlasInfo)
     {
         spriteAtlas.Remove(atlasInfo);
         selectAltas.Remove(atlasInfo);
         AssetDatabase.DeleteAsset(atlasInfo.shortPath);
     }
+
     private void SetAltasView()
     {
         altasVisuals.Clear();
         spriteAtlas.Clear();
         selectAltas.Clear();
 
-        EditorUtilityExtensions.CheckRes(config.outputDirectory, ".spriteatlas", (path) =>
-        {
-            string shortPath = EditorUtilityExtensions.ToShortPath(path);
-            SpriteAtlas atlas = AssetDatabase.LoadAssetAtPath<SpriteAtlas>(shortPath);
-            AltasInfo altasInfo = new AltasInfo();
-            altasInfo.shortPath = shortPath;
-            altasInfo.atlas = atlas;
-            spriteAtlas.Add(altasInfo);
-        });
+        EditorUtilityExtensions.CheckRes(
+            config.outputDirectory,
+            ".spriteatlasv2",
+            (path) =>
+            {
+                string shortPath = EditorUtilityExtensions.ToShortPath(path);
+                SpriteAtlas atlas = AssetDatabase.LoadAssetAtPath<SpriteAtlas>(shortPath);
+
+                AltasInfo altasInfo = new AltasInfo
+                {
+                    shortPath = shortPath,
+                    atlas = atlas
+                };
+
+                spriteAtlas.Add(altasInfo);
+            }
+        );
+
         foreach (AltasInfo atlasInfo in spriteAtlas)
         {
             AltasVisualElement element = new AltasVisualElement();
             element.SetAltasVE(atlasInfo);
             element.onClearAltas = OnClearSingleAltas;
             element.onSelectAltas = OnSelectSingleAltas;
+
             scrollView.Add(element);
             altasVisuals.Add(element);
         }
@@ -144,9 +161,9 @@ public class ClearAtlas : EditorWindow
 
     private void OnSelectSingleAltas(bool isOn, AltasInfo atlasInfo)
     {
-        if (isOn) 
+        if (isOn)
         {
-            selectAltas.Add(atlasInfo); 
+            selectAltas.Add(atlasInfo);
         }
         else
         {
@@ -155,7 +172,8 @@ public class ClearAtlas : EditorWindow
         }
     }
 }
-public class AltasInfo 
+
+public class AltasInfo
 {
     public SpriteAtlas atlas;
     public string shortPath;

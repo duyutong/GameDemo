@@ -39,18 +39,12 @@ public class SubBTContainerState : BTState
     {
         base.InitParam(param);
 
-        DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(SubBTContainerStateObjJson));
+        DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(SubBTContainerStateObj));
         using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(param)))
         {
-            SubBTContainerStateObjJson _stateObjJson = (SubBTContainerStateObjJson)jsonSerializer.ReadObject(stream);
+            _stateObj = ScriptableObject.CreateInstance<SubBTContainerStateObj>();
             var json = new StreamReader(stream).ReadToEnd();
-            JsonUtility.FromJsonOverwrite(json, _stateObjJson);
-
-            _stateObj ??= ScriptableObject.CreateInstance<SubBTContainerStateObj>();
-            _stateObj.output = _stateObjJson.output;
-            _stateObj.enter = _stateObjJson.enter;
-            _stateObj.exit = _stateObjJson.exit;
-            _stateObj.container.assetPath = _stateObjJson.container.assetPath;
+            JsonUtility.FromJsonOverwrite(json, _stateObj);
 
             output = _stateObj.output;
             exit = _stateObj.exit;
@@ -152,21 +146,7 @@ public class SubBTContainerStateObj : BTStateObject
 
     public SubBTContainerStateObj()
     {
-        if (container == null) container = new BTTargetContainer();
+        container ??= new BTTargetContainer();
     }
 }
 #endregion
-public class SubBTContainerStateObjJson : BTStateObject
-{
-    public EBTState state;
-
-    public bool exit;
-    public bool enter;
-
-    public BTTargetContainerJson container;
-}
-public class BTTargetContainerJson
-{
-    public UnityEngine.Object target;
-    public string assetPath;
-}

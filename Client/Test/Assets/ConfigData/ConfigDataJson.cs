@@ -1,9 +1,8 @@
-﻿using LitJson;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEngine;
 
 public class ConfigDataJson<T> : IConfigDataHandler<T> where T : BaseConfig, new()
 {
@@ -25,16 +24,16 @@ public class ConfigDataJson<T> : IConfigDataHandler<T> where T : BaseConfig, new
     public Dictionary<int, T> LoadConfigTable()
     {
         Dictionary<int, T> result = new();
-        string json;
-        ResourceLoader.Load<TextAsset>(tablePath, (_textAsset) => json = _textAsset.text, false);
-        JsonData _data = JsonMapper.ToObject(File.ReadAllText(tablePath));
-        for (int i = 0; i < _data.Count; i++)
+        string json = LoadTableData(tablePath);
+        JArray array = JArray.Parse(json);
+        for (int i = 0; i < array.Count; i++)
         {
-            int index = i;
-            Dictionary<string, object> pairs = new Dictionary<string, object>();
-            foreach (string key in _data[index].Keys) pairs.Add(key, _data[index][key]);
+            JObject item = array[i] as JObject;
+            Dictionary<string, object> pairs = item.ToObject<Dictionary<string, object>>();
+
             T confItem = new();
             confItem.Initialize(pairs);
+
             result.Add(confItem.id, confItem);
         }
         return result;
