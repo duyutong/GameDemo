@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 public class Trigger_ToggleGroup : TriggerNode

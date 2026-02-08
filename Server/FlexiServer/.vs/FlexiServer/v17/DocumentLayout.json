@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|e:\\unity\\gamedemo\\server\\flexiserver\\sandbox\\gameplayitemsandbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|solutionrelative:sandbox\\gameplayitemsandbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|e:\\unity\\gamedemo\\server\\flexiserver\\sandbox\\sandboxmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|solutionrelative:sandbox\\sandboxmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -23,10 +27,6 @@
       "RelativeMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|solutionrelative:sandbox\\sandboxbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|e:\\unity\\gamedemo\\server\\flexiserver\\sandbox\\gameplayitemsandbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|solutionrelative:sandbox\\gameplayitemsandbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|e:\\unity\\gamedemo\\server\\flexiserver\\sandbox\\sandboxpool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|solutionrelative:sandbox\\sandboxpool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -42,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 10,
           "Children": [
             {
               "$type": "Bookmark",
@@ -58,13 +58,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "SandboxManager.cs",
               "DocumentMoniker": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Sandbox\\SandboxManager.cs",
               "RelativeDocumentMoniker": "Sandbox\\SandboxManager.cs",
               "ToolTip": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Sandbox\\SandboxManager.cs",
               "RelativeToolTip": "Sandbox\\SandboxManager.cs",
-              "ViewState": "AgIAADUAAAAAAAAAAAAowGAAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAADUAAAAAAAAAAAAowEQAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-07T08:44:07.948Z",
               "EditorCaption": ""
@@ -95,7 +95,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "ChatService.cs",
               "DocumentMoniker": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Services\\ChatService.cs",
               "RelativeDocumentMoniker": "Services\\ChatService.cs",
@@ -103,12 +103,11 @@
               "RelativeToolTip": "Services\\ChatService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-07T01:47:20.96Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-07T01:47:20.96Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "BagService.cs",
               "DocumentMoniker": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Services\\BagService.cs",
               "RelativeDocumentMoniker": "Services\\BagService.cs",
@@ -120,7 +119,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "GamePlayService.cs",
               "DocumentMoniker": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Services\\GamePlayService.cs",
               "RelativeDocumentMoniker": "Services\\GamePlayService.cs",
@@ -128,12 +127,11 @@
               "RelativeToolTip": "Services\\GamePlayService.cs",
               "ViewState": "AgIAABYAAAAAAAAAAAAhwB0AAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-06T10:43:59.997Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-06T10:43:59.997Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "SandboxBase.cs",
               "DocumentMoniker": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Sandbox\\SandboxBase.cs",
               "RelativeDocumentMoniker": "Sandbox\\SandboxBase.cs",
@@ -145,15 +143,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 0,
               "Title": "GamePlayItemSandbox.cs",
               "DocumentMoniker": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Sandbox\\GamePlayItemSandbox.cs",
               "RelativeDocumentMoniker": "Sandbox\\GamePlayItemSandbox.cs",
               "ToolTip": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Sandbox\\GamePlayItemSandbox.cs",
               "RelativeToolTip": "Sandbox\\GamePlayItemSandbox.cs",
-              "ViewState": "AgIAACoAAAAAAAAAAAAIwEAAAAAwAAAAAAAAAA==",
+              "ViewState": "AgIAABAAAAAAAAAAAAAAwBcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-06T03:39:35.765Z"
+              "WhenOpened": "2026-02-06T03:39:35.765Z",
+              "EditorCaption": ""
             }
           ]
         }

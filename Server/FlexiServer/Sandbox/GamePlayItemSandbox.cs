@@ -47,6 +47,7 @@ namespace FlexiServer.Sandbox
 
             bagSlotIndex = emptySolt;
             itemId = randomKey;
+            info.bagSlot[bagSlotIndex] = itemId;
         }
         public bool ContainsPlayer(string account)
         {

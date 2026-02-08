@@ -25,10 +25,9 @@ public class ButtonTest : MonoBehaviour
         BagAcquireItemRequest request = new BagAcquireItemRequest();
         bagApi.BagAcquireItem(request, OnGetItem);
     }
-
     private void OnGetItem(bool succ, BagAcquireItemResponse response)
     {
         if (!succ) return;
-        itemView.AddItems(response.Item.Id);
+        itemView.AddItems(response.Item.Id,response.BagSlotIndex);
     }
 }
