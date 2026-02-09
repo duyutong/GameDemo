@@ -1,38 +1,26 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\",
+  "WorkspaceRootPath": "C:\\Users\\1\\Desktop\\unity versions\\GameDemo\\Server\\FlexiServer\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|e:\\unity\\gamedemo\\server\\flexiserver\\sandbox\\gameplayitemsandbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|solutionrelative:sandbox\\gameplayitemsandbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|c:\\users\\1\\desktop\\unity versions\\gamedemo\\server\\flexiserver\\configdata\\configloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|solutionrelative:configdata\\configloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|e:\\unity\\gamedemo\\server\\flexiserver\\sandbox\\sandboxmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|solutionrelative:sandbox\\sandboxmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|e:\\unity\\gamedemo\\server\\flexiserver\\services\\gameplayservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|solutionrelative:services\\gameplayservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|e:\\unity\\gamedemo\\server\\flexiserver\\services\\chatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|solutionrelative:services\\chatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|e:\\unity\\gamedemo\\server\\flexiserver\\services\\bagservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|c:\\users\\1\\desktop\\unity versions\\gamedemo\\server\\flexiserver\\services\\bagservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|solutionrelative:services\\bagservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|e:\\unity\\gamedemo\\server\\flexiserver\\sandbox\\sandboxbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|solutionrelative:sandbox\\sandboxbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|e:\\unity\\gamedemo\\server\\flexiserver\\sandbox\\sandboxpool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|c:\\users\\1\\desktop\\unity versions\\gamedemo\\server\\flexiserver\\sandbox\\sandboxpool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|solutionrelative:sandbox\\sandboxpool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|e:\\unity\\gamedemo\\server\\flexiserver\\models\\common\\iteminfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|solutionrelative:models\\common\\iteminfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|c:\\users\\1\\desktop\\unity versions\\gamedemo\\server\\flexiserver\\configdata\\configdatabinary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|solutionrelative:configdata\\configdatabinary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|c:\\users\\1\\desktop\\unity versions\\gamedemo\\server\\flexiserver\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{AF0E7328-89C6-49DD-8EC4-71FC750BA4E4}|FlexiServer.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,117 +30,74 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 4,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{a80febb4-e7e0-4147-b476-21aaf2453969}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{004be353-6879-467c-9d1e-9ac23cdf6d49}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "SandboxManager.cs",
-              "DocumentMoniker": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Sandbox\\SandboxManager.cs",
-              "RelativeDocumentMoniker": "Sandbox\\SandboxManager.cs",
-              "ToolTip": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Sandbox\\SandboxManager.cs",
-              "RelativeToolTip": "Sandbox\\SandboxManager.cs",
-              "ViewState": "AgIAADUAAAAAAAAAAAAowEQAAAAnAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-07T08:44:07.948Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "SandBoxPool.cs",
-              "DocumentMoniker": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Sandbox\\SandBoxPool.cs",
-              "RelativeDocumentMoniker": "Sandbox\\SandBoxPool.cs",
-              "ToolTip": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Sandbox\\SandBoxPool.cs",
-              "RelativeToolTip": "Sandbox\\SandBoxPool.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAADgvxIAAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-07T08:17:01.325Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "ItemInfo.cs",
-              "DocumentMoniker": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Models\\Common\\ItemInfo.cs",
-              "RelativeDocumentMoniker": "Models\\Common\\ItemInfo.cs",
-              "ToolTip": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Models\\Common\\ItemInfo.cs",
-              "RelativeToolTip": "Models\\Common\\ItemInfo.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAkAAAATAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-07T04:00:42.853Z"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "ChatService.cs",
-              "DocumentMoniker": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Services\\ChatService.cs",
-              "RelativeDocumentMoniker": "Services\\ChatService.cs",
-              "ToolTip": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Services\\ChatService.cs",
-              "RelativeToolTip": "Services\\ChatService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAA7AAAAAAAAAA==",
+              "Title": "ConfigDataBinary.cs",
+              "DocumentMoniker": "C:\\Users\\1\\Desktop\\unity versions\\GameDemo\\Server\\FlexiServer\\ConfigData\\ConfigDataBinary.cs",
+              "RelativeDocumentMoniker": "ConfigData\\ConfigDataBinary.cs",
+              "ToolTip": "C:\\Users\\1\\Desktop\\unity versions\\GameDemo\\Server\\FlexiServer\\ConfigData\\ConfigDataBinary.cs",
+              "RelativeToolTip": "ConfigData\\ConfigDataBinary.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-07T01:47:20.96Z"
+              "WhenOpened": "2026-02-05T10:06:41.075Z",
+              "IsPinned": true
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "BagService.cs",
-              "DocumentMoniker": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Services\\BagService.cs",
-              "RelativeDocumentMoniker": "Services\\BagService.cs",
-              "ToolTip": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Services\\BagService.cs",
-              "RelativeToolTip": "Services\\BagService.cs",
-              "ViewState": "AgIAAAQAAAAAAAAAAADwvxIAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-06T06:37:13.108Z"
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\1\\Desktop\\unity versions\\GameDemo\\Server\\FlexiServer\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\1\\Desktop\\unity versions\\GameDemo\\Server\\FlexiServer\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-02-05T09:57:02.758Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "GamePlayService.cs",
-              "DocumentMoniker": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Services\\GamePlayService.cs",
-              "RelativeDocumentMoniker": "Services\\GamePlayService.cs",
-              "ToolTip": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Services\\GamePlayService.cs",
-              "RelativeToolTip": "Services\\GamePlayService.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAhwB0AAAAjAAAAAAAAAA==",
+              "Title": "SandBoxPool.cs",
+              "DocumentMoniker": "C:\\Users\\1\\Desktop\\unity versions\\GameDemo\\Server\\FlexiServer\\Sandbox\\SandBoxPool.cs",
+              "RelativeDocumentMoniker": "Sandbox\\SandBoxPool.cs",
+              "ToolTip": "C:\\Users\\1\\Desktop\\unity versions\\GameDemo\\Server\\FlexiServer\\Sandbox\\SandBoxPool.cs",
+              "RelativeToolTip": "Sandbox\\SandBoxPool.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-06T10:43:59.997Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "SandboxBase.cs",
-              "DocumentMoniker": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Sandbox\\SandboxBase.cs",
-              "RelativeDocumentMoniker": "Sandbox\\SandboxBase.cs",
-              "ToolTip": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Sandbox\\SandboxBase.cs",
-              "RelativeToolTip": "Sandbox\\SandboxBase.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-07T02:41:43.101Z"
+              "WhenOpened": "2026-02-05T09:52:19.61Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "GamePlayItemSandbox.cs",
-              "DocumentMoniker": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Sandbox\\GamePlayItemSandbox.cs",
-              "RelativeDocumentMoniker": "Sandbox\\GamePlayItemSandbox.cs",
-              "ToolTip": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\Sandbox\\GamePlayItemSandbox.cs",
-              "RelativeToolTip": "Sandbox\\GamePlayItemSandbox.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAAwCIAAABAAAAAAAAAAA==",
+              "Title": "ConfigLoader.cs",
+              "DocumentMoniker": "C:\\Users\\1\\Desktop\\unity versions\\GameDemo\\Server\\FlexiServer\\ConfigData\\ConfigLoader.cs",
+              "RelativeDocumentMoniker": "ConfigData\\ConfigLoader.cs",
+              "ToolTip": "C:\\Users\\1\\Desktop\\unity versions\\GameDemo\\Server\\FlexiServer\\ConfigData\\ConfigLoader.cs",
+              "RelativeToolTip": "ConfigData\\ConfigLoader.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-06T03:39:35.765Z",
+              "WhenOpened": "2026-02-05T09:36:15.795Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "BagService.cs",
+              "DocumentMoniker": "C:\\Users\\1\\Desktop\\unity versions\\GameDemo\\Server\\FlexiServer\\Services\\BagService.cs",
+              "RelativeDocumentMoniker": "Services\\BagService.cs",
+              "ToolTip": "C:\\Users\\1\\Desktop\\unity versions\\GameDemo\\Server\\FlexiServer\\Services\\BagService.cs",
+              "RelativeToolTip": "Services\\BagService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-05T09:32:25.709Z"
             }
           ]
         }
