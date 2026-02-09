@@ -1,0 +1,116 @@
+[
+  {
+    "ContainingType": "FlexiServer.Transport.Http.MapPostEndpoints\u002B\u003C\u003Ec__DisplayClass0_0",
+    "Method": "\u003CMapBagEndpoints\u003Eb__0",
+    "RelativePath": "bag/acquireItem",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "msg",
+        "Type": "FlexiServer.Transport.Http.HttpMessage\u00601[[FlexiServer.Models.BagAcquireItemRequest, FlexiServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "FlexiServer.Transport.Http.HttpResult\u00601[[FlexiServer.Models.BagAcquireItemResponse, FlexiServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "FlexiServer.Transport.Http.MapPostEndpoints\u002B\u003C\u003Ec__DisplayClass2_0",
+    "Method": "\u003CMapCreateAccountEndpoints\u003Eb__0",
+    "RelativePath": "createAccount/create",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "msg",
+        "Type": "FlexiServer.Transport.Http.HttpMessage\u00601[[FlexiServer.Models.CreateAccountCreateRequest, FlexiServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "FlexiServer.Transport.Http.HttpResult\u00601[[FlexiServer.Models.CreateAccountCreateResponse, FlexiServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "FlexiServer.Transport.Http.MapPostEndpoints\u002B\u003C\u003Ec__DisplayClass3_0",
+    "Method": "\u003CMapLoginEndpoints\u003Eb__0",
+    "RelativePath": "login/httpLogin",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "msg",
+        "Type": "FlexiServer.Transport.Http.HttpMessage\u00601[[FlexiServer.Models.LoginHttpLoginRequest, FlexiServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "FlexiServer.Transport.Http.HttpResult\u00601[[FlexiServer.Models.LoginHttpLoginResponse, FlexiServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "FlexiServer.Transport.Http.MapPostEndpoints\u002B\u003C\u003Ec__DisplayClass3_0",
+    "Method": "\u003CMapLoginEndpoints\u003Eb__1",
+    "RelativePath": "login/validate",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "msg",
+        "Type": "FlexiServer.Transport.Http.HttpMessage\u00601[[FlexiServer.Models.LoginValidateRequest, FlexiServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "FlexiServer.Transport.Http.HttpResult\u00601[[FlexiServer.Models.LoginValidateResponse, FlexiServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "FlexiServer.Transport.Web.WebSocketEndpoints\u002B\u003C\u003Ec",
+    "Method": "\u003CMapWebSocketEndpoints\u003Eb__0_1",
+    "RelativePath": "ping",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  }
+]
