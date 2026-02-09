@@ -9,7 +9,8 @@ using UnityEngine;
 public class LogicGateState : BehaviorTreeBaseState
 {
     public ELogic logicType;
-
+    public System.Boolean enter;
+    public System.Boolean exit;
     public override BTStateObject stateObj
     {
         get
@@ -21,6 +22,8 @@ public class LogicGateState : BehaviorTreeBaseState
                 _stateObj.output = output;
                 _stateObj.interruptible = interruptible;
                 _stateObj.interruptTag = interruptTag;
+                _stateObj.enter = enter;
+                _stateObj.exit = exit;
 
                 _stateObj.logicType = logicType;
             }
@@ -59,6 +62,12 @@ public class LogicGateState : BehaviorTreeBaseState
     public override void OnEnter()
     {
         base.OnEnter();
+        bool isCanExecute = enter && runtime != null;
+        if (isCanExecute) OnExecute();
+        else OnRefresh();
+    }
+    public override void OnExecute()
+    {
         if (logicType == ELogic.OR)
         {
             OnExit();
@@ -84,13 +93,16 @@ public class LogicGateState : BehaviorTreeBaseState
     }
     public override void OnExit()
     {
-        if (output.Count > 0) output[0].value = true;
+        foreach (BTOutputInfo info in output) if (info.fromPortName == "exit") info.value = true;
         base.OnExit();
+       
     }
 }
 public class LogicGateStateObj : BTStateObject
 {
     public EBTState state;
+    public System.Boolean enter;
+    public System.Boolean exit;
     public ELogic logicType;
 }
 public enum ELogic

@@ -7,7 +7,6 @@ namespace FlexiServer.Models.Common
     public class ItemInfo
     {
         #region AutoContext
-        
         public int Id { get; set; }
         #endregion Variable
     }

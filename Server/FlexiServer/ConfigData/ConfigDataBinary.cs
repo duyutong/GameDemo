@@ -7,17 +7,28 @@ public class ConfigDataBinary<T> : IConfigDataHandler<T> where T : BaseConfig
 {
     private string tablePath;
     private Dictionary<int, T> configTable;
+    private readonly object _lock = new object();
     private static MemoryStream tempStream = new MemoryStream(1024 * 32);
     public void SetTablePath(string path) => tablePath = path;
     public T GetConfigData(int id)
     {
-        configTable ??= LoadConfigTable();
+        if (configTable == null)
+        {
+            lock (_lock)
+            { configTable ??= LoadConfigTable(); }
+        }
+
         if (!configTable.ContainsKey(id)) return null;
         return configTable[id];
     }
     public List<T> GetConfigData(Func<T, bool> select, int count = 1)
     {
-        configTable ??= LoadConfigTable();
+        if (configTable == null)
+        {
+            lock (_lock)
+            { configTable ??= LoadConfigTable(); }
+        }
+
         return configTable.Values.Where(v => select(v)).Take(count).ToList();
     }
     public Dictionary<int, T> LoadConfigTable()

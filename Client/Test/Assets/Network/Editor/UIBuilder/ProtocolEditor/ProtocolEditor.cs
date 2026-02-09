@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+锘縰sing System.Collections.Generic;
 using UnityEditor;
 using UnityEngine.UIElements;
 
@@ -41,7 +41,7 @@ public partial class ProtocolEditor : VisualElement
     private void OnRemoveButtonClick()
     {
         if (selectedIndex < 0) return;
-        requestScrollView.contentContainer.RemoveAt(selectedIndex + 1);//因为有一个emptyLabel占位，所以要加1
+        requestScrollView.contentContainer.RemoveAt(selectedIndex + 1);//锟斤拷为锟斤拷一锟斤拷emptyLabel占位锟斤拷锟斤拷锟斤拷要锟斤拷1
         compalexBlockItems.RemoveAt(selectedIndex);
         foreach (CompalexBlockItem block in compalexBlockItems)
         {

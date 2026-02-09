@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -63,16 +63,8 @@ public static class EditorUtilityExtensions
         }
         else
         {
-            string[] vs = Directory.GetDirectories(path);
-            foreach (string v in vs) { CheckRes(v, extension, action); }
-            DirectoryInfo directory = Directory.CreateDirectory(path);
-            FileInfo[] fileInfos = directory.GetFiles();
-            foreach (FileInfo info in fileInfos)
-            {
-                if (string.IsNullOrEmpty(info.FullName)) continue;
-                if (info.Extension != extension) continue;
-                action?.Invoke(info.FullName);
-            }
+            string[] files = Directory.GetFiles(path, $"*{extension}", SearchOption.AllDirectories);
+            foreach (string file in files) action?.Invoke(file);
         }
     }
     public static string ToShortPath(this string fullPath) 

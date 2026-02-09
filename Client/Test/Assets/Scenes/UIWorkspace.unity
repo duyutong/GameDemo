@@ -173,6 +173,8 @@ GameObject:
   m_Component:
   - component: {fileID: 145130627}
   - component: {fileID: 145130626}
+  - component: {fileID: 145130629}
+  - component: {fileID: 145130628}
   m_Layer: 0
   m_Name: Network
   m_TagString: Untagged
@@ -192,7 +194,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d76bf322fc342a446a8198f0d928e3b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Network.NetworkManager
-  isAutoLogin: 1
   host: 127.0.0.1
   port: 7000
   isDebug: 1
@@ -211,6 +212,34 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &145130628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145130625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b34bf415b772db43b0423e9570dd8fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BTRuntimeComponent
+  container: {fileID: 11400000, guid: 8c3a1ff0a85486841b6bd3572d4e3b50, type: 2}
+--- !u!114 &145130629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145130625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e68626b2465558941b68800cb9166403, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AutoTestFlow
+  network: {fileID: 145130626}
+  isAutoLogin: 1
+  bTRuntimeComp: {fileID: 145130628}
 --- !u!1 &658070995
 GameObject:
   m_ObjectHideFlags: 0

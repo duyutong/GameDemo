@@ -1,53 +1,53 @@
-using System;
+ï»¿using System;
 
 /// <summary>
-/// ÍøÂçÏà¹ØÂ·¾¶ÅäÖÃ
+/// ç½‘ç»œç›¸å…³è·¯å¾„é…ç½®
 /// </summary>
 [Serializable]
 public class PathLibrary_Network
 {
     /// <summary>
-    /// ¿Í»§¶ËÍøÂç¸ùÄ¿Â¼
+    /// å®¢æˆ·ç«¯ç½‘ç»œæ ¹ç›®å½•
     /// </summary>
     public string clientNetworkRoot;
 
     /// <summary>
-    /// ¿Í»§¶Ë API Ä¿Â¼
+    /// å®¢æˆ·ç«¯ API ç›®å½•
     /// </summary>
     public string clientApiPath;
 
     /// <summary>
-    /// ¿Í»§¶ËÃ¶¾Ù¶¨ÒåÎÄ¼şÂ·¾¶
+    /// å®¢æˆ·ç«¯æšä¸¾å®šä¹‰æ–‡ä»¶è·¯å¾„
     /// </summary>
     public string clientEnumDefinitionsPath;
 
     /// <summary>
-    /// ¿Í»§¶Ë Model ¸ùÄ¿Â¼
+    /// å®¢æˆ·ç«¯ Model ç›®å½•
     /// </summary>
     public string modelPath;
 
     /// <summary>
-    /// ¿Í»§¶Ë/·şÎñÆ÷ ¹«¹² Model Ä¿Â¼
+    /// å®¢æˆ·ç«¯/æœåŠ¡å™¨ å…¬å…± Model ç›®å½•
     /// </summary>
     public string commModelPath;
 
     /// <summary>
-    /// ·şÎñÆ÷¸ùÄ¿Â¼
+    /// æœåŠ¡å™¨æ ¹ç›®å½•
     /// </summary>
     public string serverRoot;
 
     /// <summary>
-    /// ·şÎñ²ã Service Ä¿Â¼
+    /// æœåŠ¡å™¨ Service ç›®å½•
     /// </summary>
     public string servicePath;
 
     /// <summary>
-    /// ·şÎñÆ÷/¿Í»§¶Ë HTTP ¶ËµãÄ¿Â¼
+    /// æœåŠ¡å™¨/å®¢æˆ·ç«¯ HTTP ç«¯ç‚¹ç›®å½•
     /// </summary>
     public string httpEndPointsPath;
 
     /// <summary>
-    /// ·şÎñÆ÷ºËĞÄÄ£¿éÄ¿Â¼
+    /// æœåŠ¡å™¨æ ¸å¿ƒæ¨¡å—ç›®å½•
     /// </summary>
     public string serverCorePath;
 }

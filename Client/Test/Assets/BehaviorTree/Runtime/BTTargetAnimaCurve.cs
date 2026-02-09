@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -82,12 +82,12 @@ public class BTTargetAnimaCurve
             };
             curve.AddKey(key);
 
-            // »¹Ô­×óÇÐÏßÄ£Ê½
+            // ï¿½ï¿½Ô­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
             AnimationUtility.SetKeyLeftTangentMode(
                 curve, i, (TangentMode)k.leftTangentMode
             );
 
-            // »¹Ô­ÓÒÇÐÏßÄ£Ê½
+            // ï¿½ï¿½Ô­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
             AnimationUtility.SetKeyRightTangentMode(
                 curve, i, (TangentMode)k.leftTangentMode
             );

@@ -24,7 +24,8 @@ public class EnumDefinitions
         None = 0,
         Food = 1,
         Clue = 2,
-        Survival = 3
+        Survival = 3,
+        Unidentified = 4,
     }
     public enum EClueType
     {

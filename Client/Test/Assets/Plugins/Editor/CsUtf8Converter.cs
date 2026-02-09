@@ -1,28 +1,28 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEditor;
 using System.IO;
 using System.Text;
 
 public class CsUtf8BomConverter : EditorWindow
 {
-    private string folderPath = "Assets"; // Ä¬ÈÏÉ¨ÃèÕû¸ö Assets ÎÄ¼ş¼Ğ
+    private string folderPath = "Assets"; // é»˜è®¤æ‰«æç›®å½•ä¸º Assets æ–‡ä»¶å¤¹
 
     [MenuItem("Tools/Convert .cs to UTF-8 BOM")]
     public static void ShowWindow()
     {
-        EditorWindow.GetWindow(typeof(CsUtf8BomConverter), false, "UTF-8 BOM Converter");
+        EditorWindow.GetWindow(typeof(CsUtf8BomConverter), false, "UTF-8 BOM è½¬æ¢å·¥å…·");
     }
 
     private void OnGUI()
     {
-        GUILayout.Label("ÅúÁ¿×ª»» .cs ÎÄ¼şÎª UTF-8£¨´ø BOM£©", EditorStyles.boldLabel);
+        GUILayout.Label("æ‰¹é‡è½¬æ¢ .cs æ–‡ä»¶ä¸º UTF-8ï¼ˆå¸¦ BOMï¼‰ç¼–ç ", EditorStyles.boldLabel);
         EditorGUILayout.Space();
 
-        folderPath = EditorGUILayout.TextField("É¨ÃèÄ¿Â¼", folderPath);
+        folderPath = EditorGUILayout.TextField("æ‰«æç›®å½•", folderPath);
 
-        if (GUILayout.Button("Ñ¡ÔñÄ¿Â¼"))
+        if (GUILayout.Button("é€‰æ‹©ç›®å½•"))
         {
-            string selected = EditorUtility.OpenFolderPanel("Ñ¡ÔñÉ¨ÃèÄ¿Â¼", folderPath, "");
+            string selected = EditorUtility.OpenFolderPanel("é€‰æ‹©æ‰«æç›®å½•", folderPath, "");
             if (!string.IsNullOrEmpty(selected))
             {
                 folderPath = selected;
@@ -31,17 +31,17 @@ public class CsUtf8BomConverter : EditorWindow
 
         EditorGUILayout.Space();
 
-        if (GUILayout.Button("¿ªÊ¼×ª»»"))
+        if (GUILayout.Button("å¼€å§‹è½¬æ¢"))
         {
             if (Directory.Exists(folderPath))
             {
                 ConvertAllCsFiles(folderPath);
                 AssetDatabase.Refresh();
-                EditorUtility.DisplayDialog("Íê³É", "×ª»»Íê³É£¡£¨Èç¹ûÃ»ÓĞ´òÓ¡£¬ÔÙÊÔÒ»´Î£©", "È·¶¨");
+                EditorUtility.DisplayDialog("å®Œæˆ", "è½¬æ¢å®Œæˆï¼Œå¦‚æœæ²¡æœ‰æ‰“å°è¯·å†è¿è¡Œä¸€æ¬¡", "ç¡®å®š");
             }
             else
             {
-                EditorUtility.DisplayDialog("´íÎó", "Ä¿Â¼²»´æÔÚ£¡", "È·¶¨");
+                EditorUtility.DisplayDialog("é”™è¯¯", "ç›®å½•ä¸å­˜åœ¨", "ç¡®å®š");
             }
         }
     }
@@ -56,18 +56,18 @@ public class CsUtf8BomConverter : EditorWindow
             try
             {
                 string content = File.ReadAllText(file, DetectEncoding(file));
-                // UTF-8 ´ø BOM
+                // å†™å…¥ UTF-8 å¹¶æ·»åŠ  BOM
                 File.WriteAllText(file, content, new UTF8Encoding(true));
                 count++;
-                Debug.Log($"ÒÑ×ª»»: {file}");
+                Debug.Log($"å·²è½¬æ¢: {file}");
             }
             catch (System.Exception ex)
             {
-                Debug.LogError($"×ª»»Ê§°Ü: {file} Ô­Òò: {ex.Message}");
+                Debug.LogError($"è½¬æ¢å¤±è´¥: {file} åŸå› : {ex.Message}");
             }
         }
 
-        Debug.Log($"×ª»»Íê³É£¬¹²´¦Àí {count} ¸öÎÄ¼ş¡£");
+        Debug.Log($"è½¬æ¢å®Œæˆï¼Œå…±å¤„ç† {count} ä¸ªæ–‡ä»¶");
     }
 
     private Encoding DetectEncoding(string filePath)

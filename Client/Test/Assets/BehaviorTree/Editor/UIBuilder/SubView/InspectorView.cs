@@ -10,7 +10,7 @@ public partial class InspectorView : VisualElement
         Clear();
         UnityEngine.Object.DestroyImmediate(editor);
         if (node.btState.stateObj == null) return;
-        UnityEngine.Debug.Log($"{node.btState.stateName}  {node.btState.state}");
+        UnityEngine.Debug.Log($"{node.name}  {node.btState.state}");
 
         node.btState.Save();
         editor = Editor.CreateEditor(node.btState.stateObj);

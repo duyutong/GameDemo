@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e72bb62fccd446148ad9fc3191eea09a, type: 3}
+  m_Name: autoTestFlow_timeCount
+  m_EditorClassIdentifier: Assembly-CSharp::BTContainer
+  nodeDatas:
+  - nodeName: SubBTCompleteFinish
+    guid: c8eecdd5-4327-4ea2-918d-d057464dee01
+    lastNodes:
+    - 5aae63de-e1f1-4ff7-817a-ac9800bd9343
+    output: []
+    nodePos: {x: 729, y: 219}
+    typeName: Deco_SubBTCompleteFinish
+    stateName: SubBTCompleteFinishState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[],"enter":false,"state":0}'
+  - nodeName: Loop
+    guid: 88ff03fc-a9cd-45ba-84e8-980089d7b51e
+    lastNodes: []
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: 0d2dbaea-dc86-4fd5-9046-49dff393bc52
+    nodePos: {x: -40, y: 219}
+    typeName: Deco_Loop
+    stateName: LoopState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"0d2dbaea-dc86-4fd5-9046-49dff393bc52","toPortName":"enter","value":null}],"loopCount":2,"loopState":0,"loopTag":"timeCount","state":0}'
+  - nodeName: Loop
+    guid: 5aae63de-e1f1-4ff7-817a-ac9800bd9343
+    lastNodes:
+    - b73b738f-c0e1-4fe7-bd85-55ee9f3bd24d
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: c8eecdd5-4327-4ea2-918d-d057464dee01
+    nodePos: {x: 538, y: 219}
+    typeName: Deco_Loop
+    stateName: LoopState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"c8eecdd5-4327-4ea2-918d-d057464dee01","toPortName":"enter","value":null}],"loopCount":2,"loopState":1,"loopTag":"timeCount","state":0}'
+  - nodeName: TimeDelay
+    guid: 0d2dbaea-dc86-4fd5-9046-49dff393bc52
+    lastNodes:
+    - 88ff03fc-a9cd-45ba-84e8-980089d7b51e
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: b73b738f-c0e1-4fe7-bd85-55ee9f3bd24d
+    nodePos: {x: 152, y: 219}
+    typeName: Deco_TimeDelay
+    stateName: TimeDelayState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"b73b738f-c0e1-4fe7-bd85-55ee9f3bd24d","toPortName":"enter","value":null}],"delayTime":1,"state":0}'
+  - nodeName: Debug
+    guid: b73b738f-c0e1-4fe7-bd85-55ee9f3bd24d
+    lastNodes:
+    - 0d2dbaea-dc86-4fd5-9046-49dff393bc52
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: 5aae63de-e1f1-4ff7-817a-ac9800bd9343
+    nodePos: {x: 342, y: 219}
+    typeName: Deco_Debug
+    stateName: DebugState
+    stateParams: "{\"hideFlags\":0,\"name\":\"\",\"interruptTag\":\"\",\"interruptible\":false,\"output\":[{\"fromPortName\":\"exit\",\"nodeId\":\"5aae63de-e1f1-4ff7-817a-ac9800bd9343\",\"toPortName\":\"enter\",\"value\":null}],\"enter\":false,\"exit\":false,\"logStr\":\"------
+      \u5012\u6570\u4E2D\",\"state\":0}"
+  edgeDatas:
+  - outPortNode: 0d2dbaea-dc86-4fd5-9046-49dff393bc52
+    intputPortNode: b73b738f-c0e1-4fe7-bd85-55ee9f3bd24d
+    outPortName: exit
+    intputPortName: enter
+  - outPortNode: 88ff03fc-a9cd-45ba-84e8-980089d7b51e
+    intputPortNode: 0d2dbaea-dc86-4fd5-9046-49dff393bc52
+    outPortName: exit
+    intputPortName: enter
+  - outPortNode: b73b738f-c0e1-4fe7-bd85-55ee9f3bd24d
+    intputPortNode: 5aae63de-e1f1-4ff7-817a-ac9800bd9343
+    outPortName: exit
+    intputPortName: enter
+  - outPortNode: 5aae63de-e1f1-4ff7-817a-ac9800bd9343
+    intputPortNode: c8eecdd5-4327-4ea2-918d-d057464dee01
+    outPortName: exit
+    intputPortName: enter

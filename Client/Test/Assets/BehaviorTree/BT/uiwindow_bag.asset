@@ -14,28 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BTContainer
   nodeDatas:
   - nodeName: LogicGate
-    guid: 9f4d5bbe-3226-4af4-a636-963496864904
-    lastNodes:
-    - ddec2cb2-0d94-4a32-abed-859057f0acef
-    - 1c041bbf-3fca-44eb-a29d-6e047e704fd0
-    output:
-    - fromPortName: exit
-      toPortName: enter
-      nodeId: f3d9017c-2b77-41e2-aec6-075f7fa4e07d
-    nodePos: {x: 660, y: 669}
-    typeName: Deco_LogicGate
-    stateName: LogicGateState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"f3d9017c-2b77-41e2-aec6-075f7fa4e07d","toPortName":"enter","value":null}],"logicType":0,"state":0}'
-  - nodeName: Reset
-    guid: f3d9017c-2b77-41e2-aec6-075f7fa4e07d
-    lastNodes:
-    - 9f4d5bbe-3226-4af4-a636-963496864904
-    output: []
-    nodePos: {x: 857, y: 670}
-    typeName: Deco_Reset
-    stateName: ResetState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[],"enter":false,"state":0}'
-  - nodeName: LogicGate
     guid: ebfa04cf-7c36-4927-bdac-6cbad3a3dcca
     lastNodes:
     - 6d1789cc-108e-4b56-be9a-4410fe9c1f92
@@ -48,6 +26,18 @@ MonoBehaviour:
     typeName: Deco_LogicGate
     stateName: LogicGateState
     stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"4bc8d07f-a942-43f8-a12e-2ed4244353ce","toPortName":"enter","value":null}],"logicType":0,"state":0}'
+  - nodeName: MoveTo
+    guid: bdca26c4-8fbf-4948-b482-04826a15fa76
+    lastNodes:
+    - 8a1871a7-bba3-4ca1-9e14-60cdfdfdca4c
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: ebfa04cf-7c36-4927-bdac-6cbad3a3dcca
+    nodePos: {x: 435, y: 927}
+    typeName: Behav_MoveTo
+    stateName: MoveToState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"ebfa04cf-7c36-4927-bdac-6cbad3a3dcca","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[{"inTangent":2,"inWeight":0,"leftTangentMode":0,"outTangent":2,"outWeight":0,"rightTangentMode":0,"time":0,"value":0,"weightedMode":0},{"inTangent":0,"inWeight":0,"leftTangentMode":0,"outTangent":0,"outWeight":0,"rightTangentMode":0,"time":0.2,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[{"inTangent":2,"inWeight":0,"outTangent":2,"outWeight":0,"tangentMode":0,"time":0,"value":0,"weightedMode":0},{"inTangent":0,"inWeight":0,"outTangent":0,"outWeight":0,"tangentMode":0,"time":0.2,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8}},"directionObj":{"localPath":"posRoot\/DescriptionView_Hide","pathType":0,"scenePath":"","selfPath":"self","target":null},"enter":false,"exit":false,"state":0,"targetObj":{"localPath":"BG\/DescriptionView","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
   - nodeName: Reset
     guid: 4bc8d07f-a942-43f8-a12e-2ed4244353ce
     lastNodes:
@@ -70,6 +60,27 @@ MonoBehaviour:
     typeName: Deco_LogicGate
     stateName: LogicGateState
     stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"65a83b9e-2dea-4a25-8f78-9622aeae9515","toPortName":"enter","value":null}],"logicType":0,"state":0}'
+  - nodeName: MoveTo
+    guid: 1c041bbf-3fca-44eb-a29d-6e047e704fd0
+    lastNodes:
+    - ee693f1c-da62-45de-9d06-a6355b946cc8
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: 9f4d5bbe-3226-4af4-a636-963496864904
+    nodePos: {x: 435, y: 708}
+    typeName: Behav_MoveTo
+    stateName: MoveToState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"9f4d5bbe-3226-4af4-a636-963496864904","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[{"inTangent":2,"inWeight":0,"leftTangentMode":0,"outTangent":2,"outWeight":0,"rightTangentMode":0,"time":0,"value":0,"weightedMode":0},{"inTangent":0,"inWeight":0,"leftTangentMode":0,"outTangent":0,"outWeight":0,"rightTangentMode":0,"time":0.2,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[{"inTangent":2,"inWeight":0,"outTangent":2,"outWeight":0,"tangentMode":0,"time":0,"value":0,"weightedMode":0},{"inTangent":0,"inWeight":0,"outTangent":0,"outWeight":0,"tangentMode":0,"time":0.2,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8}},"directionObj":{"localPath":"posRoot\/DescriptionView_Show","pathType":0,"scenePath":"","selfPath":"self","target":null},"enter":false,"exit":false,"state":0,"targetObj":{"localPath":"BG\/DescriptionView","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
+  - nodeName: Reset
+    guid: f3d9017c-2b77-41e2-aec6-075f7fa4e07d
+    lastNodes:
+    - 9f4d5bbe-3226-4af4-a636-963496864904
+    output: []
+    nodePos: {x: 857, y: 670}
+    typeName: Deco_Reset
+    stateName: ResetState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[],"enter":false,"state":0}'
   - nodeName: BTTagEventTrigger
     guid: 0e9dd12f-2ee9-4964-819f-bf94a64312ff
     lastNodes: []
@@ -105,6 +116,20 @@ MonoBehaviour:
     typeName: Behav_MoveTo
     stateName: MoveToState
     stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"96624ba7-2db0-4938-a88a-ce4cd4990a22","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[],"postWrapMode":8,"preWrapMode":8}},"directionObj":{"localPath":"posRoot\/ItemView_Idel","pathType":0,"scenePath":"","selfPath":"self","target":null},"enter":false,"exit":false,"state":0,"targetObj":{"localPath":"BG\/ItemView","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
+  - nodeName: BTTagEventTrigger
+    guid: 8a1871a7-bba3-4ca1-9e14-60cdfdfdca4c
+    lastNodes: []
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: 6d1789cc-108e-4b56-be9a-4410fe9c1f92
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: bdca26c4-8fbf-4948-b482-04826a15fa76
+    nodePos: {x: 224, y: 888}
+    typeName: Trigger_BTTagEventTrigger
+    stateName: BTTagEventTriggerState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"6d1789cc-108e-4b56-be9a-4410fe9c1f92","toPortName":"enter","value":null},{"fromPortName":"exit","nodeId":"bdca26c4-8fbf-4948-b482-04826a15fa76","toPortName":"enter","value":null}],"triggerTag":"UIWindow_Bag_ItemUnselect","exit":false,"state":0}'
   - nodeName: MoveTo
     guid: d03b694a-8e69-46a6-ac67-e6bfe3187605
     lastNodes:
@@ -117,6 +142,19 @@ MonoBehaviour:
     typeName: Behav_MoveTo
     stateName: MoveToState
     stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"96624ba7-2db0-4938-a88a-ce4cd4990a22","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[],"postWrapMode":8,"preWrapMode":8}},"directionObj":{"localPath":"posRoot\/DescriptionView_Hide","pathType":0,"scenePath":"","selfPath":"self","target":null},"enter":false,"exit":false,"state":0,"targetObj":{"localPath":"BG\/DescriptionView","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
+  - nodeName: LogicGate
+    guid: 9f4d5bbe-3226-4af4-a636-963496864904
+    lastNodes:
+    - ddec2cb2-0d94-4a32-abed-859057f0acef
+    - 1c041bbf-3fca-44eb-a29d-6e047e704fd0
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: f3d9017c-2b77-41e2-aec6-075f7fa4e07d
+    nodePos: {x: 660, y: 669}
+    typeName: Deco_LogicGate
+    stateName: LogicGateState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"f3d9017c-2b77-41e2-aec6-075f7fa4e07d","toPortName":"enter","value":null}],"logicType":0,"state":0}'
   - nodeName: MoveTo
     guid: ddec2cb2-0d94-4a32-abed-859057f0acef
     lastNodes:
@@ -141,32 +179,6 @@ MonoBehaviour:
     typeName: Behav_MoveTo
     stateName: MoveToState
     stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"ebfa04cf-7c36-4927-bdac-6cbad3a3dcca","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[{"inTangent":2,"inWeight":0,"leftTangentMode":0,"outTangent":2,"outWeight":0,"rightTangentMode":0,"time":0,"value":0,"weightedMode":0},{"inTangent":0,"inWeight":0,"leftTangentMode":0,"outTangent":0,"outWeight":0,"rightTangentMode":0,"time":0.2,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[{"inTangent":2,"inWeight":0,"outTangent":2,"outWeight":0,"tangentMode":0,"time":0,"value":0,"weightedMode":0},{"inTangent":0,"inWeight":0,"outTangent":0,"outWeight":0,"tangentMode":0,"time":0.2,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8}},"directionObj":{"localPath":"posRoot\/ItemView_Idel","pathType":0,"scenePath":"","selfPath":"self","target":null},"enter":false,"exit":false,"state":0,"targetObj":{"localPath":"BG\/ItemView","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
-  - nodeName: MoveTo
-    guid: bdca26c4-8fbf-4948-b482-04826a15fa76
-    lastNodes:
-    - 8a1871a7-bba3-4ca1-9e14-60cdfdfdca4c
-    output:
-    - fromPortName: exit
-      toPortName: enter
-      nodeId: ebfa04cf-7c36-4927-bdac-6cbad3a3dcca
-    nodePos: {x: 435, y: 927}
-    typeName: Behav_MoveTo
-    stateName: MoveToState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"ebfa04cf-7c36-4927-bdac-6cbad3a3dcca","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[{"inTangent":2,"inWeight":0,"leftTangentMode":0,"outTangent":2,"outWeight":0,"rightTangentMode":0,"time":0,"value":0,"weightedMode":0},{"inTangent":0,"inWeight":0,"leftTangentMode":0,"outTangent":0,"outWeight":0,"rightTangentMode":0,"time":0.2,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[{"inTangent":2,"inWeight":0,"outTangent":2,"outWeight":0,"tangentMode":0,"time":0,"value":0,"weightedMode":0},{"inTangent":0,"inWeight":0,"outTangent":0,"outWeight":0,"tangentMode":0,"time":0.2,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8}},"directionObj":{"localPath":"posRoot\/DescriptionView_Hide","pathType":0,"scenePath":"","selfPath":"self","target":null},"enter":false,"exit":false,"state":0,"targetObj":{"localPath":"BG\/DescriptionView","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
-  - nodeName: BTTagEventTrigger
-    guid: 8a1871a7-bba3-4ca1-9e14-60cdfdfdca4c
-    lastNodes: []
-    output:
-    - fromPortName: exit
-      toPortName: enter
-      nodeId: 6d1789cc-108e-4b56-be9a-4410fe9c1f92
-    - fromPortName: exit
-      toPortName: enter
-      nodeId: bdca26c4-8fbf-4948-b482-04826a15fa76
-    nodePos: {x: 224, y: 888}
-    typeName: Trigger_BTTagEventTrigger
-    stateName: BTTagEventTriggerState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"6d1789cc-108e-4b56-be9a-4410fe9c1f92","toPortName":"enter","value":null},{"fromPortName":"exit","nodeId":"bdca26c4-8fbf-4948-b482-04826a15fa76","toPortName":"enter","value":null}],"triggerTag":"UIWindow_Bag_ItemUnselect","exit":false,"state":0}'
   - nodeName: BTTagEventTrigger
     guid: ee693f1c-da62-45de-9d06-a6355b946cc8
     lastNodes: []
@@ -181,18 +193,6 @@ MonoBehaviour:
     typeName: Trigger_BTTagEventTrigger
     stateName: BTTagEventTriggerState
     stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"ddec2cb2-0d94-4a32-abed-859057f0acef","toPortName":"enter","value":null},{"fromPortName":"exit","nodeId":"1c041bbf-3fca-44eb-a29d-6e047e704fd0","toPortName":"enter","value":null}],"triggerTag":"UIWindow_Bag_ItemSelect","exit":false,"state":0}'
-  - nodeName: MoveTo
-    guid: 1c041bbf-3fca-44eb-a29d-6e047e704fd0
-    lastNodes:
-    - ee693f1c-da62-45de-9d06-a6355b946cc8
-    output:
-    - fromPortName: exit
-      toPortName: enter
-      nodeId: 9f4d5bbe-3226-4af4-a636-963496864904
-    nodePos: {x: 435, y: 708}
-    typeName: Behav_MoveTo
-    stateName: MoveToState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"9f4d5bbe-3226-4af4-a636-963496864904","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[{"inTangent":2,"inWeight":0,"leftTangentMode":0,"outTangent":2,"outWeight":0,"rightTangentMode":0,"time":0,"value":0,"weightedMode":0},{"inTangent":0,"inWeight":0,"leftTangentMode":0,"outTangent":0,"outWeight":0,"rightTangentMode":0,"time":0.2,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[{"inTangent":2,"inWeight":0,"outTangent":2,"outWeight":0,"tangentMode":0,"time":0,"value":0,"weightedMode":0},{"inTangent":0,"inWeight":0,"outTangent":0,"outWeight":0,"tangentMode":0,"time":0.2,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8}},"directionObj":{"localPath":"posRoot\/DescriptionView_Show","pathType":0,"scenePath":"","selfPath":"self","target":null},"enter":false,"exit":false,"state":0,"targetObj":{"localPath":"BG\/DescriptionView","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
   edgeDatas:
   - outPortNode: ee952007-b343-47cc-8572-453470d02b24
     intputPortNode: 96624ba7-2db0-4938-a88a-ce4cd4990a22

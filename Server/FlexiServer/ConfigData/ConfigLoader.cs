@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using System.Collections.Concurrent;
 
 namespace ConfigData
 {
     public class ConfigLoader
     {
         private static string jsonPath = "ConfigData/Config/Json";
-        private static Dictionary<Type, IConfigDataHandler> configDic;
-        public static T GetConfigData<T>(int id) where T : BaseConfig 
+        private static ConcurrentDictionary<Type, IConfigDataHandler>? configDic;
+        public static T? GetConfigData<T>(int id) where T : BaseConfig 
         {
             if (configDic == null) InitConfigHandler();
 
@@ -32,7 +29,7 @@ namespace ConfigData
 
         private static void InitConfigHandler()
         {
-            configDic = new Dictionary<Type, IConfigDataHandler>();
+            configDic = new();
 
             List<Type> types = GetClassList<BaseConfig>();
 
@@ -45,10 +42,11 @@ namespace ConfigData
                 string tablePath = Path.Combine(jsonPath, $"{className}.json");
 
                 Type handlerType = typeof(ConfigDataJson<>).MakeGenericType(configType);
+                
                 var handler = (IConfigDataHandler)Activator.CreateInstance(handlerType);
                 handler.SetTablePath(tablePath);
 
-                configDic.Add(configType, handler);
+                configDic.TryAdd(configType, handler);
             }
         }
         

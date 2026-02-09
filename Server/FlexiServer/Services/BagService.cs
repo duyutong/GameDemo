@@ -2,34 +2,29 @@ using ConfigData;
 using FlexiServer.Core;
 using FlexiServer.Models;
 using FlexiServer.Models.Common;
+using FlexiServer.Sandbox;
 using FlexiServer.Transport.Http;
+
 namespace FlexiServer.Services
 {
     [ProcessFeature("Bag")]
-    public class BagService
+    public class BagService(SandboxManager sandboxManager)
     {
-        HashSet<int> allIds = new HashSet<int>();
         #region AutoContext
         public async Task<BagAcquireItemResponse> BagAcquireItem(HttpMessage<BagAcquireItemRequest> msg)
         {
             BagAcquireItemRequest? req = msg.Data;
             if (req == null) throw new ServerException(ErrorCode.None, "BagAcquireItemRequest is Null");
 
-            if (allIds.Count == 0)
-            {
-                allIds = ConfigLoader.GetConfigDatas<ItemConfig>(100)
-                         .Select(item => item.ID)
-                         .ToHashSet();
-            }
+            GamePlayItemSandbox? sandbox = sandboxManager.GetSandBox<GamePlayItemSandbox>(
+                (_sandbox) => { return _sandbox.ContainsPlayer(msg.Account); })
+                ?? throw new ServerException(ErrorCode.None, "The match does not exist.");
 
-            int randomId = allIds.Count > 0
-               ? allIds.ElementAt(Random.Shared.Next(allIds.Count))
-               : default; // 列表为空返回默认值 0
-
-            BagAcquireItemResponse res = new BagAcquireItemResponse();
+            sandbox.GrantItemToPlayer(msg.Account, out int _itemId, out int _bagSoltIndex);
+            BagAcquireItemResponse res = new();
             res.Item = new ItemInfo();
-            res.Item.Id = randomId;
-           
+            res.Item.Id = _itemId;
+            res.BagSlotIndex = _bagSoltIndex;
             return res;
         }
         #endregion HttpFuncStr

@@ -1,11 +1,10 @@
-﻿using FlexiServer.Models.Common;
-using LiteDB;
+﻿using LiteDB;
 namespace FlexiServer.Infrastructure.Database
 {
     public class Database
     {
         public LiteDatabase Db { get; }
-        public ILiteCollection<AccountInfo> Accounts { get; }
+        public ILiteCollection<AccountInfo_DB> Accounts { get; }
         public Database(string role) 
         {
             var dbDir = Path.Combine("Infrastructure", "Data", role);
@@ -13,7 +12,7 @@ namespace FlexiServer.Infrastructure.Database
 
             var dbPath = Path.Combine(dbDir, "ServerData.db");
             Db = new LiteDatabase(dbPath);
-            Accounts = LiteDbHelper.GetCollection<AccountInfo>(Db);
+            Accounts = LiteDbHelper.GetCollection<AccountInfo_DB>(Db);
         }
         public void InitializeDatabase() 
         {

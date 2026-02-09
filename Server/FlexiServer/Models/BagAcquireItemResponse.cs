@@ -9,6 +9,7 @@ namespace FlexiServer.Models
         #region AutoContext
         
         public ItemInfo Item { get; set; }
+        public int BagSlotIndex { get; set; }
         #endregion Variable
     }
 }

@@ -11,7 +11,7 @@
                 while (stack.Count > 0)
                 {
                     var item = stack.Pop();
-                    item.Destroy();
+                    item.OnDestroy();
                 }
             }
             pool.Clear();
@@ -61,7 +61,7 @@
                 pool[type] = stack;
             }
 
-            instance.Reset();
+            instance.OnReset();
             stack.Push(instance);
 
         }

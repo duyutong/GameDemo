@@ -2,17 +2,20 @@
 
 namespace FlexiServer.Sandbox
 {
-    public abstract class SandboxBase
+    public abstract class SandboxBase()
     {
-        public void Init<TSandBox>(Action<TSandBox> initAction)
+        public Action<SandboxBase>? OnReleaseAction;
+        public void Init<TSandBox>(Action<TSandBox>? initAction)
             where TSandBox : SandboxBase
         {
             TSandBox self = (TSandBox)this;
             initAction?.Invoke(self);
+            OnInit();
         }
-
-        public abstract void Reset();
-        public abstract void Update();
-        public abstract void Destroy();
+        public void Release() { OnReleaseAction?.Invoke(this); }
+        public abstract void OnInit();
+        public abstract void OnReset();
+        public abstract void OnUpdate();
+        public abstract void OnDestroy();
     }
 }

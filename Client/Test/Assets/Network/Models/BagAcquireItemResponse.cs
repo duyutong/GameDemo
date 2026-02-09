@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Network.Models.Common;
 using System.Numerics;
@@ -10,6 +10,7 @@ namespace Network.Models
         #region AutoContext
         
         public ItemInfo Item { get; set; }
+        public int BagSlotIndex { get; set; }
         #endregion Variable
     }
 }
