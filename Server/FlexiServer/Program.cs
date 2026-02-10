@@ -47,11 +47,11 @@ app.MapWebSocketEndpoints();
 //注册长连接协议接口
 app.RegisterWebSocketServiceByConfig(modules);
 
-//开启Udp协议接口
-app.StartUdpListen(port);
-
 //注册协议接口
 app.MapPostByConfig(modules);
+
+//开启Udp协议接口
+app.StartUdpListen(port);
 
 // 打印注册结果
 ServerModuleRegister.ConsoleRegistLog(role);

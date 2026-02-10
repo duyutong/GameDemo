@@ -28,14 +28,14 @@ public class AutoTestFlow:MonoBehaviour
     }
     public void TestAction1() 
     {
-        GamePlayApi.SendWebSocketMessage(NetworkEventPaths.GamePlay_StartGame, string.Empty);
+        network.UpdConnect("Debug");
     }
     public void TestAction2()
     {
-        GamePlayApi.SendWebSocketMessage(NetworkEventPaths.GamePlay_JoinGame, string.Empty);
+        PlayerMovementApi playerMovementApi = ApiManager.GetUdpApi<PlayerMovementApi>();
+        playerMovementApi.SendUdpMessage<string>(NetworkEventPaths.PlayerMovement_MoveInGame, "PlayerMovement");
     }
     public void TestAction3()
     {
-        GameFramework.UIMgr.OpenWindow<UIWindow_Bag>(null);
     }
 }

@@ -9,6 +9,7 @@ namespace Network
         public const string Chat_NewMessage = "/newMessage";
         public const string GamePlay_JoinGame = "/joinGame";
         public const string GamePlay_StartGame = "/startGame";
+        public const string PlayerMovement_MoveInGame = "/moveInGame";
         #endregion NetworkEventPaths
     }
 }

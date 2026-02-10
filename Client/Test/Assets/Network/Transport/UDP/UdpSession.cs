@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 namespace Network.Transport.Udp
 {
     internal class UdpSession : ConnectionSession<UdpClient>
@@ -17,13 +18,13 @@ namespace Network.Transport.Udp
         {
             UdpResult<object> udpResult = JsonConvert.DeserializeObject<UdpResult<object>>(msg);
             if (udpResult == null) return;
-            Console.WriteLine($"UDP 收到: {msg}");
+            Debug.Log($"UDP 收到: {udpResult.Data}");
 
             frameManager.RefreshServerFrame(udpResult.ServerFrame, udpResult.Timestamp);
             string pattern = udpResult.Pattern;
             ApiManager.HandleUdpMessage(pattern, msg);
         }
-        public void Connect() { OnConnectAsync(string.Empty); }
+        public async Task Connect() { await ConnectAsync(string.Empty); }
         protected override Task OnConnectAsync(string token)
         {
             channel = new UdpClient();
@@ -48,7 +49,7 @@ namespace Network.Transport.Udp
 
         protected override async void ReceiveLoopAsync()
         {
-            while (!cts.Token.IsCancellationRequested)
+            while (cts != null && !cts.Token.IsCancellationRequested && channel != null)
             {
                 try
                 {
@@ -56,10 +57,8 @@ namespace Network.Transport.Udp
                     string msg = Encoding.UTF8.GetString(result.Buffer);
                     OnMessageReceived(msg);
                 }
-                catch (OperationCanceledException)
-                {
-                    break; // 取消接收循环
-                }
+                catch (Exception ex) { }
+                
             }
         }
     }

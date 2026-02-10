@@ -1,16 +1,13 @@
+using Network;
+using Network.API;
+using Network.Models.Common;
 using UnityEngine;
 
 public class UdpTest : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    PlayerMovementApi playerMovementApi => ApiManager.GetUdpApi<PlayerMovementApi>();
+    public void OnClick() 
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        playerMovementApi.SendUdpMessage<string>(NetworkEventPaths.PlayerMovement_MoveInGame, "PlayerMovement");
     }
 }

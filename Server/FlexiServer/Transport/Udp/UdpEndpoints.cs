@@ -1,30 +1,38 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace FlexiServer.Transport.Udp
 {
     public static class UdpEndpoints
     {
-        public static void StartUdpListen(this WebApplication app,int port)
+        private static CancellationTokenSource? cts;
+        private static UdpClient ? udpClient;
+        private static UdpTransport? transport;
+        public static async Task StartUdpListen(this WebApplication app,int port)
         {
-            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            socket.Bind(new IPEndPoint(IPAddress.Any, port));
-            CancellationTokenSource cts = new CancellationTokenSource();
+            udpClient = new UdpClient(port);
+            cts = new CancellationTokenSource();
 
-            UdpTransport?transport = app.Services.GetService<UdpTransport>();
-            if (transport == null) { socket.Dispose(); return; }
-            transport.SetSocket(socket,cts);
-            
-            byte[] buffer = new byte[2048];
-            EndPoint remote = new IPEndPoint(IPAddress.Any, 0);
+            transport = app.Services.GetService<UdpTransport>();
+            if (transport == null) { udpClient.Dispose(); return; }
+            transport.SetClient(udpClient, cts);
 
-            while (cts != null && cts.Token.IsCancellationRequested && socket != null)
+            await MessageReceiveLoop();
+        }
+        private async static Task MessageReceiveLoop() 
+        {
+            while (cts != null && !cts.Token.IsCancellationRequested && udpClient != null)
             {
-                int len = socket.ReceiveFrom(buffer, ref remote);
-                var clientRemote = (IPEndPoint)remote;
-                transport.ReceiveFromRemote(buffer, len, clientRemote);
+                // 异步接收数据
+                UdpReceiveResult result = await udpClient.ReceiveAsync();
+
+                // 处理接收到的数据
+                transport?.ReceiveFromRemote(result.Buffer, result.RemoteEndPoint);
             }
         }
-        
+
+
     }
 }

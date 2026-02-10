@@ -146,14 +146,15 @@ namespace Network
             webSocketTransport.SendMessage(pattern, msg);
         }
 
-        public void UpdConnect(string role) 
+        public async void  UpdConnect(string role) 
         {
             int port = rolePortDic.ContainsKey(role) ? rolePortDic[role] : this.port;
-            udpTransport.Connect(port);
+            await udpTransport.Connect(port);
         }
         public void SendUdpMessage<T>(string pattern, string path, T messageObj) 
         {
             UdpMessage<T> udpMessage = new UdpMessage<T>();
+            udpMessage.Account = Account;
             udpMessage.InputFrame = FrameManager.Instance.LocalCurrentFrame;
             udpMessage.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             udpMessage.Pattern = pattern;
