@@ -382,6 +382,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5768197279562838464, guid: 82d5f3125e9413a48977a0254ab93442, type: 3}
+      propertyPath: network
+      value: 
+      objectReference: {fileID: 145130626}
     - target: {fileID: 6353276487090259924, guid: 82d5f3125e9413a48977a0254ab93442, type: 3}
       propertyPath: m_Name
       value: AutoTestFlow

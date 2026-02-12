@@ -57,7 +57,7 @@ namespace FlexiServer.Services
         
         private void JoinGameHandle(string clientId, string account, string path, string msg)
         {
-            //���Դ��룬��ɸѡɳ��
+            //测试代码，未作筛选
             GamePlayItemSandbox? sandbox_item = sandboxManager.GetSandbox<GamePlayItemSandbox>();
             sandbox_item?.AddPlayer(clientId, account);
 
