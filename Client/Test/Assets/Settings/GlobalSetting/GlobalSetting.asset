@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 037085fc7b9ea6643a4b14599b3096e4, type: 3}
   m_Name: GlobalSetting
   m_EditorClassIdentifier: Assembly-CSharp::GlobalSetting
-  language: 1
+  language: 0

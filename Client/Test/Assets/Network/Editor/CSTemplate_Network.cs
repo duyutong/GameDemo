@@ -132,6 +132,26 @@ namespace Network.API
                 }
             });
         }";
+    public const string UdpMessageApiStr =
+@"using UnityEngine;
+
+namespace Network.API
+{
+    public class #ProtocolName_UC#Api : UdpMessageApi
+    {
+        public override string Pattern { get; set; } = ""#Pattern#"";
+        public void SendUdpMessage<TSend>(string path, TSend messageObj)
+        {
+            SendUdpMessage(Pattern, path, messageObj);
+        }
+        public override void OnDataRecieved(string pattern, string msg)
+        {
+            Debug.Log($""[#ProtocolName_UC#Api] OnDataRecieved {msg}"");
+            base.OnDataRecieved(pattern, msg);
+        }
+    }
+}
+";
     public const string WebSocketMessageApiStr =
 @"using Network;
 using Network.Models.Common;
@@ -164,7 +184,7 @@ namespace Network.API
         }
     }
 }";
-    public const string WebSocketHandlerStr =
+    public const string SocketHandlerStr =
 @"using FlexiServer.Core;
 using FlexiServer.Models.Common;
 using FlexiServer.Services.Interface;
@@ -205,16 +225,16 @@ namespace FlexiServer.Services
     public const string SwitchHandleStr =
 @"              
                 case NetworkEventPaths.#Pattern_UC#_#Func#:
-                    #Func#Handle(ClientId, recievMsg.Path, Msg);
+                    #Func#Handle(ClientId, Account, recievMsg.Path, Msg);
                     break;
 ";
     public const string FunctionHandleStr =
         @"
-        private void #Func#Handle(string ClientId, string Path, string Msg)
+        private void #Func#Handle(string clientId, string account, string path, string msg)
         {
             
         }";
-    public const string WebSocketApiMappingStr = @"{ ""#Pattern#"", typeof(#ProtocolName_UC#Api) },";
+    public const string SocketApiMappingStr = @"{ ""#Pattern#"", typeof(#ProtocolName_UC#Api) },";
     public const string NetworkEventPathStr = @"public const string #Pattern_UC#_#Func# = ""#Path#"";";
 };
 

@@ -22,10 +22,10 @@ namespace Network.Transport
             this.host = host;
             this.port = port;
         }
-    }
-    public abstract class ConnectionSession<T> : ConnectionSession where T : System.Net.WebSockets.WebSocket
+    }    
+    public abstract class ConnectionSession<T> : ConnectionSession where T :IDisposable
     {
-        public T ws;
+        public T channel;
         public CancellationTokenSource cts;
         public TickHandle tickHandle;
         public int heartbeatIntervalMs = 5000;
@@ -40,87 +40,20 @@ namespace Network.Transport
         public async Task ConnectAsync(string token)
         {
             await OnConnectAsync(token);
-
             ReceiveLoopAsync();
-            StartHeartbeatLoop();
         }
         public void DisconnectAsync()
         {
             OnDisconnectAsync();
-            StopHeartbeatLoop();
         }
-        public void SendMessageAsync(string wsMessage)
+        public void SendMessageAsync(string msg)
         {
-            OnSendMessageAsync(wsMessage);
+            OnSendMessageAsync(msg);
         }
         protected abstract Task OnConnectAsync(string token);
         protected abstract void OnDisconnectAsync();
-        protected abstract void OnHeartbeatTick();
         public abstract void OnMessageReceived(string msg);
-        protected abstract void OnSendMessageAsync(string wsMessage);
-
-        private void StartHeartbeatLoop()
-        {
-            heartbeatRunning = false;
-            tickHandle = TickManager.Instance.RegisterTick(heartbeatIntervalMs, HeartbeatLoop);
-        }
-        private void HeartbeatLoop()
-        {
-            if (heartbeatRunning) return;// 避免重入
-            OnHeartbeatTick();
-        }
-        private void StopHeartbeatLoop()
-        {
-            heartbeatRunning = false;
-            tickHandle?.Stop();
-        }
-        private async void ReceiveLoopAsync()
-        {
-            var buffer = new byte[1024];
-
-            while (!cts.Token.IsCancellationRequested && ws.State == WebSocketState.Open)
-            {
-                WebSocketReceiveResult result;
-                try { result = await ws.ReceiveAsync(buffer, cts.Token); }
-                catch { break; }
-
-                if (result.MessageType == WebSocketMessageType.Close)
-                {
-                    Debug.Log("服务器要求断开连接");
-                    await SafeCloseAsync((WebSocketCloseStatus)result.CloseStatus, result.CloseStatusDescription);
-
-                    break;
-                }
-                string msg = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                OnMessageReceived(msg);
-            }
-        }
-        private int _disconnectFlag = 0;
-
-        protected async Task SafeCloseAsync(WebSocketCloseStatus status, string reason)
-        {
-            // 确保只执行一次
-            if (Interlocked.Exchange(ref _disconnectFlag, 1) == 1) return;
-
-            try
-            {
-                if (ws != null &&
-                    (ws.State == WebSocketState.Open ||
-                     ws.State == WebSocketState.CloseReceived))
-                {
-                    await ws.CloseAsync(status, reason, CancellationToken.None);
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.Log($"WebSocket close exception (ignored): {e.Message}");
-            }
-            finally
-            {
-                cts?.Cancel();
-                ws?.Dispose();
-            }
-        }
-
+        protected abstract void OnSendMessageAsync(string msg);
+        protected abstract void ReceiveLoopAsync();
     }
 }

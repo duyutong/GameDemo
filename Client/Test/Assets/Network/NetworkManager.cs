@@ -5,6 +5,7 @@ using Network.Core.Tick;
 using Network.Models;
 using Network.Models.Common;
 using Network.Transport.Http;
+using Network.Transport.Udp;
 using Network.Transport.WebSocket;
 using Newtonsoft.Json;
 using System;
@@ -21,6 +22,7 @@ namespace Network
 
         private HttpTransport httpTransport;
         private WebSocketTransport webSocketTransport;
+        private UdpTransport udpTransport;
         public static NetworkManager Instance { get; private set; }
         public string Token { get; set; } = string.Empty;
         public string Account { get; set; } = string.Empty;
@@ -34,6 +36,7 @@ namespace Network
 
             httpTransport = new HttpTransport();
             webSocketTransport = new WebSocketTransport();
+            udpTransport = new UdpTransport();
 
             TickManager.Instance.StartTickLoop();
             FrameManager.Instance.StartFrameLoop();
@@ -41,6 +44,14 @@ namespace Network
         private void Start()
         {
             httpTransport.RegistService(host, port, null);
+        }
+        private void OnApplicationQuit()
+        {
+            rolePortDic.Clear();
+            webSocketTransport.Stop();
+            udpTransport.Stop();
+            TickManager.Instance.StopTickLoop();
+            FrameManager.Instance.StopFrameLoop();
         }
         public void SetLoginInfo(string account, string password)
         {
@@ -86,6 +97,7 @@ namespace Network
                 rolePortDic.AddOrReplace(role, port);
                 httpTransport.RegistService(host, port, info.Modules);
                 webSocketTransport.RegistService(host, port, info.Modules);
+                udpTransport.RegistService(host, port, info.Modules);
 
                // if (info.UseWebSocket) WebSocketConnect(role);
             }
@@ -108,24 +120,18 @@ namespace Network
             Account = response.Account;
             Token = response.Token;
         }
-        private void OnApplicationQuit()
-        {
-            rolePortDic.Clear();
-            webSocketTransport.Stop();
-            TickManager.Instance.StopTickLoop();
-            FrameManager.Instance.StopFrameLoop();
-        }
-        public async void WebSocketConnect(string role)
-        {
-            int port = rolePortDic.ContainsKey(role) ? rolePortDic[role] : this.port;
-            await webSocketTransport.ConnectAsync(port, Token);
-        }
+        #region 协议支持
         public async Task<HttpResult<TRes>> HttpPostAsync<TReq, TRes>(string path, TReq req)
         {
             var result = await httpTransport.PostAsync<TReq, TRes>(path, req);
             return result;
         }
 
+        public async void WebSocketConnect(string role)
+        {
+            int port = rolePortDic.ContainsKey(role) ? rolePortDic[role] : this.port;
+            await webSocketTransport.ConnectAsync(port, Token);
+        }
         public void SendWebSocketMessage<T>(string pattern, string path, T messageObj)
         {
             WebSocketMessage<T> wsMessage = new WebSocketMessage<T>();
@@ -139,5 +145,25 @@ namespace Network
             string msg = JsonConvert.SerializeObject(wsMessage);
             webSocketTransport.SendMessage(pattern, msg);
         }
+
+        public async void  UpdConnect(string role) 
+        {
+            int port = rolePortDic.ContainsKey(role) ? rolePortDic[role] : this.port;
+            await udpTransport.Connect(port);
+        }
+        public void SendUdpMessage<T>(string pattern, string path, T messageObj) 
+        {
+            UdpMessage<T> udpMessage = new UdpMessage<T>();
+            udpMessage.Account = Account;
+            udpMessage.InputFrame = FrameManager.Instance.LocalCurrentFrame;
+            udpMessage.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            udpMessage.Pattern = pattern;
+            udpMessage.Path = path;
+            udpMessage.Data = messageObj;
+
+            string msg = JsonConvert.SerializeObject(udpMessage);
+            udpTransport.SendMessage(pattern, msg);
+        }
+        #endregion
     }
 }

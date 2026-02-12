@@ -51,7 +51,7 @@ public class NetworkCodeGenerator : EditorWindow
 
         connectionType = root.Q<DropdownField>("ConnectionType");
         connectionType.RegisterValueChangedCallback(OnConnectionTypeValueChanged);
-        connectionType.choices = new List<string>() { "Http", "WebSocket" };
+        connectionType.choices = new List<string>() { "Http", "WebSocket","Udp" };
         connectionType.SetValueWithoutNotify("Http");
 
         protocolName = root.Q<TextField>("ProtocolName");
@@ -140,6 +140,11 @@ public class NetworkCodeGenerator : EditorWindow
             LoadWebSocketProtoToWindow(protoName_uc);
             connectionType.value = connectionType.choices[1];
         }
+        else if (type.IsSubclassOf(typeof(UdpMessageApi))) 
+        {
+            LoadUdpProtoToWindow(protoName_uc);
+            connectionType.value = connectionType.choices[2];
+        }
     }
 
     private void OnProtoSearchButtonClick(PointerUpEvent evt)
@@ -157,6 +162,10 @@ public class NetworkCodeGenerator : EditorWindow
             entries.Add(new SearchTreeGroupEntry(new GUIContent("Websocket")) { level = 1 });
             List<SearchTreeEntry> webProto = menu.GetProtocolEntries<WebSocketMessageApi>(2);
             entries.AddRange(webProto);
+
+            entries.Add(new SearchTreeGroupEntry(new GUIContent("Udp")) { level = 1 });
+            List<SearchTreeEntry> udpProto = menu.GetProtocolEntries<UdpMessageApi>(2);
+            entries.AddRange(udpProto);
 
             return entries;
         };
@@ -177,6 +186,11 @@ public class NetworkCodeGenerator : EditorWindow
                 LoadWebSocketProtoToWindow(protoName);
                 connectionType.value = connectionType.choices[1];
             }
+            else if (type.IsSubclassOf(typeof(UdpMessageApi)))
+            {
+                LoadUdpProtoToWindow(protoName);
+                connectionType.value = connectionType.choices[2];
+            }
             return true;
         };
 
@@ -184,6 +198,21 @@ public class NetworkCodeGenerator : EditorWindow
         var mousePos = evt.position;
         mousePos = GUIUtility.GUIToScreenPoint(mousePos);
         SearchWindow.Open(new SearchWindowContext(mousePos), menu);
+    }
+    private void LoadUdpProtoToWindow(string protoName)
+    {
+        List<NetworkProtocolEventSaveData> eventDatas = ApiMethodParser.GetUdpProto(protoName);
+        eventScrollView.contentContainer.Clear();
+        tempEventDatas.Clear();
+        foreach (var data in eventDatas)
+        {
+            VisualElement item = webSocketEventTemplate.CloneTree();
+            eventScrollView.contentContainer.Add(item);
+            EventVisualElement eventData = item.Q<EventVisualElement>();
+            eventData.Init();
+            eventData.SetProtocolDataToWindow(data);
+            tempEventDatas.Add(eventData);
+        }
     }
 
     private void LoadWebSocketProtoToWindow(string protoName)
@@ -217,14 +246,15 @@ public class NetworkCodeGenerator : EditorWindow
             tempEventDatas.Add(eventData);
         }
     }
-
     private void OnConnectionTypeValueChanged(ChangeEvent<string> evt)
     {
         bool isWebSocket = evt.newValue == "WebSocket";
         bool isHttp = evt.newValue == "Http";
+        bool isUdp = evt.newValue == "Udp";
 
         if (isHttp) currEventTemplateitem = httpEventTemplate;
         if (isWebSocket) currEventTemplateitem = webSocketEventTemplate;
+        if (isUdp) currEventTemplateitem = webSocketEventTemplate;
     }
 
     public List<string> GetTempModelNames()
@@ -372,9 +402,16 @@ public class NetworkCodeGenerator : EditorWindow
         {
             //----WebSocket Protocol ----
             NetworkProtocolSaveUtility.GenClient_WebSocketMessageApi(protocolName);
-            NetworkProtocolSaveUtility.GenServer_WebSocketHandler(protocolName, protocolSaveData);
-            NetworkProtocolSaveUtility.RefreshNetworkEventPaths_WebSocket(protocolName, protocolSaveData);
-            NetworkProtocolSaveUtility.RefreshApiManager_WebSocket(protocolName);
+            NetworkProtocolSaveUtility.GenServer_SocketHandler(protocolName, protocolSaveData);
+            NetworkProtocolSaveUtility.RefreshNetworkEventPaths_Socket(protocolName, protocolSaveData);
+            NetworkProtocolSaveUtility.RefreshApiManager_Socket(protocolName);
+        }
+        else if (connectionType == "Udp") 
+        {
+            NetworkProtocolSaveUtility.GenClient_UdpMessageApi(protocolName);
+            NetworkProtocolSaveUtility.GenServer_SocketHandler(protocolName, protocolSaveData);
+            NetworkProtocolSaveUtility.RefreshNetworkEventPaths_Socket(protocolName, protocolSaveData);
+            NetworkProtocolSaveUtility.RefreshApiManager_Socket(protocolName);
         }
         //----ModelSave----
         if (tempModelDataDic != null && tempModelDataDic.Count > 0)

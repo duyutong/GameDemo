@@ -26,8 +26,8 @@ namespace FlexiServer.Transport.Web
         private CancellationTokenSource? cts;
 
         private TickHandle? tickHandle;
-        private Action<ClientConnectData, string, string>? OnReceived;
-        private Action<ClientConnectData, EPlayerConnectionState>? OnConnStateChanged;
+        private Action<SClientConnectData, string, string>? OnReceived;
+        private Action<SClientConnectData, EPlayerConnectionState>? OnConnStateChanged;
         public void Start()
         {
             cts = new CancellationTokenSource();
@@ -43,7 +43,7 @@ namespace FlexiServer.Transport.Web
             }
             StopHeartbeatLoop();
         }
-        public void OnConnectionStateChanged(Action<ClientConnectData, EPlayerConnectionState> onConnectionStateChanged)
+        public void SetConnectionStateChangedListener(Action<SClientConnectData, EPlayerConnectionState> onConnectionStateChanged)
         {
             OnConnStateChanged = onConnectionStateChanged;
         }
@@ -112,7 +112,7 @@ namespace FlexiServer.Transport.Web
         {
             var buffer = ArrayPool<byte>.Shared.Rent(4096);
             var ws = client.WebSocket;
-            ClientConnectData clientConnect = new ClientConnectData();
+            SClientConnectData clientConnect = new SClientConnectData();
 
             try
             {
@@ -175,15 +175,16 @@ namespace FlexiServer.Transport.Web
             }
         }
 
-        private void OnMessageReceived(ClientConnectData connectData, string msg)
+        private void OnMessageReceived(SClientConnectData connectData, string msg)
         {
             WebSocketMessage<object>? wsMessage = JsonConvert.DeserializeObject<WebSocketMessage<object>>(msg);
             if (wsMessage == null) return;
             if (wsMessage.Type == EWsMessageType.Heartbeat) return;
+
             string pattern = wsMessage.Pattern;
             OnReceived?.Invoke(connectData, pattern, msg);
         }
-        public void OnMessageReceived(Action<ClientConnectData, string, string> receivedCall)
+        public void SetMessageReceivedListener(Action<SClientConnectData, string, string> receivedCall)
         {
             OnReceived = receivedCall;
         }
@@ -270,7 +271,7 @@ namespace FlexiServer.Transport.Web
         private void ClientCloseConnect(string clientId)
         {
             OnConnStateChanged?.Invoke(
-                new ClientConnectData
+                new SClientConnectData
                 {
                     ClientId = clientId,
                     Account = clients.ContainsKey(clientId) ? clients[clientId].Account : ""
@@ -281,7 +282,7 @@ namespace FlexiServer.Transport.Web
         private void HeartbeatTimeout(string clientId)
         {
             OnConnStateChanged?.Invoke(
-                new ClientConnectData
+                new SClientConnectData
                 {
                     ClientId = clientId,
                     Account = clients.ContainsKey(clientId) ? clients[clientId].Account : ""

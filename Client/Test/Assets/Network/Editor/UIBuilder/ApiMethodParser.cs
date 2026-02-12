@@ -11,6 +11,27 @@ using System.Reflection;
 
 public class ApiMethodParser
 {
+    public static List<NetworkProtocolEventSaveData> GetUdpProto(string protoName) 
+    {
+        string path = NetworkPathConfig.GetClientNetworkEventPathsPath();
+        string exitStr = EditorUtilityExtensions.ReadFileIfExists(path);
+
+        var pattern = @"public\s+const\s+string\s+([A-Za-z_]+)_\w+\s*=\s*""([^""]+)"";";
+        var matches = Regex.Matches(exitStr, pattern);
+
+        List<NetworkProtocolEventSaveData> eventData = new List<NetworkProtocolEventSaveData>();
+        foreach (Match match in matches)
+        {
+            var data1 = match.Groups[1].Value;
+            if (data1 != protoName) continue;
+
+            var data2 = match.Groups[2].Value;
+            NetworkProtocolEventSaveData eventSaveData = new NetworkProtocolEventSaveData();
+            eventSaveData.pattern = data2;
+            eventData.Add(eventSaveData);
+        }
+        return eventData;
+    }
     public static List<NetworkProtocolEventSaveData> GetWebSocketProto(string protoName)
     {
         string path = NetworkPathConfig.GetClientNetworkEventPathsPath();

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Unity\\GameDemo\\Server\\FlexiServer\\FlexiServer.csproj": {}
+    "F:\\GameDemo\\Server\\FlexiServer\\FlexiServer.csproj": {}
   },
   "projects": {
-    "E:\\Unity\\GameDemo\\Server\\FlexiServer\\FlexiServer.csproj": {
+    "F:\\GameDemo\\Server\\FlexiServer\\FlexiServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\FlexiServer.csproj",
+        "projectUniqueName": "F:\\GameDemo\\Server\\FlexiServer\\FlexiServer.csproj",
         "projectName": "FlexiServer",
-        "projectPath": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\FlexiServer.csproj",
-        "packagesPath": "C:\\Users\\win10\\.nuget\\packages\\",
-        "outputPath": "E:\\Unity\\GameDemo\\Server\\FlexiServer\\obj\\",
+        "projectPath": "F:\\GameDemo\\Server\\FlexiServer\\FlexiServer.csproj",
+        "packagesPath": "C:\\Users\\sg\\.nuget\\packages\\",
+        "outputPath": "F:\\GameDemo\\Server\\FlexiServer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\win10\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\sg\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

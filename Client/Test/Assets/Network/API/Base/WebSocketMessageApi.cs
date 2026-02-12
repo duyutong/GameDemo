@@ -20,7 +20,7 @@ namespace Network.API
             if (objResult == null) return;
             Dispatch(objResult.Path, objResult);
         }
-        public void Dispatch(string path, WebSocketResult<object> result)
+        private void Dispatch(string path, WebSocketResult<object> result)
         {
             if (listeners.TryGetValue(path, out var map))
             {
