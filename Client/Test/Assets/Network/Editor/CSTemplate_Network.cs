@@ -197,7 +197,7 @@ namespace FlexiServer.Services
     public class #ProtocolName_UC#Service : IService
     {
         public string Pattern => ""#Pattern#"";
-        public void OnDataRecieved(string ClientId, string Acount, string Msg)
+        public void OnDataRecieved(string ClientId, string Account, string Msg)
         {
             WebSocketMessage<object>? recievMsg = JsonConvert.DeserializeObject<WebSocketMessage<object>>(Msg);
             if (recievMsg == null) return;

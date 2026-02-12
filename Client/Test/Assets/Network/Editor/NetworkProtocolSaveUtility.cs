@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using UnityEngine;
 
 public class NetworkProtocolSaveUtility
 {
@@ -237,7 +234,7 @@ public class NetworkProtocolSaveUtility
         {
             string path = eventData.pattern;
             string funcName = GetFuncNameFromPattern(path);
-            if (exitStr.Contains($"{funcName}Handle(ClientId, recievMsg.Path, Msg);")) continue;
+            if (exitStr.Contains($"{funcName}Handle(ClientId, Account, recievMsg.Path, Msg);")) continue;
 
             string str1 = CSTemplate_Network.SwitchHandleStr;
             str1 = str1.Replace("#Path#", path);

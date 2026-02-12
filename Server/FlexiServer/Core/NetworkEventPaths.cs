@@ -11,6 +11,7 @@ namespace FlexiServer.Core
         public const string GamePlay_StartGame = "/startGame";
         public const string PlayerMovement_MoveInGame = "/moveInGame";
         public const string GamePlay_SetMovementState = "/setMovementState";
+        public const string GamePlay_LeaveGame = "/leaveGame";
         #endregion NetworkEventPaths
     }
 }

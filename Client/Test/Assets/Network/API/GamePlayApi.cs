@@ -24,7 +24,7 @@ namespace Network.API
         }
         public override void OnDataRecieved(string pattern, string msg)
         {
-            //Debug.Log($"[GamePlayApi] OnDataRecieved {msg}");
+            Debug.Log($"[GamePlayApi] OnDataRecieved {msg}");
             base.OnDataRecieved(pattern, msg);
         }
     }

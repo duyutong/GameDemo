@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FlexiServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cc0b8db19f5b7bd73f48e63c27f0438d89bbfe7d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+501903a0e14d60d894042dc90e50b233d130a441")]
 [assembly: System.Reflection.AssemblyProductAttribute("FlexiServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FlexiServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
