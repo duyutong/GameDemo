@@ -1,4 +1,4 @@
-namespace Network.Transport.Udp
+namespace FlexiServer.Transport.Udp
 {
     public class UdpResult<T>
     {

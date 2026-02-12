@@ -56,7 +56,19 @@ namespace Network.API
 
             if (patternToType.TryGetValue(pattern, out var type))
             {
-                Debug.Log($"成功收到udp消息  {type.Name}");
+                if (!udpApiDic.ContainsKey(type))
+                {
+                    var apiInstance = (UdpMessageApi)Activator.CreateInstance(type);
+                    if (apiInstance == null) goto Faile;
+                    udpApiDic[type] = apiInstance;
+                }
+                udpApiDic[type].OnDataRecieved(pattern, msg);
+                return;
+            }
+        Faile:
+            {
+                Debug.LogWarning($"未找到 pattern = {pattern} 的 API 类");
+                return;
             }
         }
         public static void HandleMessage(string pattern, string msg)

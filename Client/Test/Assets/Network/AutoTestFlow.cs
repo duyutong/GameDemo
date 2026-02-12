@@ -32,10 +32,15 @@ public class AutoTestFlow:MonoBehaviour
     }
     public void TestAction2()
     {
-        PlayerMovementApi playerMovementApi = ApiManager.GetUdpApi<PlayerMovementApi>();
-        playerMovementApi.SendUdpMessage<string>(NetworkEventPaths.PlayerMovement_MoveInGame, "PlayerMovement");
+        GamePlayApi gamePlayApi = ApiManager.GetWebSoketApi<GamePlayApi>();
+        gamePlayApi.SendWebSocketMessage<string>(NetworkEventPaths.GamePlay_StartGame, null);
     }
     public void TestAction3()
     {
+        PlayerGameInfo playerGameInfo = new PlayerGameInfo();
+        playerGameInfo.Account = NetworkManager.Instance.Account;
+
+        GamePlayApi gamePlayApi = ApiManager.GetWebSoketApi<GamePlayApi>();
+        gamePlayApi.SendWebSocketMessage(NetworkEventPaths.GamePlay_JoinGame, playerGameInfo);
     }
 }

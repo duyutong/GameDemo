@@ -11,12 +11,10 @@ using System.Threading.Tasks;
 
 namespace FlexiServer.Transport.Udp
 {
-    public class UdpTransport(TickManager tickManager, FrameManager frameManager) : ITransport
+    public class UdpTransport : ITransport
     {
-        private readonly TickManager tickManager = tickManager;
-        private readonly FrameManager frameManager = frameManager;
-        private UdpClient udpClient;
-        private CancellationTokenSource cts;
+        private UdpClient? udpClient;
+        private CancellationTokenSource?cts;
         private ConcurrentDictionary<string, ClientConnection> udpClients = new();  //Account to IPEndPoint
         private Action<SClientConnectData, string, string>? OnReceived;
         public void SetClient(UdpClient _clien, CancellationTokenSource _cts) 
@@ -46,6 +44,7 @@ namespace FlexiServer.Transport.Udp
             if (!udpClients.ContainsKey(account)) return;
             if (!udpClients.TryGetValue(account, out var client)) return;
             if (client.ClientEndPoint == null) return;
+            if (udpClient == null) return;
 
             byte[] data = Encoding.UTF8.GetBytes(message);
             await udpClient.SendAsync(data, client.ClientEndPoint);

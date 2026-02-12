@@ -31,7 +31,7 @@ builder.Services.AddSingleton<SandboxManager>();
 builder.Services.AddSingleton<WebSocketTransport>();
 builder.Services.AddSingleton<UdpTransport>();
 
-// 注册服务(http/websocket)
+// 注册服务
 builder.AddSingletonByConfig(modules);
 
 var app = builder.Build();
@@ -45,7 +45,7 @@ app.Services.GetRequiredService<TransportManager>().RgiestTransport(udpTransport
 app.MapWebSocketEndpoints();
 
 //注册长连接协议接口
-app.RegisterWebSocketServiceByConfig(modules);
+app.RegisterSocketServiceByConfig(modules);
 
 //注册协议接口
 app.MapPostByConfig(modules);

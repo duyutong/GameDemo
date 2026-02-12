@@ -1,4 +1,4 @@
-using Network;
+﻿using Network;
 using Network.Transport.Udp;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -10,6 +10,7 @@ namespace Network.API
     public abstract class UdpMessageApi
     {
         public abstract string Pattern { get; set; }
+        public int currentFrame;//当前操作到哪一帧（对应服务器发出操作时赋值的权威帧）
         private Dictionary<string, Dictionary<Delegate, Action<UdpResult<object>>>> listeners = new();
         public void SendUdpMessage<TSend>(string pattern,string path, TSend messageObj)
         {
@@ -19,6 +20,9 @@ namespace Network.API
         {
             UdpResult<object> objResult = JsonConvert.DeserializeObject<UdpResult<object>>(msg);
             if (objResult == null) return;
+            if (objResult.ServerFrame < currentFrame) return;
+            currentFrame = objResult.ServerFrame;
+
             Dispatch(objResult.Path, objResult);
         }
         private void Dispatch(string path, UdpResult<object> result)
@@ -39,7 +43,7 @@ namespace Network.API
                 listeners[path] = map;
             }
 
-            // �Ѿ�ע�����ֱ�� return
+            // 已经注册过，直接 return
             if (map.ContainsKey(callBack)) return;
 
             Action<UdpResult<object>> wrapper = (objResult) =>

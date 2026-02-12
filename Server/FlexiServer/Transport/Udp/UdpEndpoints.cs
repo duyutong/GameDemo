@@ -10,7 +10,7 @@ namespace FlexiServer.Transport.Udp
         private static CancellationTokenSource? cts;
         private static UdpClient ? udpClient;
         private static UdpTransport? transport;
-        public static async Task StartUdpListen(this WebApplication app,int port)
+        public static async void StartUdpListen(this WebApplication app,int port)
         {
             udpClient = new UdpClient(port);
             cts = new CancellationTokenSource();
@@ -27,12 +27,9 @@ namespace FlexiServer.Transport.Udp
             {
                 // 异步接收数据
                 UdpReceiveResult result = await udpClient.ReceiveAsync();
-
                 // 处理接收到的数据
                 transport?.ReceiveFromRemote(result.Buffer, result.RemoteEndPoint);
             }
         }
-
-
     }
 }

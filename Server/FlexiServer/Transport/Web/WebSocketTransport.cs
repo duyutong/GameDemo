@@ -180,6 +180,7 @@ namespace FlexiServer.Transport.Web
             WebSocketMessage<object>? wsMessage = JsonConvert.DeserializeObject<WebSocketMessage<object>>(msg);
             if (wsMessage == null) return;
             if (wsMessage.Type == EWsMessageType.Heartbeat) return;
+
             string pattern = wsMessage.Pattern;
             OnReceived?.Invoke(connectData, pattern, msg);
         }

@@ -1,5 +1,6 @@
 ﻿using FlexiServer.Core;
 using FlexiServer.Transport.Interface;
+using System.Security.Claims;
 
 namespace FlexiServer.Transport
 {
@@ -37,6 +38,11 @@ namespace FlexiServer.Transport
             string account = connectData.Account;
             string clientId = connectData.ClientId;
             ClientMsgEvent?.Invoke(pattern, clientId, account, msg);
+        }
+        public static void SendMessageToClient<T>(List<string> clienyKeys, string message) where T : class, ITransport
+        {
+            foreach (string key in clienyKeys)
+                SendMessageToClient<T>(key, message);
         }
         public static void SendMessageToClient<T>(string clientKey, string message) where T : class, ITransport
         {

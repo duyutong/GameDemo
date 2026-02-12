@@ -55,17 +55,20 @@ namespace Network.Transport.WebSocket
             else if (wsResult.Type == EWsMessageType.Heartbeat)
             {
                 // 处理心跳响应（如果需要）
+                FrameManager.Instance.RefreshServerFrame(wsResult.ServerFrame, wsResult.Timestamp);
             }
             else if (wsResult.Type == EWsMessageType.Relogin)
             {
-                Debug.Log("收到重新登录请求，需重新认证身份");
                 // 处理重新登录逻辑
+                Debug.Log("收到重新登录请求，需重新认证身份");
                 NetworkManager.Instance.HttpLogin();
             }
             else if (wsResult.Type == EWsMessageType.FrameSync)
             {
                 // 处理帧同步消息
                 FrameManager.Instance.RefreshServerFrame(wsResult.ServerFrame, wsResult.Timestamp);
+                string pattern = wsResult.Pattern;
+                ApiManager.HandleMessage(pattern, msg);
             }
         }
         protected override async void OnSendMessageAsync(string wsMessage)

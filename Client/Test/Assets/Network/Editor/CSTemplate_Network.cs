@@ -225,12 +225,12 @@ namespace FlexiServer.Services
     public const string SwitchHandleStr =
 @"              
                 case NetworkEventPaths.#Pattern_UC#_#Func#:
-                    #Func#Handle(ClientId, Acount, recievMsg.Path, Msg);
+                    #Func#Handle(ClientId, Account, recievMsg.Path, Msg);
                     break;
 ";
     public const string FunctionHandleStr =
         @"
-        private void #Func#Handle(string clientId, string acount, string path, string msg)
+        private void #Func#Handle(string clientId, string account, string path, string msg)
         {
             
         }";
