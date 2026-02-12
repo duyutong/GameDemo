@@ -57,7 +57,7 @@ namespace FlexiServer.Services
         
         private void JoinGameHandle(string clientId, string account, string path, string msg)
         {
-            //²âÊÔ´úÂë£¬²»É¸Ñ¡É³ºÐ
+            //ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ë£¬ï¿½ï¿½É¸Ñ¡É³ï¿½ï¿½
             GamePlayItemSandbox? sandbox_item = sandboxManager.GetSandbox<GamePlayItemSandbox>();
             sandbox_item?.AddPlayer(clientId, account);
 

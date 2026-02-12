@@ -8,10 +8,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using static EnumDefinitions;
 
-public class PlayerMoveNet : MonoBehaviour
+public class PlayerDragMoveNet : MonoBehaviour
 {
     public string account = "ABC";
-    public float moveLerpSpeed = 10;
+    public float moveLerpSpeed = 30;
 
     private EventTrigger trigger;
     private RectTransform targetRect;

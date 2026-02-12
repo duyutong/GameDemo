@@ -13,9 +13,9 @@ using static EnumDefinitions;
 public class OtherMoveNet : MonoBehaviour
 {
     public string account = "ABC";
-    public float moveLerpSpeed = 10;
-    public EOperationState operationState;
+    public float moveLerpSpeed = 30;
 
+    private EOperationState operationState;
     private RectTransform targetRect;
     private Vector2 targetPos;
     private GamePlayApi gamePlayApi => ApiManager.GetWebSoketApi<GamePlayApi>();
