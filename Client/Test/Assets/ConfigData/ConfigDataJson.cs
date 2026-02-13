@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public class ConfigDataJson<T> : IConfigDataHandler<T> where T : BaseConfig, new()
 {

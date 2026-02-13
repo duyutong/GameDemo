@@ -6,22 +6,14 @@ using FlexiServer.Services.Interface;
 using FlexiServer.Transport;
 using FlexiServer.Transport.Udp;
 using Newtonsoft.Json;
-using System.Reflection.Metadata.Ecma335;
 
 namespace FlexiServer.Services
 {
     [ProcessFeature("PlayerMovement")]
-    public class PlayerMovementService : IService, IFrameResolvedHandler, ISandboxUpdateHandler<GamePlayMovementSandbox>
+    public class PlayerMovementService(SandboxManager sandboxManager, FrameManager frameManager) : IService, IFrameResolvedHandler, ISandboxUpdateHandler<GamePlayMovementSandbox>
     {
         public string Pattern => "/playerMovement";
 
-        private SandboxManager sandboxManager;
-        private FrameManager frameManager;
-        public PlayerMovementService(SandboxManager _sandboxManager, FrameManager _frameManager)
-        {
-            sandboxManager = _sandboxManager;
-            frameManager = _frameManager;
-        }
         public void OnFrameResolved(int frame, List<FrameMessage> commands)
         {
             List<MovementInfo> movementInfos = [];

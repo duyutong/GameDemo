@@ -15,6 +15,16 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 0490a00a886534742ae09bb3190d2068
   m_SerializeEntries:
+  - m_GUID: 1c77551fb7cd400479c70ba1fcc0324f
+    m_Address: Assets/BehaviorTree/BT/autoTestFlow_timeCount.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2105b59b460c64a4e98651c327b49e19
+    m_Address: Assets/BehaviorTree/BT/bagItem_toggle.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 24f0e36cfd3aa434490b4487dd05ee2c
     m_Address: Assets/AddressableAssets/Prefabs/UI/UI_Window_Bag/UIItem_Bag_Item.prefab
     m_ReadOnly: 0
@@ -30,6 +40,21 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 51f88f09ec4010c479a0b3cc75e107f0
+    m_Address: Assets/BehaviorTree/BT/uipanel_bag_buttonGroup.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 82d5f3125e9413a48977a0254ab93442
+    m_Address: Assets/AutoTestFlow.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c3a1ff0a85486841b6bd3572d4e3b50
+    m_Address: Assets/BehaviorTree/BT/autoTestFlow.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8d25e1b225f0ed942aa046dc2a662af4
     m_Address: Assets/AddressableAssets/Prefabs/UI/UIRoot/UIRoot.prefab
     m_ReadOnly: 0
@@ -37,6 +62,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 91c22e773af4bc74ba8af5769d30ede5
     m_Address: Assets/AddressableAssets/Art/Atlas/Clue.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a26a1a7191c56ad4d93963e8ed5616b0
+    m_Address: Assets/BehaviorTree/BT/uiwindow_bag.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

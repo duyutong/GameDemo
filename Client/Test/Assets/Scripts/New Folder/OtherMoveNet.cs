@@ -27,7 +27,11 @@ public class OtherMoveNet : MonoBehaviour
         playerMovementApi.AddListener<List<MovementInfo>>(NetworkEventPaths.PlayerMovement_MoveInGame, OnRecieveMoveMsg);
         gamePlayApi.AddListener<MovementInfo>(NetworkEventPaths.GamePlay_SetMovementState, OnMovementStateChanged);
     }
-
+    private void OnDestroy()
+    {
+        playerMovementApi.RemoveListener<List<MovementInfo>>(NetworkEventPaths.PlayerMovement_MoveInGame, OnRecieveMoveMsg);
+        gamePlayApi.RemoveListener<MovementInfo>(NetworkEventPaths.GamePlay_SetMovementState, OnMovementStateChanged);
+    }
     private void OnMovementStateChanged(WebSocketResult<MovementInfo> result)
     {
         if (result.Code != 200) return;

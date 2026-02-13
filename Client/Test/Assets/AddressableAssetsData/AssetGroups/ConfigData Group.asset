@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4324b8fd03c2345429084a692a210f56
+    m_Address: Assets/AddressableAssets/Config/Json/ClueConfig.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7f96b56cb4abc164285da492cffcc2c7
     m_Address: Assets/AddressableAssets/Config/Json/languageConfig.json
     m_ReadOnly: 0

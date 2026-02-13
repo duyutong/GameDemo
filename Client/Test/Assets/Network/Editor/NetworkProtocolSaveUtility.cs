@@ -191,6 +191,10 @@ public class NetworkProtocolSaveUtility
 
         string savePath = NetworkPathConfig.GetClientApiFullPath();
         string csSavePath = Path.Combine(savePath, $"{protocol_uc}Api.cs");
+
+        // 如果已经有文件了，就不生成了
+        if (File.Exists(csSavePath)) return;
+
         string tempStr = CSTemplate_Network.UdpMessageApiStr;
         tempStr = tempStr.Replace("#ProtocolName_UC#", protocol_uc);
         tempStr = tempStr.Replace("#ProtocolName_LC#", protocol_lc);
@@ -208,6 +212,10 @@ public class NetworkProtocolSaveUtility
 
         string savePath = NetworkPathConfig.GetClientApiFullPath();
         string csSavePath = Path.Combine(savePath, $"{protocol_uc}Api.cs");
+
+        // 如果已经有文件了，就不生成了
+        if (File.Exists(csSavePath)) return;
+
         string tempStr = CSTemplate_Network.WebSocketMessageApiStr;
         tempStr = tempStr.Replace("#ProtocolName_UC#", protocol_uc);
         tempStr = tempStr.Replace("#ProtocolName_LC#", protocol_lc);

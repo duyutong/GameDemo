@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
 using static UnityEditor.AnimationUtility;
+#endif
 
 [Serializable]
 public class SerializableCurve
@@ -52,8 +53,10 @@ public class BTTargetAnimaCurve
                 weightedMode = (int)k.weightedMode
             };
             int index = curve.keys.ToList().IndexOf(k);
+#if UNITY_EDITOR
             sk.leftTangentMode = (int)GetKeyLeftTangentMode(curve, index);
             sk.rightTangentMode = (int)GetKeyRightTangentMode(curve, index);
+#endif
 
             return sk;
         }).ToList();
@@ -81,16 +84,10 @@ public class BTTargetAnimaCurve
                 weightedMode = (WeightedMode)k.weightedMode
             };
             curve.AddKey(key);
-
-            // ��ԭ������ģʽ
-            AnimationUtility.SetKeyLeftTangentMode(
-                curve, i, (TangentMode)k.leftTangentMode
-            );
-
-            // ��ԭ������ģʽ
-            AnimationUtility.SetKeyRightTangentMode(
-                curve, i, (TangentMode)k.leftTangentMode
-            );
+#if UNITY_EDITOR
+            SetKeyLeftTangentMode(curve, i, (TangentMode)k.leftTangentMode);
+            SetKeyRightTangentMode( curve, i, (TangentMode)k.leftTangentMode );
+#endif
         }
         return curve;
     }
