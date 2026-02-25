@@ -46,7 +46,7 @@ public partial class BehaviorTreeView : GraphView
         {
             SearchWindow.Open(new SearchWindowContext(contentRect.screenMousePosition), menu);
         };
-        menu.OnCreateSearchTreeAction = () => 
+        menu.OnCreateSearchTreeAction = () =>
         {
             List<SearchTreeEntry> entries = new List<SearchTreeEntry>();
             entries.Add(new SearchTreeGroupEntry(new GUIContent("创建新节点")));
@@ -162,6 +162,8 @@ public partial class BehaviorTreeView : GraphView
             PasteNode(nodeData);
         foreach (EdgeData edgeData in container.edgeDatas)
             PasteEdge(edgeData);
+
+        ReplaceCopyNodeId();
     }
 
     /// <summary>
@@ -191,17 +193,43 @@ public partial class BehaviorTreeView : GraphView
         if (copyNodeGuidDic.ContainsKey(intputPortNode)) return copyNodeGuidDic[intputPortNode];
         else return null;
     }
+    private void ReplaceCopyNodeId()
+    {
+        foreach (KeyValuePair<string, BTBaseNode> keyValuePair in copyNodeGuidDic)
+        {
+            BTBaseNode currNode = keyValuePair.Value;
+            foreach (BTOutputInfo outputInfo in currNode.btState.output)
+            {
+                BTBaseNode outputNode = GetCopyNode(outputInfo.nodeId);
+                if (outputNode == null) continue;
 
+                outputInfo.nodeId = outputNode.btState.nodeId;
+            }
+        }
+    }
     /// <summary>
     /// 粘贴节点
     /// </summary>
     private void PasteNode(NodeData nodeData)
     {
-        BTBaseNode node = CreatCopyNode(Type.GetType(nodeData.typeName), nodeData.nodePos + 10 * Vector2.one);
+        BTBaseNode node = CreatCopyNode(nodeData, 10 * Vector2.one);
         copyNodeGuidDic.Add(nodeData.guid, node);
         AddToSelection(node);
     }
+    private BehaviorTreeBaseState CopyBTState(NodeData nodeData, string nodeId)
+    {
+        Type nodeType = Type.GetType(nodeData.typeName);
 
+        Type stateType = GetType(nodeData.stateName);
+        BehaviorTreeBaseState btState = (BehaviorTreeBaseState)Activator.CreateInstance(stateType);
+        btState.runtime = runtime;
+        btState.nodeId = nodeId;
+        btState.InitParam(nodeData.stateParams);
+        btState.InitBTTarget();
+        btState.output = nodeData.output;
+
+        return btState;
+    }
     /// <summary>
     /// 处理GraphView的变化
     /// </summary>
@@ -254,12 +282,14 @@ public partial class BehaviorTreeView : GraphView
         });
         return change;
     }
-
     /// <summary>
     /// 创建并返回复制的节点
     /// </summary>
-    private BTBaseNode CreatCopyNode(Type type, Vector2 pos)
+    private BTBaseNode CreatCopyNode(NodeData nodeData, Vector2 offset)
     {
+        Type type = Type.GetType(nodeData.typeName);
+        Vector2 pos = nodeData.nodePos + offset;
+
         Type nodeType = type;
         BTBaseNode node = (BTBaseNode)Activator.CreateInstance(nodeType);
 
@@ -269,7 +299,7 @@ public partial class BehaviorTreeView : GraphView
         node.onSelectAction = onSelectAction;
         node.onUnselectedAction = onUnselectAction;
         node.target = selectionTarget;
-        node.btState = (BehaviorTreeBaseState)Activator.CreateInstance(stateType);
+        node.btState = CopyBTState(nodeData,node.guid);
         node.nodePos = pos;
         node.SetPosition(new Rect(pos, node.GetPosition().size));
 
@@ -304,7 +334,6 @@ public partial class BehaviorTreeView : GraphView
 
         return true;
     }
-
     /// <summary>
     /// 加载节点
     /// </summary>
