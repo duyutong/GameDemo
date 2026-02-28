@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Network.Models.Common;
 using System.Numerics;
@@ -13,6 +13,7 @@ namespace Network.Models
         public string Token { get; set; }
         public List<ProcessInfo> ProcessInfos { get; set; }
         public int Code { get; set; }
+        public int FrameSyncIntervalMs { get; set; }
         #endregion Variable
     }
 }

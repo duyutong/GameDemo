@@ -9,8 +9,8 @@ namespace FlexiServer.Core.Frame
         public int ServerCurrentFrame { get; private set; }
         // 最大回滚帧数
         private int MaxRollbackFrames { get; set; } = 10;
-        // 帧同步刷新间隔:50ms
-        public int FrameSyncIntervalMs { get; set; } = 50;
+        // 帧同步刷新间隔
+        public int FrameSyncIntervalMs { get; set; } = 20;
         // 最大回滚帧数
         private int rollbackStartFrame = 0;
         // 当前权威帧对应的时间点

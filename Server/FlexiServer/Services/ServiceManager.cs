@@ -49,18 +49,19 @@ namespace FlexiServer.Services
                     if (iface.IsGenericType)
                     {
                         var genericDef = iface.GetGenericTypeDefinition();
+                        var dataType = iface.GetGenericArguments()[0];
 
                         if (genericDef == typeof(ISandboxUpdateHandler<>))
                         {
                             var adapter = RegisterSandboxHandler(service, iface, "OnSandboxUpdate");
                             if (adapter != null)
-                                sandboxManager.OnManagerUpdated += adapter;
+                                sandboxManager.RegisterSandboxUpdateHandler(dataType, adapter);
                         }
                         else if (genericDef == typeof(ISandboxInitHandler<>))
                         {
                             var adapter = RegisterSandboxHandler(service, iface, "OnSandboxInit");
                             if (adapter != null)
-                                sandboxManager.OnManagerInited += adapter;
+                                sandboxManager.RegisterSandboxInitHandler(dataType, adapter);
                         }
                     }
                     // -------- 非泛型接口 --------
@@ -109,12 +110,10 @@ namespace FlexiServer.Services
             var typedHandler = Delegate.CreateDelegate(delegateType, service, method);
 
             var sandboxParam = Expression.Parameter(typeof(SandboxBase), "sandbox");
-            var typeCheck = Expression.TypeIs(sandboxParam, dataType);
             var casted = Expression.Convert(sandboxParam, dataType);
             var handlerConst = Expression.Constant(typedHandler);
             var invoke = Expression.Invoke(handlerConst, casted);
-            var body = Expression.IfThen(typeCheck, invoke);
-            var lambda = Expression.Lambda<Action<SandboxBase>>(body, sandboxParam);
+            var lambda = Expression.Lambda<Action<SandboxBase>>(invoke, sandboxParam);
 
             return lambda.Compile();
         }

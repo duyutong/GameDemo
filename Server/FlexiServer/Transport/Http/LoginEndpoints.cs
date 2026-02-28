@@ -9,6 +9,7 @@ namespace FlexiServer.Transport.Http
         public static void MapLoginEndpoints(this WebApplication app)
         {
             #region AutoContext
+            
             app.MapPost("/login/httpLogin", async (HttpMessage<LoginHttpLoginRequest> msg) =>
             {
                 var result = new HttpResult<LoginHttpLoginResponse>();
@@ -28,7 +29,7 @@ namespace FlexiServer.Transport.Http
                 return result;
             });
             
-            app.MapPost("/login/validate", async (HttpMessage<LoginValidateRequest> msg) =>
+            app.MapPost("/login/Validate", async (HttpMessage<LoginValidateRequest> msg) =>
             {
                 var result = new HttpResult<LoginValidateResponse>();
                 try

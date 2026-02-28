@@ -81,6 +81,7 @@ namespace Network
 
             Account = response.Account;
             Token = response.Token;
+            FrameManager.Instance.FrameSyncIntervalMs = response.FrameSyncIntervalMs;
             Debug.Log($"Login Success! Account: {Account}");
 
             var processes = response.ProcessInfos;
@@ -99,7 +100,7 @@ namespace Network
                 webSocketTransport.RegistService(host, port, info.Modules);
                 udpTransport.RegistService(host, port, info.Modules);
 
-               // if (info.UseWebSocket) WebSocketConnect(role);
+                // if (info.UseWebSocket) WebSocketConnect(role);
             }
         }
         private void HandleError(ErrorCode errorCode)
@@ -146,12 +147,12 @@ namespace Network
             webSocketTransport.SendMessage(pattern, msg);
         }
 
-        public async void  UpdConnect(string role) 
+        public async void UpdConnect(string role)
         {
             int port = rolePortDic.ContainsKey(role) ? rolePortDic[role] : this.port;
             await udpTransport.Connect(port);
         }
-        public void SendUdpMessage<T>(string pattern, string path, T messageObj) 
+        public void SendUdpMessage<T>(string pattern, string path, T messageObj)
         {
             UdpMessage<T> udpMessage = new UdpMessage<T>();
             udpMessage.Account = Account;

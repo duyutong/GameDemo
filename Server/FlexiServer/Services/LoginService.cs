@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace FlexiServer.Services
 {
     [ProcessFeature("Login")]
-    public class LoginService(TokenManager tokenService, SandboxManager sandboxManager, Database db, IConfiguration config)
+    public class LoginService(TokenManager tokenService, FrameManager frameManager, Database db, IConfiguration config)
     {
         #region AutoContext
         public async Task<LoginHttpLoginResponse> LoginHttpLogin(HttpMessage<LoginHttpLoginRequest> msg)
@@ -49,6 +49,7 @@ namespace FlexiServer.Services
                 res.Code = code;
                 res.Account = req.Account;
                 res.Token = token;
+                res.FrameSyncIntervalMs = frameManager.FrameSyncIntervalMs;
                 res.ProcessInfos = processes.Values.ToList();
                 return res;
             }

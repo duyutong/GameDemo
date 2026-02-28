@@ -74,7 +74,7 @@
   {
     "ContainingType": "FlexiServer.Transport.Http.MapPostEndpoints\u002B\u003C\u003Ec__DisplayClass3_0",
     "Method": "\u003CMapLoginEndpoints\u003Eb__1",
-    "RelativePath": "login/validate",
+    "RelativePath": "login/Validate",
     "HttpMethod": "POST",
     "IsController": false,
     "Order": 0,
