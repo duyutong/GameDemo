@@ -1,8 +1,3 @@
-using Network;
-using Network.API;
-using Network.Models;
-using Network.Models.Common;
-using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,21 +7,16 @@ public class PlayerDragMoveNet : MonoBehaviour
 {
     public string account = "ABC";
     public float moveLerpSpeed = 30;
+    public LocalPlayerMovement playerMovement;
 
     private EventTrigger trigger;
     private RectTransform targetRect;
     private RectTransform parentRect;
     private Vector2 dragOffset;
-    private MovementInfo movementInfo;
 
-    private GamePlayApi gamePlayApi =>ApiManager.GetWebSoketApi<GamePlayApi>();
-    private PlayerMovementApi playerMovementApi => ApiManager.GetUdpApi<PlayerMovementApi>();
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        movementInfo ??= new MovementInfo();
-        movementInfo.Account = account;
-
         trigger = gameObject.GetOrAddComponent<EventTrigger>();
         trigger.RemoveAllEventListener();
         trigger.AddTriggerEventListener(EventTriggerType.BeginDrag, OnMoveBegin);
@@ -38,10 +28,7 @@ public class PlayerDragMoveNet : MonoBehaviour
     }
     private void OnMoveEnd(PointerEventData data)
     {
-        movementInfo.EOpState = EOperationState.Finish;
-        movementInfo.X = targetRect.anchoredPosition.x;
-        movementInfo.Y = targetRect.anchoredPosition.y;
-        gamePlayApi.SendWebSocketMessage(NetworkEventPaths.GamePlay_SetMovementState, movementInfo);
+        playerMovement.SyncLocalPlayerMovement(EOperationState.Finish, targetRect.position, moveLerpSpeed);
     }
 
     private void OnMoving(PointerEventData data)
@@ -51,11 +38,7 @@ public class PlayerDragMoveNet : MonoBehaviour
         // ÉèÖÃ UI ÔªËØµÄ anchoredPosition
         targetRect.anchoredPosition = localPoint + dragOffset;
 
-        movementInfo.EOpState = EOperationState.InProgress;
-        movementInfo.X = targetRect.anchoredPosition.x;
-        movementInfo.Y = targetRect.anchoredPosition.y;
-        movementInfo.MoveLerpSpeed = moveLerpSpeed;
-        playerMovementApi.SendUdpMessage(NetworkEventPaths.PlayerMovement_MoveInGame, movementInfo);
+        playerMovement.SyncLocalPlayerMovement(EOperationState.InProgress, targetRect.position, moveLerpSpeed);
     }
 
     private void OnMoveBegin(PointerEventData data)
@@ -63,15 +46,6 @@ public class PlayerDragMoveNet : MonoBehaviour
         RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, data.position, data.pressEventCamera, out Vector2 localPoint);
         dragOffset = targetRect.anchoredPosition - localPoint;
 
-        movementInfo.EOpState = EOperationState.Begin;
-        movementInfo.X = targetRect.anchoredPosition.x;
-        movementInfo.Y = targetRect.anchoredPosition.y;
-        gamePlayApi.SendWebSocketMessage(NetworkEventPaths.GamePlay_SetMovementState, movementInfo);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        playerMovement.SyncLocalPlayerMovement(EOperationState.Begin, targetRect.position, moveLerpSpeed);
     }
 }

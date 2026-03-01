@@ -125,19 +125,19 @@ namespace FlexiServer.Sandbox
                 ExcuteSandboxUpdateAction(sandBox);
             }
         }
-        public void RegisterSandboxInitHandler<TSandbox>(Type sandBoxType, Action<TSandbox> handler) where TSandbox : SandboxBase
+        public void RegisterSandboxInitHandler(Type genericArgType, Action<SandboxBase> handler)
         {
-            if (OnSandboxInited.ContainsKey(sandBoxType))
-                OnSandboxInited[sandBoxType] += (sandbox) => handler((TSandbox)sandbox);
+            if (OnSandboxInited.ContainsKey(genericArgType))
+                OnSandboxInited[genericArgType] += (sandbox) => handler(sandbox);
             else
-                OnSandboxInited[sandBoxType] = (sandbox) => handler((TSandbox)sandbox);
+                OnSandboxInited[genericArgType] = (sandbox) => handler(sandbox);
         }
-        public void RegisterSandboxUpdateHandler<TSandbox>(Type sandBoxType,Action<TSandbox> handler) where TSandbox : SandboxBase
+        public void RegisterSandboxUpdateHandler(Type genericArgType,Action<SandboxBase> handler)
         {
-            if (OnSandboxUpdated.ContainsKey(sandBoxType))
-                OnSandboxUpdated[sandBoxType] += (sandbox) => handler((TSandbox)sandbox);
+            if (OnSandboxUpdated.ContainsKey(genericArgType))
+                OnSandboxUpdated[genericArgType] += (sandbox) => handler(sandbox);
             else
-                OnSandboxUpdated[sandBoxType] = (sandbox) => handler((TSandbox)sandbox);
+                OnSandboxUpdated[genericArgType] = (sandbox) => handler(sandbox);
         }
         private void  ExcuteSandboxUpdateAction(SandboxBase sandbox)
         {

@@ -14,7 +14,7 @@ namespace Network.Core.Frame
         // 本地帧
         public int LocalCurrentFrame { get; private set; }
         // 帧同步刷新间隔
-        public int FrameSyncIntervalMs { get; set; } = 20;
+        public int FrameSyncIntervalMs { get; set; } = 50;
         // 帧更新
         private TickHandle tickHandle;
         // 当前本地帧对应的时间点

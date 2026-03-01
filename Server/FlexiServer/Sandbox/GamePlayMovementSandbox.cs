@@ -125,12 +125,13 @@ namespace FlexiServer.Sandbox
         {
             foreach (PlayerInfo player in playerMap.Values)
             {
-                Vector2 posA = new(player.currMove.X, player.currMove.Y);
-                Vector2 posB = new(player.targetMove.X, player.targetMove.Y);
+                Vector3 posA = new(player.currMove.X, player.currMove.Y, player.currMove.Z);
+                Vector3 posB = new(player.targetMove.X, player.targetMove.Y, player.currMove.Z);
                 float lerpT = player.targetMove.MoveLerpSpeed * SandboxManager.DeltaTime;
-                Vector2 result = SandboxUtil.Lerp(posA, posB, lerpT);
-                player.currMove.X= result.X; 
+                Vector3 result = SandboxUtil.Lerp(posA, posB, lerpT);
+                player.currMove.X = result.X;
                 player.currMove.Y = result.Y;
+                player.currMove.Z = result.Z;
             }
         }
     }

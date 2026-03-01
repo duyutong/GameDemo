@@ -34,6 +34,7 @@ namespace FlexiServer.Core.Tick
             while (!token.IsCancellationRequested)
             {
                 long now = sw.ElapsedMilliseconds;
+                long nextWakeUp = long.MaxValue;
 
                 List<TickTask> snapshot;// 复制一份当前的 Tick 列表
                 lock (ticks) { snapshot = [.. ticks]; }
@@ -52,10 +53,13 @@ namespace FlexiServer.Core.Tick
                             Console.WriteLine($"Tick error: {ex}");
                         }
                     }
+
+                    long remain = t.NextRunAtMs - sw.ElapsedMilliseconds;
+                    if (remain < nextWakeUp) nextWakeUp = remain;
                 }
 
-                // 主循环以 1ms 精度睡眠
-                await Task.Delay(1, token);
+                int sleep = (int)Math.Clamp(nextWakeUp, 0, 5);
+                await Task.Delay(sleep, token);
             }
         }
     }

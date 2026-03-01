@@ -580,7 +580,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OtherMoveNet
   account: ABC
-  moveLerpSpeed: 30
 --- !u!114 &1475971242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -631,6 +630,7 @@ GameObject:
   - component: {fileID: 1944355455}
   - component: {fileID: 1944355454}
   - component: {fileID: 1944355456}
+  - component: {fileID: 1944355457}
   m_Layer: 5
   m_Name: self
   m_TagString: Untagged
@@ -709,6 +709,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovementTrans
   account: ABC
   moveLerpSpeed: 30
+  playerMovement: {fileID: 1944355457}
+--- !u!114 &1944355457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944355452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe1203c84d64cfa439a24be775360c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalPlayerMovement
 --- !u!1001 &5405875835642078645
 PrefabInstance:
   m_ObjectHideFlags: 0
