@@ -1,4 +1,4 @@
-using Network.Core.Frame;
+Ôªøusing Network.Core.Frame;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,13 +14,16 @@ public class PlayerMoveByInputAction : MonoBehaviour
 
     private bool isMoveStartde = false;
     private Vector2 moveInput;
-    
+
+    private Rigidbody2D rb;
     private PlayerControls controls;
     private InputAction moveAction;
     private void Awake()
     {
-        controls = new PlayerControls();  // …˙≥…¿‡ µ¿˝
-        moveAction = controls.Player.Move; // Player  « Action Map √˚£¨Move  « Action √˚
+        controls = new PlayerControls();  // ÁîüÊàêÁ±ªÂÆû‰æã
+        moveAction = controls.Player.Move; // Player ÊòØ Action Map ÂêçÔºåMove ÊòØ Action Âêç
+
+        rb = rb != null ? rb : gameObject.GetComponent<Rigidbody2D>();
     }
 
     private void OnEnable()
@@ -41,28 +44,30 @@ public class PlayerMoveByInputAction : MonoBehaviour
     {
         syncInterval = FrameManager.Instance.FrameSyncIntervalMs * 0.001f;
         isMoveStartde = true;
-        playerMovement?.SyncLocalPlayerMovement(EOperationState.Begin, transform.position, moveLerpSpeed);
+        playerMovement.SyncLocalPlayerMovement(EOperationState.Begin, transform.position, moveLerpSpeed);
     }
     private void OnMoveCanceled(InputAction.CallbackContext context)
     {
         isMoveStartde = false;
-        playerMovement?.SyncLocalPlayerMovement(EOperationState.Finish, transform.position, moveLerpSpeed);
+        rb.linearVelocity = Vector2.zero;
+        playerMovement.SyncLocalPlayerMovement(EOperationState.Finish, transform.position, moveLerpSpeed);
     }
     private void FixedUpdate()
     {
-        if (isMoveStartde) 
+        if (isMoveStartde)
         {
             moveInput = moveAction.ReadValue<Vector2>();
 
-            Vector3 move = (Vector3)moveInput;
-            transform.position += moveSpeed * Time.fixedDeltaTime * move;
+            Vector2 move = moveInput.normalized;
+            Vector2 velocity = moveSpeed * move;
+            rb.linearVelocity = velocity;
 
             syncTimer -= Time.fixedDeltaTime;
-            if (syncTimer <= 0) 
+            if (syncTimer <= 0)
             {
                 syncTimer = syncInterval;
-                playerMovement?.SyncLocalPlayerMovement(EOperationState.InProgress, transform.position, moveLerpSpeed);
-            }   
+                playerMovement.SyncLocalPlayerMovement(EOperationState.InProgress, transform.position, moveLerpSpeed);
+            }
         }
     }
 }

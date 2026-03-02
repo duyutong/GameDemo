@@ -9,6 +9,7 @@ namespace FlexiServer.Infrastructure.Database
         public string Name { get; }
         public CollectionNameAttribute(string name)
         {
+            // 支持同类型不同集合的情况，例如分表
             Name = name;
         }
     }

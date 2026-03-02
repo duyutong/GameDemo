@@ -38,6 +38,7 @@ namespace FlexiServer.Services
                     Account = req.Account,
                     PasswordHash = hash,
                     PasswordSalt = salt,
+                    CreateTime = DateTime.UtcNow,
                 });
             }
             catch (LiteDB.LiteException ex) 

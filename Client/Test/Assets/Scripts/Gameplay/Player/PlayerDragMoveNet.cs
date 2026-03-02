@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+ï»¿using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static EnumDefinitions;
@@ -33,9 +33,9 @@ public class PlayerDragMoveNet : MonoBehaviour
 
     private void OnMoving(PointerEventData data)
     {
-        // ½«ÆÁÄ»×ø±ê×ª»»Îª Canvas ¿Õ¼ä×ø±ê
+        // ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îª Canvas ï¿½Õ¼ï¿½ï¿½ï¿½ï¿½ï¿½
         RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, data.position, data.pressEventCamera, out Vector2 localPoint);
-        // ÉèÖÃ UI ÔªËØµÄ anchoredPosition
+        // ï¿½ï¿½ï¿½ï¿½ UI Ôªï¿½Øµï¿½ anchoredPosition
         targetRect.anchoredPosition = localPoint + dragOffset;
 
         playerMovement.SyncLocalPlayerMovement(EOperationState.InProgress, targetRect.position, moveLerpSpeed);

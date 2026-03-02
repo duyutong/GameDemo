@@ -1,4 +1,4 @@
-using Network;
+ï»¿using Network;
 using Network.API;
 using Network.Models.Common;
 using Network.Transport.Udp;
@@ -11,7 +11,7 @@ using static EnumDefinitions;
 public class RemotePlayerMovement : MonoBehaviour
 {
     public string account = "ABC";
-    public bool freezeZ = true; // ÊÇ·ñ¶³½á Z Öá
+    public bool freezeZ = true; // ï¿½Ç·ñ¶³½ï¿½ Z ï¿½ï¿½
 
     private int lastFramerate = 0;
     private float moveLerpSpeed = 30;

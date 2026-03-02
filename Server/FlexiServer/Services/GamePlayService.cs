@@ -17,13 +17,13 @@ namespace FlexiServer.Services
             WebSocketMessage<object>? recievMsg = JsonConvert.DeserializeObject<WebSocketMessage<object>>(Msg);
             if (recievMsg == null) return;
 
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write("[GamePlayService]");
-            Console.ResetColor();
+            //Console.ForegroundColor = ConsoleColor.White;
+            //Console.Write("[GamePlayService]");
+            //Console.ResetColor();
 
-            Console.WriteLine(
-                $" OnDataRecieved | Pattern: {recievMsg.Pattern} | Path: {recievMsg.Path}"
-            );
+            //Console.WriteLine(
+            //    $" OnDataRecieved | Pattern: {recievMsg.Pattern} | Path: {recievMsg.Path}"
+            //);
             
             switch (recievMsg.Path)
             {
