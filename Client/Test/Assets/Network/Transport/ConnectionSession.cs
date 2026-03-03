@@ -46,14 +46,14 @@ namespace Network.Transport
         {
             OnDisconnectAsync();
         }
-        public void SendMessageAsync(string msg)
+        public void SendMessageAsync<TData>(string pattern, string path, TData messageObj)
         {
-            OnSendMessageAsync(msg);
+            OnSendMessageAsync(pattern, path, messageObj);
         }
         protected abstract Task OnConnectAsync(string token);
         protected abstract void OnDisconnectAsync();
-        public abstract void OnMessageReceived(string msg);
-        protected abstract void OnSendMessageAsync(string msg);
+        public abstract void OnMessageReceived(byte[] buffer);
+        protected abstract void OnSendMessageAsync<TData>(string pattern, string path, TData messageObj);
         protected abstract void ReceiveLoopAsync();
     }
 }

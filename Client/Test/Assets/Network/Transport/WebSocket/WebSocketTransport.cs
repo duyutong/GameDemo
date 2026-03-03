@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Network.Core.Frame;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,15 +27,14 @@ namespace Network.Transport.WebSocket
             if (result.Value != null && result.Value.Any()) return result.Key;
             return NetworkManager.Instance.port;
         }
-        public void SendMessage(string pattern, string msg)
+        public void SendMessage<T>(string pattern,string path, T messageObj)
         {
             int port = GetPortByPattern(pattern);
             if (!sessionDic.ContainsKey(port)) return;
 
             WebSocketSession session = sessionDic[port];
-            session.SendMessageAsync(msg);
+            session.SendMessageAsync(pattern, path, messageObj);
         }
-
         public async Task ConnectAsync(int port,string token)
         {
             if (!sessionDic.ContainsKey(port)) return;

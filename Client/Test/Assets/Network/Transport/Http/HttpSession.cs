@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,17 +20,15 @@ namespace Network.Transport.Http
         {
             try
             {
-                HttpMessage<TReq> message = new()
-                {
-                    Account = NetworkManager.Instance.Account,
-                    Data = req,
-                };
-                string json = JsonConvert.SerializeObject(message);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync($"http://{host}:{port}{path}", content);
-                string resJson = await response.Content.ReadAsStringAsync();
+                HttpMessage<TReq> message = new();
+                message.Account = NetworkManager.Instance.Account;
+                message.Data = req;
 
-                return JsonConvert.DeserializeObject<HttpResult<TRes>>(resJson);
+                HttpContent content = GetHttpContent(message);
+                var response = await client.PostAsync($"http://{host}:{port}{path}", content);
+                byte[] resBytes = await response.Content.ReadAsByteArrayAsync();
+
+                return DeserializeHttpResult<TRes>(resBytes);
             }
             catch (Exception ex)
             {
@@ -41,6 +40,41 @@ namespace Network.Transport.Http
                     Data = default
                 };
             }
+        }
+        private HttpResult<TRes> DeserializeHttpResult<TRes>(byte[] resBytes)
+        {
+            if (GlobalSetting.Instance.format == ETransportFormat.Protobuf)
+            {
+                using var ms = new MemoryStream(resBytes);
+                return ProtoBuf.Serializer.Deserialize<HttpResult<TRes>>(ms);
+            }
+            else
+            {
+                string resJson = Encoding.UTF8.GetString(resBytes);
+                return JsonConvert.DeserializeObject<HttpResult<TRes>>(resJson)!;
+            }
+        }
+        private HttpContent GetHttpContent<TReq>(HttpMessage<TReq> message)
+        {
+            HttpContent content;
+            if (GlobalSetting.Instance.format == ETransportFormat.Protobuf)
+            {
+                byte[] bytes;
+                using (var ms = new MemoryStream())
+                {
+                    ProtoBuf.Serializer.Serialize(ms, message);
+                    bytes = ms.ToArray();
+                }
+                content = new ByteArrayContent(bytes);
+                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-protobuf");
+            }
+            else
+            {
+                string json = JsonConvert.SerializeObject(message);
+                content = new StringContent(json, Encoding.UTF8, "application/json");
+            }
+
+            return content;
         }
     }
 }

@@ -13,6 +13,7 @@ using System.Numerics;
 using static EnumDefinitions;
 namespace FlexiServer#NamespaceStr#
 {
+    [global::ProtoBuf.ProtoContract(Name = @""#ModelName#"")]
     public class #ModelName#
     {
         #region AutoContext
@@ -29,6 +30,7 @@ using System.Numerics;
 using static EnumDefinitions;
 namespace Network#NamespaceStr#
 {
+    [global::ProtoBuf.ProtoContract(Name = @""#ModelName#"")]
     public class #ModelName#
     {
         #region AutoContext
@@ -38,10 +40,14 @@ namespace Network#NamespaceStr#
 }
 ";
     public const string ModelVariableListStr = @"
-        public List<#TypeName#> #VariableName# { get; set; }";
+        [global::ProtoBuf.ProtoMember(#Pos#)]
+        public List<#TypeName#> #VariableName# { get; set; }
+";
 
     public const string ModelVariableStr = @"
-        public #TypeName# #VariableName# { get; set; }";
+        [global::ProtoBuf.ProtoMember(#Pos#)]
+        public #TypeName# #VariableName# { get; set; }
+";
 
     public const string HttpEndpointsStr =
 @"using FlexiServer.Core;
@@ -168,14 +174,6 @@ namespace Network.API
         public void SendWebSocketMessage<TSend>(string path, TSend messageObj)
         {
             base.SendWebSocketMessage(Pattern, path, messageObj);
-        }
-        public override void AddListener<TResult>(string path, Action<WebSocketResult<TResult>> callBack)
-        {
-            base.AddListener(path, callBack);
-        }
-        public override void RemoveListener<TResult>(string path, Action<WebSocketResult<TResult>> callBack)
-        {
-            base.RemoveListener(path, callBack);
         }
         public override void OnDataRecieved(string pattern, string msg)
         {

@@ -22,10 +22,5 @@ namespace Network.API
         {
             base.RemoveListener(path, callBack);
         }
-        public override void OnDataRecieved(string pattern, string msg)
-        {
-            // Debug.Log($"[GamePlayApi] OnDataRecieved {msg}");
-            base.OnDataRecieved(pattern, msg);
-        }
     }
 }

@@ -25,15 +25,15 @@ namespace Network.Transport.Udp
             if (result.Value != null && result.Value.Any()) return result.Key;
             return NetworkManager.Instance.port;
         }
-        public void SendMessage(string pattern,string msg) 
+        public void SendMessage<T>(string pattern, string path, T messageObj)
         {
             int port = GetPortByPattern(pattern);
             if (!sessionDic.ContainsKey(port)) return;
 
             UdpSession session = sessionDic[port];
-            session.SendMessageAsync(msg);
+            session.SendMessageAsync(pattern, path, messageObj);
         }
-        public async Task Connect(int port) 
+        public async Task Connect(int port)
         {
             if (!sessionDic.ContainsKey(port)) return;
 

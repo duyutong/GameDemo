@@ -10,7 +10,7 @@ namespace FlexiServer.Core.Frame
             var f = _pool.Get();
             f.InputFrame = 0;
             f.ClientId = "";
-            f.Command = "";
+            f.Command = [];
             return f;
         }
 

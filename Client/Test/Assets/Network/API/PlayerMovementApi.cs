@@ -1,3 +1,5 @@
+using Network.Models.Common;
+using Network.Transport.Udp;
 using UnityEngine;
 
 namespace Network.API
@@ -9,10 +11,9 @@ namespace Network.API
         {
             SendUdpMessage(Pattern, path, messageObj);
         }
-        public override void OnDataRecieved(string pattern, string msg)
+        public override void OnDataRecieved(string pattern, UdpResult<object> result)
         {
-            // Debug.Log($"[PlayerMovementApi] OnDataRecieved {msg}");
-            base.OnDataRecieved(pattern, msg);
+            base.OnDataRecieved(pattern, result);
         }
     }
 }

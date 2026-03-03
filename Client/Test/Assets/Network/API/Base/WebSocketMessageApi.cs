@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Network.API
 {
@@ -14,11 +15,10 @@ namespace Network.API
         {
             NetworkManager.Instance.SendWebSocketMessage(pattern, path, messageObj);
         }
-        public virtual void OnDataRecieved(string pattern, string msg)
+        public virtual void OnDataRecieved(string pattern, WebSocketResult<object> result)
         {
-            WebSocketResult<object> objResult = JsonConvert.DeserializeObject<WebSocketResult<object>>(msg);
-            if (objResult == null) return;
-            Dispatch(objResult.Path, objResult);
+            if (result == null) return;
+            Dispatch(result.Path, result);
         }
         private void Dispatch(string path, WebSocketResult<object> result)
         {
@@ -79,13 +79,34 @@ namespace Network.API
         private T ConvertData<T>(object data)
         {
             if (data == null) return default;
-
             if (data is T value) return value;
 
-            if (data is JToken token)
-                return token.ToObject<T>();
-
-            return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(data));
+            if (GlobalSetting.Instance.format == ETransportFormat.Protobuf)
+            {
+                if (data is byte[] bytes)
+                {
+                    using var ms = new MemoryStream(bytes);
+                    return ProtoBuf.Serializer.Deserialize<T>(ms);
+                }
+                else if (data is MemoryStream ms)
+                {
+                    return ProtoBuf.Serializer.Deserialize<T>(ms);
+                }
+                else
+                {
+                    // 如果 data 已经是对象类型，尝试先序列化再反序列化
+                    using var tmpMs = new MemoryStream();
+                    ProtoBuf.Serializer.Serialize(tmpMs, data);
+                    tmpMs.Position = 0;
+                    return ProtoBuf.Serializer.Deserialize<T>(tmpMs);
+                }
+            }
+            else
+            {
+                // JSON: data 可能是 JObject / JToken / 原生对象
+                if (data is JToken token) return token.ToObject<T>();
+                return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(data));
+            }
         }
     }
 }

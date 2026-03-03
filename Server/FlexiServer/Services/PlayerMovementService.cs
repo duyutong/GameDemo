@@ -5,7 +5,6 @@ using FlexiServer.Sandbox;
 using FlexiServer.Services.Interface;
 using FlexiServer.Transport;
 using FlexiServer.Transport.Udp;
-using Newtonsoft.Json;
 
 namespace FlexiServer.Services
 {
@@ -21,7 +20,7 @@ namespace FlexiServer.Services
             {
                 if (command.Path == NetworkEventPaths.PlayerMovement_MoveInGame)
                 {
-                    var recievMsg = JsonConvert.DeserializeObject<UdpMessage<MovementInfo>>(command.Command);
+                    var recievMsg = TransportUtil.DeserializeUdpMessage<MovementInfo>(command.Command);
                     if (recievMsg == null) continue;
                     if (recievMsg.Data == null) continue;
                     movementInfos.Add(recievMsg.Data);
@@ -38,25 +37,21 @@ namespace FlexiServer.Services
         }
         public void OnSandboxUpdate(GamePlayMovementSandbox sandbox)
         {
+            if (sandbox == null) return;
+
             int ServerCurrentFrame = frameManager.ServerCurrentFrame;
             if (!sandbox.HasSendableUpdate(ServerCurrentFrame)) return;
 
             var movmentInfos = sandbox.GetMoveInfos(ServerCurrentFrame);
             if (movmentInfos.Count == 0) return;
-            
-            UdpResult<List<MovementInfo>> sendMsg = new();
-            sendMsg.Pattern = Pattern;
-            sendMsg.Path = NetworkEventPaths.PlayerMovement_MoveInGame;
-            sendMsg.Data = movmentInfos;
-            sendMsg.ServerFrame = ServerCurrentFrame;
-            sendMsg.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-            string udpMsgJson = JsonConvert.SerializeObject(sendMsg);
-            TransportManager.SendMessageToClient<UdpTransport>(sandbox.GetPlayerAccounts(), udpMsgJson);
+            string path = NetworkEventPaths.PlayerMovement_MoveInGame;
+            TransportManager.SendMessageToClient<UdpTransport, List<MovementInfo>>(sandbox.GetPlayerClients(), Pattern, path, movmentInfos);
+            
         }
-        public void OnDataRecieved(string ClientId, string Account, string Msg)
+        public void OnDataRecieved(string ClientId, string Account, byte[] Buffer)
         {
-            TransportMessage? recievMsg = JsonConvert.DeserializeObject<TransportMessage>(Msg);
+            UdpMessage<object>? recievMsg = TransportUtil.DeserializeUdpMessage<object>(Buffer);
             if (recievMsg == null) return;
 
             //Console.ForegroundColor = ConsoleColor.White;
@@ -72,7 +67,7 @@ namespace FlexiServer.Services
                 #region AutoContext
 
                 case NetworkEventPaths.PlayerMovement_MoveInGame:
-                    MoveInGameHandle(ClientId, Account, recievMsg.Path, Msg);
+                    MoveInGameHandle(ClientId, Account, recievMsg.Path, Buffer);
                     break;
 
                 #endregion Switch_Handle
@@ -81,12 +76,12 @@ namespace FlexiServer.Services
             }
         }
         #region AutoContext
-        private void MoveInGameHandle(string clientId, string account, string path, string msg)
+        private void MoveInGameHandle(string clientId, string account, string path, byte[] buffer)
         {
-            var recievMsg = JsonConvert.DeserializeObject<UdpMessage<MovementInfo>>(msg);
+            var recievMsg = TransportUtil.DeserializeUdpMessage<MovementInfo>(buffer);
             if (recievMsg == null) return;
 
-            frameManager.AddFrameMessageToPool(recievMsg.InputFrame, clientId, Pattern, path, msg);
+            frameManager.AddFrameMessageToPool(recievMsg.InputFrame, clientId, Pattern, path, buffer);
         }
 
         #endregion Function_Handle

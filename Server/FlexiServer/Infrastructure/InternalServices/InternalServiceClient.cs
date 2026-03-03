@@ -1,4 +1,5 @@
 ﻿using FlexiServer.Models.Common;
+using FlexiServer.Transport;
 using FlexiServer.Transport.Http;
 using Newtonsoft.Json;
 using System.Text;
@@ -17,12 +18,20 @@ namespace FlexiServer.Infrastructure.InternalServices
                 Account = "Server",
                 Data = req,
             };
-            string json = JsonConvert.SerializeObject(message);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync(url, content);
-            string resJson = await response.Content.ReadAsStringAsync();
+            HttpContent content;
+            byte[] bytes;
+            using (var ms = new MemoryStream())
+            {
+                ProtoBuf.Serializer.Serialize(ms, message);
+                bytes = ms.ToArray();
+            }
+            content = new ByteArrayContent(bytes);
+            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-protobuf");
 
-            return JsonConvert.DeserializeObject<HttpResult<TRes>>(resJson)!;
+            var response = await client.PostAsync(url, content);
+            byte[] resBytes = await response.Content.ReadAsByteArrayAsync();
+
+            return TransportUtil.DeserializeHttpResult<TRes>(resBytes);
         }
         private string GetUrlByRole(string role)
         {

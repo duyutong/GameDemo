@@ -25,10 +25,12 @@ public class NetworkProtocolSaveUtility
         tempStr = tempStr.Replace("#NamespaceStr#", isComm ? CSTemplate_Network.NamespaceStr_ModelsCommon : CSTemplate_Network.NamespaceStr_Models);
 
         string variableStr = "";
+        int pos = 0;
         foreach (NetworkProtocolBlockData block in blocks)
         {
             string str = block.isEnumerable ? CSTemplate_Network.ModelVariableListStr : CSTemplate_Network.ModelVariableStr;
             EditorUtilityExtensions.ToCamelAndPascal(block.variableName, out _, out string variableName_uc);
+            str = str.Replace("#Pos#", pos.ToString());
             str = str.Replace("#TypeName#", block.typeName);
             str = str.Replace("#VariableName#", variableName_uc);
             variableStr += str;
@@ -128,10 +130,13 @@ public class NetworkProtocolSaveUtility
         tempStr = tempStr.Replace("#ModelName#", modelName);
         tempStr = tempStr.Replace("#NamespaceStr#", isComm ? CSTemplate_Network.NamespaceStr_ModelsCommon : CSTemplate_Network.NamespaceStr_Models);
         string variableStr = "";
+        int pos = 0;
         foreach (NetworkProtocolBlockData block in blocks)
         {
             string str = block.isEnumerable ? CSTemplate_Network.ModelVariableListStr : CSTemplate_Network.ModelVariableStr;
+            pos += 1;
             EditorUtilityExtensions.ToCamelAndPascal(block.variableName, out _, out string variableName_uc);
+            str = str.Replace("#Pos#", pos.ToString());
             str = str.Replace("#TypeName#", block.typeName);
             str = str.Replace("#VariableName#", variableName_uc);
             variableStr += str;

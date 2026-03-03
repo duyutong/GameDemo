@@ -135,16 +135,7 @@ namespace Network
         }
         public void SendWebSocketMessage<T>(string pattern, string path, T messageObj)
         {
-            WebSocketMessage<T> wsMessage = new WebSocketMessage<T>();
-            wsMessage.Type = EWsMessageType.Normal;
-            wsMessage.InputFrame = FrameManager.Instance.LocalCurrentFrame;
-            wsMessage.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            wsMessage.Pattern = pattern;
-            wsMessage.Path = path;
-            wsMessage.Data = messageObj;
-
-            string msg = JsonConvert.SerializeObject(wsMessage);
-            webSocketTransport.SendMessage(pattern, msg);
+            webSocketTransport.SendMessage(pattern, path, messageObj);
         }
 
         public async void UpdConnect(string role)
@@ -154,16 +145,7 @@ namespace Network
         }
         public void SendUdpMessage<T>(string pattern, string path, T messageObj)
         {
-            UdpMessage<T> udpMessage = new UdpMessage<T>();
-            udpMessage.Account = Account;
-            udpMessage.InputFrame = FrameManager.Instance.LocalCurrentFrame;
-            udpMessage.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            udpMessage.Pattern = pattern;
-            udpMessage.Path = path;
-            udpMessage.Data = messageObj;
-
-            string msg = JsonConvert.SerializeObject(udpMessage);
-            udpTransport.SendMessage(pattern, msg);
+            udpTransport.SendMessage(pattern, path, messageObj);
         }
         #endregion
     }

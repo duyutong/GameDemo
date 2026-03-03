@@ -4,11 +4,14 @@ using System.Numerics;
 using static EnumDefinitions;
 namespace FlexiServer.Models
 {
+    [global::ProtoBuf.ProtoContract(Name = @"RoomGetRoomsResponse")]
     public class RoomGetRoomsResponse
     {
         #region AutoContext
         
+        [global::ProtoBuf.ProtoMember(0)]
         public List<RoomInfo> Rooms { get; set; }
+
         #endregion Variable
     }
 }

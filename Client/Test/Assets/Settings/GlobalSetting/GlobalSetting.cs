@@ -6,6 +6,7 @@ public class GlobalSetting : ScriptableObject
     private static GlobalSetting _instance;
     private static string assetPath = "Assets/Settings/GlobalSetting/GlobalSetting.asset";
     public ELanguage language = ELanguage.Chinese;
+    public ETransportFormat format = ETransportFormat.Json;
     public static GlobalSetting Instance
     {
         get
@@ -20,4 +21,9 @@ public enum ELanguage
 {
     Chinese = 0,
     English = 1,
+}
+public enum ETransportFormat
+{
+    Json = 0,
+    Protobuf = 1
 }

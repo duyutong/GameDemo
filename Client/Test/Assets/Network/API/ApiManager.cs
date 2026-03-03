@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Network.Transport.WebSocket;
 using UnityEngine.InputSystem.Interactions;
+using Network.Transport.Udp;
 namespace Network.API
 {
     public class ApiManager
@@ -11,7 +12,6 @@ namespace Network.API
         private static Dictionary<string, Type> patternToType = new Dictionary<string, Type>()
         {
             #region patternToType
-            { "/chat", typeof(ChatApi) },
             { "/gamePlay", typeof(GamePlayApi) },
             { "/playerMovement", typeof(PlayerMovementApi) },
             #endregion patternToType
@@ -50,7 +50,7 @@ namespace Network.API
             }
             return (TApi)webSoketApiDict[type];
         }
-        public static void HandleUdpMessage(string pattern, string msg)
+        public static void HandleUdpMessage(string pattern, UdpResult<object> result)
         {
             if (string.IsNullOrEmpty(pattern)) return;
 
@@ -62,7 +62,7 @@ namespace Network.API
                     if (apiInstance == null) goto Faile;
                     udpApiDic[type] = apiInstance;
                 }
-                udpApiDic[type].OnDataRecieved(pattern, msg);
+                udpApiDic[type].OnDataRecieved(pattern, result);
                 return;
             }
         Faile:
@@ -71,7 +71,7 @@ namespace Network.API
                 return;
             }
         }
-        public static void HandleMessage(string pattern, string msg)
+        public static void HandleWebsocketMessage(string pattern, WebSocketResult<object> result)
         {
             if (string.IsNullOrEmpty(pattern)) return;
 
@@ -83,7 +83,7 @@ namespace Network.API
                     if (apiInstance == null) goto Faile;
                     webSoketApiDict[type] = apiInstance;
                 }
-                webSoketApiDict[type].OnDataRecieved(pattern, msg);
+                webSoketApiDict[type].OnDataRecieved(pattern, result);
                 return;
             }
         Faile:

@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Network.API
 {
@@ -12,18 +13,17 @@ namespace Network.API
         public abstract string Pattern { get; set; }
         public int currentFrame;//当前操作到哪一帧（对应服务器发出操作时赋值的权威帧）
         private Dictionary<string, Dictionary<Delegate, Action<UdpResult<object>>>> listeners = new();
-        public void SendUdpMessage<TSend>(string pattern,string path, TSend messageObj)
+        public void SendUdpMessage<TSend>(string pattern, string path, TSend messageObj)
         {
             NetworkManager.Instance.SendUdpMessage(pattern, path, messageObj);
         }
-        public virtual void OnDataRecieved(string pattern, string msg) 
+        public virtual void OnDataRecieved(string pattern, UdpResult<object> result)
         {
-            UdpResult<object> objResult = JsonConvert.DeserializeObject<UdpResult<object>>(msg);
-            if (objResult == null) return;
-            if (objResult.ServerFrame < currentFrame) return;
-            currentFrame = objResult.ServerFrame;
+            if (result == null) return;
+            if (result.ServerFrame < currentFrame) return;
+            currentFrame = result.ServerFrame;
 
-            Dispatch(objResult.Path, objResult);
+            Dispatch(result.Path, result);
         }
         private void Dispatch(string path, UdpResult<object> result)
         {
@@ -75,13 +75,34 @@ namespace Network.API
         private T ConvertData<T>(object data)
         {
             if (data == null) return default;
-
             if (data is T value) return value;
 
-            if (data is JToken token)
-                return token.ToObject<T>();
-
-            return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(data));
+            if (GlobalSetting.Instance.format == ETransportFormat.Protobuf)
+            {
+                if (data is byte[] bytes)
+                {
+                    using var ms = new MemoryStream(bytes);
+                    return ProtoBuf.Serializer.Deserialize<T>(ms);
+                }
+                else if (data is MemoryStream ms)
+                {
+                    return ProtoBuf.Serializer.Deserialize<T>(ms);
+                }
+                else
+                {
+                    // 如果 data 已经是对象类型，尝试先序列化再反序列化
+                    using var tmpMs = new MemoryStream();
+                    ProtoBuf.Serializer.Serialize(tmpMs, data);
+                    tmpMs.Position = 0;
+                    return ProtoBuf.Serializer.Deserialize<T>(tmpMs);
+                }
+            }
+            else
+            {
+                // JSON: data 可能是 JObject / JToken / 原生对象
+                if (data is JToken token) return token.ToObject<T>();
+                return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(data));
+            }
         }
     }
 }

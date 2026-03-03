@@ -22,9 +22,11 @@ namespace FlexiServer.Core.Frame
         private TickHandle? tickHandle;
         // 回滚后帧管理器返回给 Service 的回调函数
         public Action<int, List<FrameMessage>>? OnFrameResolved;
-        public void AddFrameMessageToPool(int inputFrame,string clientId, string pattern,string path, string command)
+        public void AddFrameMessageToPool(int inputFrame,string clientId, string pattern,string path, byte[] command)
         {
+            if (command == null || command.Length == 0) return;
             if (inputFrame < ServerCurrentFrame - MaxRollbackFrames) return;
+
             rollbackStartFrame = Math.Min(rollbackStartFrame, inputFrame);
 
             var msg = FrameMessagePool.Get();

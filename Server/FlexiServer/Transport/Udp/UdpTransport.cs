@@ -2,7 +2,6 @@
 using FlexiServer.Core.Frame;
 using FlexiServer.Core.Tick;
 using FlexiServer.Transport.Interface;
-using Newtonsoft.Json;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
@@ -11,12 +10,14 @@ using System.Threading.Tasks;
 
 namespace FlexiServer.Transport.Udp
 {
-    public class UdpTransport : ITransport
+    public class UdpTransport(FrameManager frameManager) : ITransport
     {
+        private readonly FrameManager frameManager = frameManager;
+
         private UdpClient? udpClient;
         private CancellationTokenSource?cts;
         private ConcurrentDictionary<string, ClientConnection> udpClients = new();  //Account to IPEndPoint
-        private Action<SClientConnectData, string, string>? OnReceived;
+        private Action<SClientConnectData, string, byte[]>? OnReceived;
         public void SetClient(UdpClient _clien, CancellationTokenSource _cts) 
         {
             udpClient = _clien;
@@ -26,28 +27,35 @@ namespace FlexiServer.Transport.Udp
         {
 
         }
-        private void OnMessageReceived(SClientConnectData connectData, string msg)
+        private void OnMessageReceived(SClientConnectData connectData, byte[] buffer)
         {
-            UdpMessage<object>? udpMessage = JsonConvert.DeserializeObject<UdpMessage<object>>(msg);
+            UdpMessage<object>? udpMessage = TransportUtil.DeserializeUdpMessage<object>(buffer);
             if (udpMessage == null) return;
 
             string pattern = udpMessage.Pattern;
-            OnReceived?.Invoke(connectData, pattern, msg);
+            OnReceived?.Invoke(connectData, pattern, buffer);
         }
-        public void SetMessageReceivedListener(Action<SClientConnectData, string, string> receivedCall)
+        public void SetMessageReceivedListener(Action<SClientConnectData, string, byte[]> receivedCall)
         {
             OnReceived = receivedCall;
         }
 
-        public async void SendMessage(string account, string message)
+        public async void SendMessage<TData>(string clientKey, string pattern, string path, TData data)
         {
-            if (!udpClients.ContainsKey(account)) return;
-            if (!udpClients.TryGetValue(account, out var client)) return;
+            if (!udpClients.ContainsKey(clientKey)) return;
+            if (!udpClients.TryGetValue(clientKey, out var client)) return;
             if (client.ClientEndPoint == null) return;
             if (udpClient == null) return;
 
-            byte[] data = Encoding.UTF8.GetBytes(message);
-            await udpClient.SendAsync(data, client.ClientEndPoint);
+            UdpResult<TData> sendMsg = new();
+            sendMsg.Pattern = pattern;
+            sendMsg.Path = path;
+            sendMsg.Data = data;
+            sendMsg.ServerFrame = frameManager.ServerCurrentFrame;
+            sendMsg.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+            var datagram = TransportUtil.SerializeUdpResult(sendMsg);
+            await udpClient.SendAsync(datagram, client.ClientEndPoint);
         }
         public void Start() { }
 
@@ -63,7 +71,7 @@ namespace FlexiServer.Transport.Udp
             string msg = Encoding.UTF8.GetString(buffer);
             if (string.IsNullOrEmpty(msg)) return;
 
-            UdpMessage<object>? udpMessage = JsonConvert.DeserializeObject<UdpMessage<object>>(msg);
+            UdpMessage<object>? udpMessage = TransportUtil.DeserializeUdpMessage<object>(buffer);
             if (udpMessage == null) return;
 
             string account = udpMessage.Account;
@@ -82,7 +90,7 @@ namespace FlexiServer.Transport.Udp
 
             SClientConnectData clientConnect = new SClientConnectData();
             clientConnect.Account = account;
-            OnMessageReceived(clientConnect, msg);
+            OnMessageReceived(clientConnect, buffer);
         }
         private class ClientConnection {
             public string Account { get; set; } = "";

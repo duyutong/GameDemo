@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: GlobalSetting
   m_EditorClassIdentifier: Assembly-CSharp::GlobalSetting
   language: 0
+  format: 0

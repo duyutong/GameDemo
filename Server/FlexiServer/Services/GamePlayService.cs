@@ -5,57 +5,56 @@ using FlexiServer.Sandbox;
 using FlexiServer.Services.Interface;
 using FlexiServer.Transport;
 using FlexiServer.Transport.Web;
-using Newtonsoft.Json;
 namespace FlexiServer.Services
 {
     [ProcessFeature("GamePlay")]
-    public class GamePlayService(SandboxManager sandboxManager, FrameManager frameManager) : IService
+    public class GamePlayService(SandboxManager sandboxManager) : IService
     {
         public string Pattern => "/gamePlay";
-        public void OnDataRecieved(string ClientId, string Account, string Msg)
+        public void OnDataRecieved(string ClientId, string Account, byte[] Buffer)
         {
-            WebSocketMessage<object>? recievMsg = JsonConvert.DeserializeObject<WebSocketMessage<object>>(Msg);
+            WebSocketMessage<object>? recievMsg = TransportUtil.DeserializeWsMessage<object>(Buffer);
             if (recievMsg == null) return;
 
-            //Console.ForegroundColor = ConsoleColor.White;
-            //Console.Write("[GamePlayService]");
-            //Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("[GamePlayService]");
+            Console.ResetColor();
 
-            //Console.WriteLine(
-            //    $" OnDataRecieved | Pattern: {recievMsg.Pattern} | Path: {recievMsg.Path}"
-            //);
-            
+            Console.WriteLine(
+                $" OnDataRecieved | Pattern: {recievMsg.Pattern} | Path: {recievMsg.Path}"
+            );
+
             switch (recievMsg.Path)
             {
                 #region AutoContext
-                              
+
                 case NetworkEventPaths.GamePlay_JoinGame:
-                    JoinGameHandle(ClientId, Account, recievMsg.Path, Msg);
+                    JoinGameHandle(ClientId, Account, recievMsg.Path, Buffer);
                     break;
 
-                               
+
                 case NetworkEventPaths.GamePlay_StartGame:
-                    StartGameHandle(ClientId, Account, recievMsg.Path, Msg);
+                    StartGameHandle(ClientId, Account, recievMsg.Path, Buffer);
                     break;
 
-                               
+
                 case NetworkEventPaths.GamePlay_SetMovementState:
-                    SetMovementStateHandle(ClientId, Account, recievMsg.Path, Msg);
+                    SetMovementStateHandle(ClientId, Account, recievMsg.Path, Buffer);
                     break;
 
-                               
+
                 case NetworkEventPaths.GamePlay_LeaveGame:
-                    LeaveGameHandle(ClientId, Account, recievMsg.Path, Msg);
+                    LeaveGameHandle(ClientId, Account, recievMsg.Path, Buffer);
                     break;
 
-                 #endregion Switch_Handle
+                #endregion Switch_Handle
                 default:
                     break;
             }
         }
         #region AutoContext
-        
-        private void JoinGameHandle(string clientId, string account, string path, string msg)
+
+        private void JoinGameHandle(string clientId, string account, string path, byte[] buffer)
         {
             //测试代码，不筛选沙盒
             GamePlayItemSandbox? sandbox_item = sandboxManager.GetSandbox<GamePlayItemSandbox>();
@@ -64,39 +63,30 @@ namespace FlexiServer.Services
             GamePlayMovementSandbox? sandbox_movement = sandboxManager.GetSandbox<GamePlayMovementSandbox>();
             sandbox_movement?.AddPlayer(clientId, account);
         }
-        
-        private void StartGameHandle(string clientId, string account, string path, string msg)
+
+        private void StartGameHandle(string clientId, string account, string path, byte[] buffer)
         {
             sandboxManager.GetOrCreateSandbox<GamePlayItemSandbox>();
             sandboxManager.GetOrCreateSandbox<GamePlayMovementSandbox>();
         }
-        
-        private void SetMovementStateHandle(string clientId, string account, string path, string msg)
+
+        private void SetMovementStateHandle(string clientId, string account, string path, byte[] buffer)
         {
-            var recievMsg = JsonConvert.DeserializeObject<WebSocketMessage<MovementInfo>>(msg);
-            MovementInfo? info = recievMsg!.Data;
+            var recievMsg = TransportUtil.DeserializeWsMessage<MovementInfo>(buffer);
+            MovementInfo? data = recievMsg!.Data;
 
             GamePlayMovementSandbox? sandbox = sandboxManager.GetSandbox<GamePlayMovementSandbox>((_standbox) =>
             { return _standbox.ContainsPlayer(account); });
             if (sandbox == null) return;
 
-            sandbox.RefreshMovementState(info);
+            sandbox.RefreshMovementState(data);
 
-            WebSocketResult<MovementInfo> sendMsg = new WebSocketResult<MovementInfo>();
-            sendMsg.Pattern = Pattern;
-            sendMsg.Path = path;
-            sendMsg.Data = info;
-            sendMsg.Type = EWsMessageType.FrameSync;
-            sendMsg.ServerFrame = frameManager.ServerCurrentFrame;
-            sendMsg.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-
-            string wsMsgStr = JsonConvert.SerializeObject(sendMsg);
-            TransportManager.SendMessageToClient<WebSocketTransport>(sandbox.GetPlayerClients(), wsMsgStr);
+            TransportManager.SendMessageToClient<WebSocketTransport, MovementInfo>(sandbox.GetPlayerClients(), Pattern, path, data);
         }
-        
-        private void LeaveGameHandle(string clientId, string account, string path, string msg)
+
+        private void LeaveGameHandle(string clientId, string account, string path, byte[] buffer)
         {
-            
+
         }
         #endregion Function_Handle
     }

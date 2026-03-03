@@ -1,8 +1,11 @@
-﻿using Network.API;
+﻿using Assets.Network.API.ErrorCode;
+using Network.API;
 using Network.Core.Frame;
 using Network.Core.Tick;
 using Newtonsoft.Json;
 using System;
+using System.IO;
+using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -41,46 +44,80 @@ namespace Network.Transport.WebSocket
             cts?.Cancel();
             channel?.Dispose();
         }
-        
-        public override void OnMessageReceived(string msg)
+
+        public override void OnMessageReceived(byte[] buffer)
         {
-            WebSocketResult<object> wsResult = JsonConvert.DeserializeObject<WebSocketResult<object>>(msg);
+            WebSocketResult<object> wsResult = DeserializeWsResult<object>(buffer);
             if (wsResult == null) return;
 
-            if (wsResult.Type == EWsMessageType.Normal)
+            if (wsResult.Code == 200)
             {
-                string pattern = wsResult.Pattern;
-                ApiManager.HandleMessage(pattern, msg);
-            }
-            else if (wsResult.Type == EWsMessageType.Heartbeat)
-            {
-                // 处理心跳响应（如果需要）
                 FrameManager.Instance.RefreshServerFrame(wsResult.ServerFrame, wsResult.Timestamp);
+                string pattern = wsResult.Pattern;
+                ApiManager.HandleWebsocketMessage(pattern, wsResult);
             }
-            else if (wsResult.Type == EWsMessageType.Relogin)
+            else if (wsResult.Code == (int)ErrorCode.TokenExpired)
             {
-                // 处理重新登录逻辑
-                Debug.Log("收到重新登录请求，需重新认证身份");
+                Debug.Log("Token过期，正在重新登录...");
                 NetworkManager.Instance.HttpLogin();
-            }
-            else if (wsResult.Type == EWsMessageType.FrameSync)
-            {
-                // 处理帧同步消息
-                FrameManager.Instance.RefreshServerFrame(wsResult.ServerFrame, wsResult.Timestamp);
-                string pattern = wsResult.Pattern;
-                ApiManager.HandleMessage(pattern, msg);
+                return;
             }
         }
-        protected override async void OnSendMessageAsync(string wsMessage)
+        protected override async void OnSendMessageAsync<TData>(string pattern, string path, TData messageObj)
         {
             if (channel == null || channel.State != WebSocketState.Open)
             {
                 Debug.LogWarning("WebSocket 未连接，无法发送消息");
                 return;
             }
-            var buffer = Encoding.UTF8.GetBytes(wsMessage);
-            var segment = new ArraySegment<byte>(buffer);
-            await channel.SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None);
+
+            WebSocketMessage<TData> wsMessage = new();
+            wsMessage.InputFrame = FrameManager.Instance.LocalCurrentFrame;
+            wsMessage.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            wsMessage.Pattern = pattern;
+            wsMessage.Path = path;
+            wsMessage.Data = messageObj;
+
+            var buffer = SerializeWsMessage(wsMessage);
+            var lenBytes = BitConverter.GetBytes(buffer.Length); // 4字节长度前缀
+            var sendBytes = lenBytes.Concat(buffer).ToArray();
+            var segment = new ArraySegment<byte>(sendBytes);
+
+            await channel.SendAsync(segment, WebSocketMessageType.Binary, true, CancellationToken.None);
+        }
+        private byte[] SerializeWsMessage<T>(WebSocketMessage<T> message)
+        {
+            if (GlobalSetting.Instance.format == ETransportFormat.Json)
+            {
+                string json = JsonConvert.SerializeObject(message);
+                return Encoding.UTF8.GetBytes(json);
+            }
+            else
+            {
+                using var ms = new MemoryStream();
+                ProtoBuf.Serializer.Serialize(ms, message);
+                return ms.ToArray();
+            }
+        }
+        private WebSocketResult<TData> DeserializeWsResult<TData>(byte[] bytes)
+        {
+            if (GlobalSetting.Instance.format == ETransportFormat.Json)
+            {
+                if (bytes.Length < 4) return null!;
+                int jsonLength = BitConverter.ToInt32(bytes, 0);
+                if (bytes.Length < 4 + jsonLength) return null!;
+
+                byte[] jsonBytes = new byte[jsonLength];
+                Array.Copy(bytes, 4, jsonBytes, 0, jsonLength);
+
+                string json = Encoding.UTF8.GetString(jsonBytes);
+                return JsonConvert.DeserializeObject<WebSocketResult<TData>>(json)!;
+            }
+            else
+            {
+                using var ms = new MemoryStream(bytes);
+                return ProtoBuf.Serializer.Deserialize<WebSocketResult<TData>>(ms);
+            }
         }
         protected override async void ReceiveLoopAsync()
         {
@@ -99,8 +136,8 @@ namespace Network.Transport.WebSocket
 
                     break;
                 }
-                string msg = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                OnMessageReceived(msg);
+
+                OnMessageReceived(buffer);
             }
         }
         private int _disconnectFlag = 0;
@@ -137,22 +174,10 @@ namespace Network.Transport.WebSocket
 
             tickHandle = TickManager.Instance.RegisterTick(heartbeatIntervalMs, OnHeartbeatTick);
         }
-        protected async void OnHeartbeatTick()
+        protected void OnHeartbeatTick()
         {
-            WebSocketMessage<string> wsMessage = new()
-            {
-                Type = EWsMessageType.Heartbeat,
-                Pattern = "/ping",
-                Data = "ping"
-            };
-            string jsonMessage = JsonConvert.SerializeObject(wsMessage);
-            var messageBytes = Encoding.UTF8.GetBytes(jsonMessage);
-            var segment = new ArraySegment<byte>(messageBytes);
-            if (channel.State == WebSocketState.Open)
-            {
-                try { await channel.SendAsync(segment, WebSocketMessageType.Text, true, cts.Token); }
-                catch { Debug.LogError("向服务器发送ping消息失败！"); }
-            }
+            try { SendMessageAsync("/ping", "", "ping"); }
+            catch { Debug.LogError("发送ping消息失败！"); }
         }
         private void StopHeartbeatLoop()
         {

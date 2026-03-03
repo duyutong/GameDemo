@@ -19,12 +19,12 @@ namespace FlexiServer.Services
         {
             transportMgr.RemoveClientMsgHandler(OnClientMessageReceived);
         }
-        private void OnClientMessageReceived(string pattern, string clientId, string account, string msg)
+        private void OnClientMessageReceived(string pattern, string clientId, string account, byte[] buffer)
         {
             IService? service = GetService(pattern);
             if (service == null) return;
 
-            service.OnDataRecieved(clientId, account, msg);
+            service.OnDataRecieved(clientId, account, buffer);
         }
 
         public void RegisterService(IService? service)

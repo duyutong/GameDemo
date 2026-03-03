@@ -1,4 +1,4 @@
-﻿using Network.Models;
+using Network.Models;
 using System;
 using UnityEngine;
 namespace Network.API
