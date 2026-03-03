@@ -30,6 +30,7 @@ public class NetworkProtocolSaveUtility
         {
             string str = block.isEnumerable ? CSTemplate_Network.ModelVariableListStr : CSTemplate_Network.ModelVariableStr;
             EditorUtilityExtensions.ToCamelAndPascal(block.variableName, out _, out string variableName_uc);
+            pos += 1;
             str = str.Replace("#Pos#", pos.ToString());
             str = str.Replace("#TypeName#", block.typeName);
             str = str.Replace("#VariableName#", variableName_uc);
@@ -97,7 +98,7 @@ public class NetworkProtocolSaveUtility
         foreach (NetworkProtocolEventSaveData eventSaveData in eventData)
         {
             string funcName = GetFuncNameFromPattern(eventSaveData.pattern);
-            if (exitStr.Contains($"public async Task<{funcName}Response> {funcName}(HttpMessage<{funcName}Request> msg)")) continue;
+            if (exitStr.Contains($"{funcName}(HttpMessage<{funcName}Request> msg)")) continue;
 
             string str = CSTemplate_Network.HttpFuncStr;
             str = str.Replace("#Func#", funcName);

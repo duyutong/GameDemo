@@ -29,7 +29,7 @@ namespace FlexiServer.Transport.Udp
         }
         private void OnMessageReceived(SClientConnectData connectData, byte[] buffer)
         {
-            UdpMessage<object>? udpMessage = TransportUtil.DeserializeUdpMessage<object>(buffer);
+            UdpMessageHeader udpMessage = TransportUtil.DeserializeUdpMessageHeader(buffer);
             if (udpMessage == null) return;
 
             string pattern = udpMessage.Pattern;
@@ -71,7 +71,7 @@ namespace FlexiServer.Transport.Udp
             string msg = Encoding.UTF8.GetString(buffer);
             if (string.IsNullOrEmpty(msg)) return;
 
-            UdpMessage<object>? udpMessage = TransportUtil.DeserializeUdpMessage<object>(buffer);
+            UdpMessageHeader udpMessage = TransportUtil.DeserializeUdpMessageHeader(buffer);
             if (udpMessage == null) return;
 
             string account = udpMessage.Account;

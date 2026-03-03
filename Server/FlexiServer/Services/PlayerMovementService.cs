@@ -51,7 +51,7 @@ namespace FlexiServer.Services
         }
         public void OnDataRecieved(string ClientId, string Account, byte[] Buffer)
         {
-            UdpMessage<object>? recievMsg = TransportUtil.DeserializeUdpMessage<object>(Buffer);
+            UdpMessageHeader recievMsg = TransportUtil.DeserializeUdpMessageHeader(Buffer);
             if (recievMsg == null) return;
 
             //Console.ForegroundColor = ConsoleColor.White;

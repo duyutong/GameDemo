@@ -71,7 +71,7 @@ namespace Network.API
                 return;
             }
         }
-        public static void HandleWebsocketMessage(string pattern, WebSocketResult<object> result)
+        public static void HandleWebsocketMessage(string pattern, byte[] buffer)
         {
             if (string.IsNullOrEmpty(pattern)) return;
 
@@ -83,7 +83,7 @@ namespace Network.API
                     if (apiInstance == null) goto Faile;
                     webSoketApiDict[type] = apiInstance;
                 }
-                webSoketApiDict[type].OnDataRecieved(pattern, result);
+                webSoketApiDict[type].OnDataRecieved(pattern, buffer);
                 return;
             }
         Faile:

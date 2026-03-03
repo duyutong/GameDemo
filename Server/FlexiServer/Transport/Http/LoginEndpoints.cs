@@ -10,8 +10,9 @@ namespace FlexiServer.Transport.Http
         {
             #region AutoContext
             
-            app.MapPost("/login/httpLogin", async (HttpMessage<LoginHttpLoginRequest> msg) =>
+            app.MapPost("/login/httpLogin", async (HttpContext context) =>
             {
+                HttpMessage<LoginHttpLoginRequest> msg = await TransportUtil.ReadHttpMessageAsync<LoginHttpLoginRequest>(context);
                 var result = new HttpResult<LoginHttpLoginResponse>();
                 try
                 {
@@ -26,11 +27,12 @@ namespace FlexiServer.Transport.Http
                     result.Code = ex.Code;                 // 可以自定义不同错误码
                     result.Message = ex.Message;
                 }
-                return result;
+                TransportUtil.ReturnHttpResultTask(context, result);
             });
             
-            app.MapPost("/login/Validate", async (HttpMessage<LoginValidateRequest> msg) =>
+            app.MapPost("/login/Validate", async (HttpContext context) =>
             {
+                HttpMessage<LoginValidateRequest> msg = await TransportUtil.ReadHttpMessageAsync<LoginValidateRequest>(context);
                 var result = new HttpResult<LoginValidateResponse>();
                 try
                 {
@@ -45,7 +47,7 @@ namespace FlexiServer.Transport.Http
                     result.Code = ex.Code;                 // 可以自定义不同错误码
                     result.Message = ex.Message;
                 }
-                return result;
+                TransportUtil.ReturnHttpResultTask(context, result);
             });
             
             #endregion MapPostStr

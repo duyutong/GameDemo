@@ -67,8 +67,9 @@ namespace FlexiServer.Transport.Http
     }
 }";
     public const string MapPostStr = @"
-            app.MapPost(""#Pattern#"", async (HttpMessage<#Func#Request> msg) =>
+            app.MapPost(""#Pattern#"", async (HttpContext context) =>
             {
+                HttpMessage<#Func#Request> msg = await TransportUtil.ReadHttpMessageAsync<#Func#Request>(context);
                 var result = new HttpResult<#Func#Response>();
                 try
                 {
@@ -83,7 +84,7 @@ namespace FlexiServer.Transport.Http
                     result.Code = ex.Code;                 // 可以自定义不同错误码
                     result.Message = ex.Message;
                 }
-                return result;
+                TransportUtil.ReturnHttpResultTask(context, result);
             });
             ";
 

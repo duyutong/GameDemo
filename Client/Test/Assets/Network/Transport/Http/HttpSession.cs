@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,15 +44,17 @@ namespace Network.Transport.Http
         }
         private HttpResult<TRes> DeserializeHttpResult<TRes>(byte[] resBytes)
         {
-            if (GlobalSetting.Instance.format == ETransportFormat.Protobuf)
-            {
-                using var ms = new MemoryStream(resBytes);
-                return ProtoBuf.Serializer.Deserialize<HttpResult<TRes>>(ms);
-            }
-            else
+            if (resBytes.Length == 0) return null!;
+            // 判断流是不是 JSON
+            if (resBytes[0] == (byte)'{') // JSON 一般以 { 开头
             {
                 string resJson = Encoding.UTF8.GetString(resBytes);
                 return JsonConvert.DeserializeObject<HttpResult<TRes>>(resJson)!;
+            }
+            else
+            {
+                using var ms = new MemoryStream(resBytes);
+                return ProtoBuf.Serializer.Deserialize<HttpResult<TRes>>(ms);
             }
         }
         private HttpContent GetHttpContent<TReq>(HttpMessage<TReq> message)

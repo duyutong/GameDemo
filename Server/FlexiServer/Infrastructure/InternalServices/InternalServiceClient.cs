@@ -19,12 +19,7 @@ namespace FlexiServer.Infrastructure.InternalServices
                 Data = req,
             };
             HttpContent content;
-            byte[] bytes;
-            using (var ms = new MemoryStream())
-            {
-                ProtoBuf.Serializer.Serialize(ms, message);
-                bytes = ms.ToArray();
-            }
+            byte[] bytes = TransportUtil.SerializeHttpMessage(message);
             content = new ByteArrayContent(bytes);
             content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-protobuf");
 

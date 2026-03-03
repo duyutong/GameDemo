@@ -10,8 +10,9 @@ namespace FlexiServer.Transport.Http
         {
             #region AutoContext
             
-            app.MapPost("/createAccount/create", async (HttpMessage<CreateAccountCreateRequest> msg) =>
+            app.MapPost("/createAccount/create", async (HttpContext context) =>
             {
+                HttpMessage<CreateAccountCreateRequest> msg = await TransportUtil.ReadHttpMessageAsync<CreateAccountCreateRequest>(context);
                 var result = new HttpResult<CreateAccountCreateResponse>();
                 try
                 {
@@ -26,7 +27,7 @@ namespace FlexiServer.Transport.Http
                     result.Code = ex.Code;                 // 可以自定义不同错误码
                     result.Message = ex.Message;
                 }
-                return result;
+                TransportUtil.ReturnHttpResultTask(context, result);
             });
             
             #endregion MapPostStr

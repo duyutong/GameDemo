@@ -1,4 +1,5 @@
-﻿using Network.Transport.WebSocket;
+﻿using Assets.Network.Transport;
+using Network.Transport.WebSocket;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -15,26 +16,19 @@ namespace Network.API
         {
             NetworkManager.Instance.SendWebSocketMessage(pattern, path, messageObj);
         }
-        public virtual void OnDataRecieved(string pattern, WebSocketResult<object> result)
+        public virtual void OnDataRecieved(string pattern, byte[] buffer)
         {
-            if (result == null) return;
-            Dispatch(result.Path, result);
+            if (buffer == null || buffer.Length == 0) return;
+            Dispatch(buffer);
         }
-        private void Dispatch(string path, WebSocketResult<object> result)
+        private void Dispatch(byte[] buffer)
         {
+            string path = TransportUtil.DeserializeWsResultHeader(buffer)?.Path;
             if (listeners.TryGetValue(path, out var map))
             {
                 foreach (var wrapper in map.Values)
-                    wrapper(result);
+                    wrapper(buffer);
             }
-        }
-
-        protected float GetDeltaSeconds(WebSocketResult<object> wsMessage)
-        {
-            long currTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            long inputTime = wsMessage.Timestamp;
-            float deltaSeconds = (currTime - inputTime) / 1000f;
-            return deltaSeconds;
         }
         public virtual void AddListener<T>(string path, Action<WebSocketResult<T>> callBack)
         {
@@ -49,20 +43,22 @@ namespace Network.API
             // 已经注册过，直接 return
             if (map.ContainsKey(callBack)) return;
 
-            Action<WebSocketResult<object>> wrapper = (objResult) =>
+            Action<byte[]> wrapper = (buffer) =>
             {
-                var real = new WebSocketResult<T>
-                {
-                    Code = objResult.Code,
-                    Message = objResult.Message,
-                    ServerFrame = objResult.ServerFrame,
-                    Timestamp = objResult.Timestamp,
-                    Path = objResult.Path,
-                    Pattern = objResult.Pattern,
-                    Data = ConvertData<T>(objResult.Data)
-                };
+                WebSocketResult<T> objResult = TransportUtil.DeserializeWsResult<T>(buffer);
+                //var real = new WebSocketResult<T>
+                //{
 
-                callBack(real);
+                //    Code = objResult.Code,
+                //    Message = objResult.Message,
+                //    ServerFrame = objResult.ServerFrame,
+                //    Timestamp = objResult.Timestamp,
+                //    Path = objResult.Path,
+                //    Pattern = objResult.Pattern,
+                //    Data = ConvertData<T>(objResult.Data)
+                //};
+
+                callBack(objResult);
             };
 
             map[callBack] = wrapper;

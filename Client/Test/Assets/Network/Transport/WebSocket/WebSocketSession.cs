@@ -1,4 +1,5 @@
 ﻿using Assets.Network.API.ErrorCode;
+using Assets.Network.Transport;
 using Network.API;
 using Network.Core.Frame;
 using Network.Core.Tick;
@@ -47,14 +48,14 @@ namespace Network.Transport.WebSocket
 
         public override void OnMessageReceived(byte[] buffer)
         {
-            WebSocketResult<object> wsResult = DeserializeWsResult<object>(buffer);
+            var wsResult = TransportUtil.DeserializeWsResultHeader(buffer);
             if (wsResult == null) return;
 
             if (wsResult.Code == 200)
             {
                 FrameManager.Instance.RefreshServerFrame(wsResult.ServerFrame, wsResult.Timestamp);
                 string pattern = wsResult.Pattern;
-                ApiManager.HandleWebsocketMessage(pattern, wsResult);
+                ApiManager.HandleWebsocketMessage(pattern, buffer);
             }
             else if (wsResult.Code == (int)ErrorCode.TokenExpired)
             {
@@ -78,46 +79,12 @@ namespace Network.Transport.WebSocket
             wsMessage.Path = path;
             wsMessage.Data = messageObj;
 
-            var buffer = SerializeWsMessage(wsMessage);
+            var buffer = TransportUtil.SerializeWsMessage(wsMessage);
             var lenBytes = BitConverter.GetBytes(buffer.Length); // 4字节长度前缀
             var sendBytes = lenBytes.Concat(buffer).ToArray();
             var segment = new ArraySegment<byte>(sendBytes);
 
             await channel.SendAsync(segment, WebSocketMessageType.Binary, true, CancellationToken.None);
-        }
-        private byte[] SerializeWsMessage<T>(WebSocketMessage<T> message)
-        {
-            if (GlobalSetting.Instance.format == ETransportFormat.Json)
-            {
-                string json = JsonConvert.SerializeObject(message);
-                return Encoding.UTF8.GetBytes(json);
-            }
-            else
-            {
-                using var ms = new MemoryStream();
-                ProtoBuf.Serializer.Serialize(ms, message);
-                return ms.ToArray();
-            }
-        }
-        private WebSocketResult<TData> DeserializeWsResult<TData>(byte[] bytes)
-        {
-            if (GlobalSetting.Instance.format == ETransportFormat.Json)
-            {
-                if (bytes.Length < 4) return null!;
-                int jsonLength = BitConverter.ToInt32(bytes, 0);
-                if (bytes.Length < 4 + jsonLength) return null!;
-
-                byte[] jsonBytes = new byte[jsonLength];
-                Array.Copy(bytes, 4, jsonBytes, 0, jsonLength);
-
-                string json = Encoding.UTF8.GetString(jsonBytes);
-                return JsonConvert.DeserializeObject<WebSocketResult<TData>>(json)!;
-            }
-            else
-            {
-                using var ms = new MemoryStream(bytes);
-                return ProtoBuf.Serializer.Deserialize<WebSocketResult<TData>>(ms);
-            }
         }
         protected override async void ReceiveLoopAsync()
         {

@@ -10,8 +10,9 @@ namespace FlexiServer.Transport.Http
         {
             #region AutoContext
             
-            app.MapPost("/clue/identify", async (HttpMessage<ClueIdentifyRequest> msg) =>
+            app.MapPost("/clue/identify", async (HttpContext context) =>
             {
+                HttpMessage<ClueIdentifyRequest> msg = await TransportUtil.ReadHttpMessageAsync<ClueIdentifyRequest>(context);
                 var result = new HttpResult<ClueIdentifyResponse>();
                 try
                 {
@@ -26,7 +27,7 @@ namespace FlexiServer.Transport.Http
                     result.Code = ex.Code;                 // 可以自定义不同错误码
                     result.Message = ex.Message;
                 }
-                return result;
+                TransportUtil.ReturnHttpResultTask(context, result);
             });
             
             #endregion MapPostStr

@@ -13,7 +13,7 @@ namespace FlexiServer.Services
         public string Pattern => "/gamePlay";
         public void OnDataRecieved(string ClientId, string Account, byte[] Buffer)
         {
-            WebSocketMessage<object>? recievMsg = TransportUtil.DeserializeWsMessage<object>(Buffer);
+            WebSocketMessageHeader recievMsg = TransportUtil.DeserializeWsMessageHeader(Buffer);
             if (recievMsg == null) return;
 
             Console.ForegroundColor = ConsoleColor.White;

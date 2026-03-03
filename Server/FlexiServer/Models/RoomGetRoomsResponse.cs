@@ -9,7 +9,7 @@ namespace FlexiServer.Models
     {
         #region AutoContext
         
-        [global::ProtoBuf.ProtoMember(0)]
+        [global::ProtoBuf.ProtoMember(1)]
         public List<RoomInfo> Rooms { get; set; }
 
         #endregion Variable

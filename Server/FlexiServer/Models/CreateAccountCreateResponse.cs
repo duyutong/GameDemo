@@ -9,13 +9,13 @@ namespace FlexiServer.Models
     {
         #region AutoContext
         
-        [global::ProtoBuf.ProtoMember(0)]
+        [global::ProtoBuf.ProtoMember(1)]
         public string Account { get; set; }
 
-        [global::ProtoBuf.ProtoMember(0)]
+        [global::ProtoBuf.ProtoMember(2)]
         public string Token { get; set; }
 
-        [global::ProtoBuf.ProtoMember(0)]
+        [global::ProtoBuf.ProtoMember(3)]
         public List<ProcessInfo> ProcessInfos { get; set; }
 
         #endregion Variable

@@ -9,10 +9,10 @@ namespace FlexiServer.Models
     {
         #region AutoContext
         
-        [global::ProtoBuf.ProtoMember(0)]
+        [global::ProtoBuf.ProtoMember(1)]
         public ItemInfo Item { get; set; }
 
-        [global::ProtoBuf.ProtoMember(0)]
+        [global::ProtoBuf.ProtoMember(2)]
         public int BagSlotIndex { get; set; }
 
         #endregion Variable

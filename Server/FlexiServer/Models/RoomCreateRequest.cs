@@ -9,13 +9,13 @@ namespace FlexiServer.Models
     {
         #region AutoContext
         
-        [global::ProtoBuf.ProtoMember(0)]
+        [global::ProtoBuf.ProtoMember(1)]
         public int PlayerId { get; set; }
 
-        [global::ProtoBuf.ProtoMember(0)]
+        [global::ProtoBuf.ProtoMember(2)]
         public int RoomType { get; set; }
 
-        [global::ProtoBuf.ProtoMember(0)]
+        [global::ProtoBuf.ProtoMember(3)]
         public int AccessType { get; set; }
 
         #endregion Variable

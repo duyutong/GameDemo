@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 var argDict = args.Select(a => a.Split('=', 2)).Where(p => p.Length == 2).ToDictionary(p => p[0], p => p[1]);
 
 string role = argDict.GetValueOrDefault("role", "Debug");
-string format = argDict.GetValueOrDefault("format", "Json");
+string format = argDict.GetValueOrDefault("format", "Protobuf");
 GlobalSetting.Role = role;
 GlobalSetting.FormatStr = format;
 

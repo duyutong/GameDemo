@@ -9,11 +9,14 @@
         public string Pattern { get; set; } = "";
         [global::ProtoBuf.ProtoMember(2)]
         public string Path { get; set; } = "";
+
         [global::ProtoBuf.ProtoMember(3)]
-        public TData Data { get; set; }
+        public long Timestamp { get; set; }
+
         [global::ProtoBuf.ProtoMember(4)]
         public int InputFrame { get; set; } = 0;
+
         [global::ProtoBuf.ProtoMember(5)]
-        public long Timestamp { get; set; }
+        public TData Data { get; set; }
     }
 }

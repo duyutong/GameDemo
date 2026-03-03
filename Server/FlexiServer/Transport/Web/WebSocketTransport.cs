@@ -190,7 +190,7 @@ namespace FlexiServer.Transport.Web
 
         private void OnMessageReceived(SClientConnectData connectData, byte[] buffer)
         {
-            WebSocketMessage<object>? wsMessage = TransportUtil.DeserializeWsMessage<object>(buffer);
+            WebSocketMessageHeader? wsMessage = TransportUtil.DeserializeWsMessageHeader(buffer);
             if (wsMessage == null) return;
 
             string pattern = wsMessage.Pattern;
