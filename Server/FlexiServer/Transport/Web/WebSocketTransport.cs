@@ -3,11 +3,9 @@ using FlexiServer.Core.Frame;
 using FlexiServer.Core.Tick;
 using FlexiServer.Services;
 using FlexiServer.Transport.Interface;
-using Newtonsoft.Json;
 using System.Buffers;
 using System.Collections.Concurrent;
 using System.Net.WebSockets;
-using System.Text;
 
 namespace FlexiServer.Transport.Web
 {
@@ -52,14 +50,12 @@ namespace FlexiServer.Transport.Web
         {
             if (ws.State != WebSocketState.Open) return;
 
-            WebSocketResult<string> wsResult = new WebSocketResult<string>();
+            WebSocketResult wsResult = new();
             wsResult.Code = (int)ErrorCode.TokenExpired;
-            wsResult.Data = "Token expired, please login again.";
+            wsResult.Data = "Token expired, please login again.".ToBytes();
 
-            var buffer = TransportUtil.SerializeWsResult(wsResult);
-            var lenBytes = BitConverter.GetBytes(buffer.Length); // 4字节长度前缀
-            var sendBytes = lenBytes.Concat(buffer).ToArray();
-            var segment = new ArraySegment<byte>(sendBytes);
+            var buffer = wsResult.ToBytes();
+            var segment = new ArraySegment<byte>(buffer);
             
             try
             {
@@ -190,7 +186,7 @@ namespace FlexiServer.Transport.Web
 
         private void OnMessageReceived(SClientConnectData connectData, byte[] buffer)
         {
-            WebSocketMessageHeader? wsMessage = TransportUtil.DeserializeWsMessageHeader(buffer);
+            var wsMessage = buffer.ConvertData<WebSocketMessage>();
             if (wsMessage == null) return;
 
             string pattern = wsMessage.Pattern;
@@ -210,20 +206,18 @@ namespace FlexiServer.Transport.Web
 
             if (ws != null && ws.State != WebSocketState.Open) return;
 
-            WebSocketResult<TData> wsResult = new WebSocketResult<TData>();
+            WebSocketResult wsResult = new WebSocketResult();
             wsResult.Pattern = pattern;
             wsResult.Code = 200;
             wsResult.Path = path;
-            wsResult.Data = data;
+            wsResult.Data = data.ToBytes();
             wsResult.ServerFrame = frameManager.ServerCurrentFrame;
             wsResult.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
             try
             {
-                var buffer = TransportUtil.SerializeWsResult(wsResult);
-                var lenBytes = BitConverter.GetBytes(buffer.Length); // 4字节长度前缀
-                var sendBytes = lenBytes.Concat(buffer).ToArray();
-                var segment = new ArraySegment<byte>(sendBytes);
+                var buffer = wsResult.ToBytes();
+                var segment = new ArraySegment<byte>(buffer);
 
                 ws?.SendAsync(segment, WebSocketMessageType.Binary, true, CancellationToken.None);
             }

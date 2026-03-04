@@ -13,7 +13,7 @@ namespace FlexiServer.Services
         public string Pattern => "/gamePlay";
         public void OnDataRecieved(string ClientId, string Account, byte[] Buffer)
         {
-            WebSocketMessageHeader recievMsg = TransportUtil.DeserializeWsMessageHeader(Buffer);
+            var recievMsg = Buffer.ConvertData<WebSocketMessage>();
             if (recievMsg == null) return;
 
             Console.ForegroundColor = ConsoleColor.White;
@@ -72,9 +72,11 @@ namespace FlexiServer.Services
 
         private void SetMovementStateHandle(string clientId, string account, string path, byte[] buffer)
         {
-            var recievMsg = TransportUtil.DeserializeWsMessage<MovementInfo>(buffer);
-            MovementInfo? data = recievMsg!.Data;
+            var recievMsg = buffer.ConvertData<WebSocketMessage>();
+            if (recievMsg == null) return;
+            if (recievMsg.Data == null || recievMsg.Data.Length == 0) return;
 
+            MovementInfo? data = recievMsg.Data.ConvertData<MovementInfo>();
             GamePlayMovementSandbox? sandbox = sandboxManager.GetSandbox<GamePlayMovementSandbox>((_standbox) =>
             { return _standbox.ContainsPlayer(account); });
             if (sandbox == null) return;

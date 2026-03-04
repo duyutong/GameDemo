@@ -7,8 +7,6 @@ using Network.Models.Common;
 using Network.Transport.Http;
 using Network.Transport.Udp;
 using Network.Transport.WebSocket;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -122,7 +120,7 @@ namespace Network
             Token = response.Token;
         }
         #region 协议支持
-        public async Task<HttpResult<TRes>> HttpPostAsync<TReq, TRes>(string path, TReq req)
+        public async Task<HttpResult> HttpPostAsync<TReq, TRes>(string path, TReq req)
         {
             var result = await httpTransport.PostAsync<TReq, TRes>(path, req);
             return result;

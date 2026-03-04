@@ -3,12 +3,9 @@ using Assets.Network.Transport;
 using Network.API;
 using Network.Core.Frame;
 using Network.Core.Tick;
-using Newtonsoft.Json;
 using System;
-using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -48,14 +45,14 @@ namespace Network.Transport.WebSocket
 
         public override void OnMessageReceived(byte[] buffer)
         {
-            var wsResult = TransportUtil.DeserializeWsResultHeader(buffer);
+            var wsResult = buffer.ConvertData<WebSocketResult>();
             if (wsResult == null) return;
 
             if (wsResult.Code == 200)
             {
                 FrameManager.Instance.RefreshServerFrame(wsResult.ServerFrame, wsResult.Timestamp);
                 string pattern = wsResult.Pattern;
-                ApiManager.HandleWebsocketMessage(pattern, buffer);
+                ApiManager.HandleWebsocketResult(pattern, wsResult);
             }
             else if (wsResult.Code == (int)ErrorCode.TokenExpired)
             {
@@ -72,17 +69,15 @@ namespace Network.Transport.WebSocket
                 return;
             }
 
-            WebSocketMessage<TData> wsMessage = new();
+            WebSocketMessage wsMessage = new();
             wsMessage.InputFrame = FrameManager.Instance.LocalCurrentFrame;
             wsMessage.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             wsMessage.Pattern = pattern;
             wsMessage.Path = path;
-            wsMessage.Data = messageObj;
+            wsMessage.Data = messageObj.ToBytes();
 
-            var buffer = TransportUtil.SerializeWsMessage(wsMessage);
-            var lenBytes = BitConverter.GetBytes(buffer.Length); // 4字节长度前缀
-            var sendBytes = lenBytes.Concat(buffer).ToArray();
-            var segment = new ArraySegment<byte>(sendBytes);
+            var buffer = wsMessage.ToBytes();
+            var segment = new ArraySegment<byte>(buffer);
 
             await channel.SendAsync(segment, WebSocketMessageType.Binary, true, CancellationToken.None);
         }

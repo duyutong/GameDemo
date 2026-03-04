@@ -1,7 +1,5 @@
 ﻿using FlexiServer.Core;
 using FlexiServer.Transport.Interface;
-using System.Security.Claims;
-
 namespace FlexiServer.Transport
 {
     public class TransportManager
@@ -20,7 +18,7 @@ namespace FlexiServer.Transport
         public void RemoveClientMsgHandler(Action<string, string, string, byte[]> handler)
             => ClientMsgEvent -= handler;
         #endregion
-        public void RgiestTransport<T>(T? transport) where T : ITransport
+        public void RgiestTransport<T>(T? transport)where T : class, ITransport
         {
             if (transport == null) return;
             transport.SetMessageReceivedListener(OnMessageReceived);

@@ -1,3 +1,4 @@
+using Assets.Network.Transport;
 using Network.Models;
 using System;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace Network.API
             {
                 bool success = result.Code == 200 && result.Data != null;
 
-                if (success) action?.Invoke(success, result.Data);
+                if (success) action?.Invoke(success, result.Data.ConvertData<RoomCreateResponse>());
                 else
                 {
                     Debug.LogError($"RoomApi RoomCreate failed: Code={result.Code}, Message={result.Message}");
@@ -26,7 +27,7 @@ namespace Network.API
             {
                 bool success = result.Code == 200 && result.Data != null;
 
-                if (success) action?.Invoke(success, result.Data);
+                if (success) action?.Invoke(success, result.Data.ConvertData<RoomGetRoomsResponse>());
                 else
                 {
                     Debug.LogError($"RoomApi RoomGetRooms failed: Code={result.Code}, Message={result.Message}");
@@ -40,7 +41,7 @@ namespace Network.API
             {
                 bool success = result.Code == 200 && result.Data != null;
 
-                if (success) action?.Invoke(success, result.Data);
+                if (success) action?.Invoke(success, result.Data.ConvertData<RoomFindRoomResponse>());
                 else
                 {
                     Debug.LogError($"RoomApi RoomFindRoom failed: Code={result.Code}, Message={result.Message}");

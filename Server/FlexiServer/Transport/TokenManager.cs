@@ -58,7 +58,13 @@ namespace FlexiServer.Transport
                 LoginValidateRequest req = new LoginValidateRequest();
                 req.Account = account;
                 var result = await internalService.PostAsync<LoginValidateRequest, LoginValidateResponse>(role, path, req);
-                if (result != null && result.Code == 200 && result.Data != null) return result.Data.IsValidate;
+                if (result != null && result.Code == 200 && result.Data != null)
+                { 
+                    var validateResponse = result.Data.ConvertData<LoginValidateResponse>();
+                    if(validateResponse == null)return false;
+                    
+                    return validateResponse.IsValidate; 
+                }
             }
             return false;
         }

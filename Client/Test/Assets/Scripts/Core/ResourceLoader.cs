@@ -14,24 +14,7 @@ public class ResourceLoader
 
     public static void Load<T>(string pathOrKey, Action<T> onDone, bool usePool = false) where T : UnityEngine.Object
     {
-#if UNITY_EDITOR
-        if (typeof(T) == typeof(TextAsset))
-        {
-            string json = File.ReadAllText(pathOrKey);
-            onDone?.Invoke(new TextAsset(json) as T);
-        }
-        else if (typeof(T) == typeof(Sprite))
-        {
-            var sprite = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>(pathOrKey);
-            onDone?.Invoke(sprite as T);
-        }
-        else
-        {
-            var asset = UnityEditor.AssetDatabase.LoadAssetAtPath<T>(pathOrKey);
-            onDone?.Invoke(asset);
-        }
-#else
-         if (usePool)
+        if (usePool)
         {
             if (pool.TryGetValue(pathOrKey, out var q) && q.Count > 0)
             {
@@ -39,9 +22,8 @@ public class ResourceLoader
             }
         }
 
-        if (typeof(T) == typeof(Sprite)){ LoadSpriteAsync(pathOrKey,onDone);}
+        if (typeof(T) == typeof(Sprite)) { LoadSpriteAsync(pathOrKey, onDone); }
         else { LoadAssetAsync(pathOrKey, onDone, usePool); }
-#endif
     }
     private static async Task LoadAssetAsync<T>(string pathOrKey, Action<T> onDone, bool usePool = false) where T : UnityEngine.Object
     {

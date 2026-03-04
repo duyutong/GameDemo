@@ -12,15 +12,15 @@ namespace FlexiServer.Transport.Http
             
             app.MapPost("/login/httpLogin", async (HttpContext context) =>
             {
-                HttpMessage<LoginHttpLoginRequest> msg = await TransportUtil.ReadHttpMessageAsync<LoginHttpLoginRequest>(context);
-                var result = new HttpResult<LoginHttpLoginResponse>();
+                HttpMessage msg = await TransportUtil.ReadHttpMessageAsync(context);
+                var result = new HttpResult();
                 try
                 {
                     LoginService service = app.Services.GetRequiredService<LoginService>();
                     var res = await service.LoginHttpLogin(msg);
                     result.Code = 200;
                     result.Message = "succ";
-                    result.Data = res;
+                    result.Data = res.ToBytes();
                 }
                 catch (ServerException ex)
                 {
@@ -32,15 +32,15 @@ namespace FlexiServer.Transport.Http
             
             app.MapPost("/login/Validate", async (HttpContext context) =>
             {
-                HttpMessage<LoginValidateRequest> msg = await TransportUtil.ReadHttpMessageAsync<LoginValidateRequest>(context);
-                var result = new HttpResult<LoginValidateResponse>();
+                HttpMessage msg = await TransportUtil.ReadHttpMessageAsync(context);
+                var result = new HttpResult();
                 try
                 {
                     LoginService service = app.Services.GetRequiredService<LoginService>();
                     var res = await service.LoginValidate(msg);
                     result.Code = 200;
                     result.Message = "succ";
-                    result.Data = res;
+                    result.Data = res.ToBytes();
                 }
                 catch (ServerException ex)
                 {

@@ -12,15 +12,15 @@ namespace FlexiServer.Transport.Http
             
             app.MapPost("/bag/acquireItem", async (HttpContext context) =>
             {
-                HttpMessage<BagAcquireItemRequest> msg = await TransportUtil.ReadHttpMessageAsync<BagAcquireItemRequest>(context);
-                var result = new HttpResult<BagAcquireItemResponse>();
+                HttpMessage msg = await TransportUtil.ReadHttpMessageAsync(context);
+                var result = new HttpResult();
                 try
                 {
                     BagService service = app.Services.GetRequiredService<BagService>();
                     var res = await service.BagAcquireItem(msg);
                     result.Code = 200;
                     result.Message = "succ";
-                    result.Data = res;
+                    result.Data = res.ToBytes();
                 }
                 catch (ServerException ex)
                 {

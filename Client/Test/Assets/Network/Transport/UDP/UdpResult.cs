@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Network.Transport.Udp
 {
     [global::ProtoBuf.ProtoContract(Name = @"UdpResult")]
-    public class UdpResult<TData>
+    public class UdpResult
     {
         [global::ProtoBuf.ProtoMember(1)]
         public int Code { get; set; } = 200;
@@ -18,7 +18,7 @@ namespace Network.Transport.Udp
         public string Path { get; set; } = "";
 
         [global::ProtoBuf.ProtoMember(5)]
-        public TData Data { get; set; }
+        public byte[] Data { get; set; }
 
         [global::ProtoBuf.ProtoMember(6)]
         public int ServerFrame { get; set; } = 0;

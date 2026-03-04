@@ -29,7 +29,9 @@ namespace FlexiServer.Transport.Udp
         }
         private void OnMessageReceived(SClientConnectData connectData, byte[] buffer)
         {
-            UdpMessageHeader udpMessage = TransportUtil.DeserializeUdpMessageHeader(buffer);
+            if (buffer == null || buffer.Length == 0) return;
+
+            var udpMessage = buffer.ConvertData<UdpMessage>();
             if (udpMessage == null) return;
 
             string pattern = udpMessage.Pattern;
@@ -47,14 +49,14 @@ namespace FlexiServer.Transport.Udp
             if (client.ClientEndPoint == null) return;
             if (udpClient == null) return;
 
-            UdpResult<TData> sendMsg = new();
+            UdpResult sendMsg = new();
             sendMsg.Pattern = pattern;
             sendMsg.Path = path;
-            sendMsg.Data = data;
+            sendMsg.Data = data.ToBytes();
             sendMsg.ServerFrame = frameManager.ServerCurrentFrame;
             sendMsg.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-            var datagram = TransportUtil.SerializeUdpResult(sendMsg);
+            var datagram = sendMsg.ToBytes();
             await udpClient.SendAsync(datagram, client.ClientEndPoint);
         }
         public void Start() { }
@@ -71,7 +73,7 @@ namespace FlexiServer.Transport.Udp
             string msg = Encoding.UTF8.GetString(buffer);
             if (string.IsNullOrEmpty(msg)) return;
 
-            UdpMessageHeader udpMessage = TransportUtil.DeserializeUdpMessageHeader(buffer);
+            var udpMessage = buffer.ConvertData<UdpMessage>();
             if (udpMessage == null) return;
 
             string account = udpMessage.Account;

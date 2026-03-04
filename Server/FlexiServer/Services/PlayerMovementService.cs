@@ -12,7 +12,7 @@ namespace FlexiServer.Services
     public class PlayerMovementService(SandboxManager sandboxManager, FrameManager frameManager) : IService, IFrameResolvedHandler, ISandboxUpdateHandler<GamePlayMovementSandbox>
     {
         public string Pattern => "/playerMovement";
-
+        private int inputFrame;
         public void OnFrameResolved(int frame, List<FrameMessage> commands)
         {
             List<MovementInfo> movementInfos = [];
@@ -20,10 +20,13 @@ namespace FlexiServer.Services
             {
                 if (command.Path == NetworkEventPaths.PlayerMovement_MoveInGame)
                 {
-                    var recievMsg = TransportUtil.DeserializeUdpMessage<MovementInfo>(command.Command);
+                    var recievMsg = command.Command.ConvertData<UdpMessage>();
                     if (recievMsg == null) continue;
                     if (recievMsg.Data == null) continue;
-                    movementInfos.Add(recievMsg.Data);
+
+                    var info = recievMsg.Data.ConvertData<MovementInfo>();
+                    if (info == null) continue; 
+                    movementInfos.Add(info);
                 }
             }
 
@@ -51,16 +54,18 @@ namespace FlexiServer.Services
         }
         public void OnDataRecieved(string ClientId, string Account, byte[] Buffer)
         {
-            UdpMessageHeader recievMsg = TransportUtil.DeserializeUdpMessageHeader(Buffer);
+            var recievMsg = Buffer.ConvertData<UdpMessage>();
             if (recievMsg == null) return;
 
-            //Console.ForegroundColor = ConsoleColor.White;
-            //Console.Write("[PlayerMovementService]");
-            //Console.ResetColor();
+            inputFrame = recievMsg.InputFrame;
 
-            //Console.WriteLine(
-            //    $" OnDataRecieved | Pattern: {recievMsg.Pattern} | Path: {recievMsg.Path}"
-            //);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("[PlayerMovementService]");
+            Console.ResetColor();
+
+            Console.WriteLine(
+                $" OnDataRecieved | Pattern: {recievMsg.Pattern} | Path: {recievMsg.Path}"
+            );
 
             switch (recievMsg.Path)
             {
@@ -78,10 +83,7 @@ namespace FlexiServer.Services
         #region AutoContext
         private void MoveInGameHandle(string clientId, string account, string path, byte[] buffer)
         {
-            var recievMsg = TransportUtil.DeserializeUdpMessage<MovementInfo>(buffer);
-            if (recievMsg == null) return;
-
-            frameManager.AddFrameMessageToPool(recievMsg.InputFrame, clientId, Pattern, path, buffer);
+            frameManager.AddFrameMessageToPool(inputFrame, clientId, Pattern, path, buffer);
         }
 
         #endregion Function_Handle

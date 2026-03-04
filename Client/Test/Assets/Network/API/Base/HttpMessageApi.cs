@@ -12,7 +12,7 @@ namespace Network.API
 {
     public class HttpMessageApi
     {
-        public async Task<HttpResult<TRes>> PostAsync<TReq, TRes>(string path, TReq req, Action<HttpResult<TRes>> callBack)
+        public async Task<HttpResult> PostAsync<TReq, TRes>(string path, TReq req, Action<HttpResult> callBack)
         {
             var result = await NetworkManager.Instance.HttpPostAsync<TReq, TRes>(path, req);
             callBack?.Invoke(result);

@@ -10,7 +10,7 @@ namespace Network.Transport.Http
     {
         private Dictionary<int, HashSet<string>> portDic = new();
         private Dictionary<int, HttpSession> sessionDic = new();
-        public async Task<HttpResult<TRes>> PostAsync<TReq, TRes>(string path, TReq req)
+        public async Task<HttpResult> PostAsync<TReq, TRes>(string path, TReq req)
         {
             int port = GetPortByPattern(path);
             if (!sessionDic.ContainsKey(port)) return null;

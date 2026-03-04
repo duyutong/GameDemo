@@ -1,9 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Assets.Network.Transport;
 using System;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -17,24 +14,24 @@ namespace Network.Transport.Http
             this.host = host;
             this.port = port;
         }
-        public async Task<HttpResult<TRes>> PostAsync<TReq, TRes>(string path, TReq req)
+        public async Task<HttpResult> PostAsync<TReq, TRes>(string path, TReq req)
         {
             try
             {
-                HttpMessage<TReq> message = new();
+                HttpMessage message = new();
                 message.Account = NetworkManager.Instance.Account;
-                message.Data = req;
+                message.Data = req.ToBytes();
 
                 HttpContent content = GetHttpContent(message);
                 var response = await client.PostAsync($"http://{host}:{port}{path}", content);
                 byte[] resBytes = await response.Content.ReadAsByteArrayAsync();
 
-                return DeserializeHttpResult<TRes>(resBytes);
+                return resBytes.ConvertData<HttpResult>();
             }
             catch (Exception ex)
             {
-                Debug.LogError(ex.Message);
-                return new HttpResult<TRes>
+                Debug.LogError(ex);
+                return new HttpResult
                 {
                     Code = -1,
                     Message = ex.Message,
@@ -42,40 +39,12 @@ namespace Network.Transport.Http
                 };
             }
         }
-        private HttpResult<TRes> DeserializeHttpResult<TRes>(byte[] resBytes)
-        {
-            if (resBytes.Length == 0) return null!;
-            // 判断流是不是 JSON
-            if (resBytes[0] == (byte)'{') // JSON 一般以 { 开头
-            {
-                string resJson = Encoding.UTF8.GetString(resBytes);
-                return JsonConvert.DeserializeObject<HttpResult<TRes>>(resJson)!;
-            }
-            else
-            {
-                using var ms = new MemoryStream(resBytes);
-                return ProtoBuf.Serializer.Deserialize<HttpResult<TRes>>(ms);
-            }
-        }
-        private HttpContent GetHttpContent<TReq>(HttpMessage<TReq> message)
+        private HttpContent GetHttpContent(HttpMessage message)
         {
             HttpContent content;
-            if (GlobalSetting.Instance.format == ETransportFormat.Protobuf)
-            {
-                byte[] bytes;
-                using (var ms = new MemoryStream())
-                {
-                    ProtoBuf.Serializer.Serialize(ms, message);
-                    bytes = ms.ToArray();
-                }
-                content = new ByteArrayContent(bytes);
-                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-protobuf");
-            }
-            else
-            {
-                string json = JsonConvert.SerializeObject(message);
-                content = new StringContent(json, Encoding.UTF8, "application/json");
-            }
+            byte[] bytes = message.ToBytes();
+            content = new ByteArrayContent(bytes);
+            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-protobuf");
 
             return content;
         }

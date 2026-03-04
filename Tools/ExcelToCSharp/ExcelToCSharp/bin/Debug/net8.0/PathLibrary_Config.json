@@ -1,0 +1,7 @@
+{
+  "excelPath": "F:\\GameDemo\\Config\\ExcelData",
+  "jsonPath": "F:\\Tools\\ExcelToCSharp\\TestOuptput\\Config\\Json",
+  "binaryPath": "F:\\Tools\\ExcelToCSharp\\TestOuptput\\Config\\Binary",
+  "csharpPath": "F:\\Tools\\ExcelToCSharp\\TestOuptput\\ConfigData\\CSharpClass",
+  "loaderPath": "F:\\Tools\\ExcelToCSharp\\TestOuptput\\ConfigData\\ConfigLoader.cs"
+}

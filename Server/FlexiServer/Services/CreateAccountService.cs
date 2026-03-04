@@ -12,9 +12,11 @@ namespace FlexiServer.Services
     public class CreateAccountService(TokenManager tokenService, Database db,IConfiguration config)
     {
         #region AutoContext
-        public async Task<CreateAccountCreateResponse> CreateAccountCreate(HttpMessage<CreateAccountCreateRequest> msg)
+        public async Task<CreateAccountCreateResponse> CreateAccountCreate(HttpMessage msg)
         {
-            CreateAccountCreateRequest? req = msg.Data;
+            if (msg == null || msg.Data == null) throw new ServerException(ErrorCode.None, "Data is Null");
+
+            var req = msg.Data.ConvertData<CreateAccountCreateRequest>();
             if (req == null) throw new ServerException(ErrorCode.None, "CreateAccountCreateRequest is Null");
 
             var processes = config

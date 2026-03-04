@@ -3,6 +3,7 @@ using FlexiServer.Core;
 using FlexiServer.Models;
 using FlexiServer.Models.Common;
 using FlexiServer.Sandbox;
+using FlexiServer.Transport;
 using FlexiServer.Transport.Http;
 
 namespace FlexiServer.Services
@@ -11,9 +12,11 @@ namespace FlexiServer.Services
     public class BagService(SandboxManager sandboxManager)
     {
         #region AutoContext
-        public async Task<BagAcquireItemResponse> BagAcquireItem(HttpMessage<BagAcquireItemRequest> msg)
+        public async Task<BagAcquireItemResponse> BagAcquireItem(HttpMessage msg)
         {
-            BagAcquireItemRequest? req = msg.Data;
+            if (msg == null || msg.Data == null) throw new ServerException(ErrorCode.None, "Data is Null");
+            
+            var req = msg.Data.ConvertData<BagAcquireItemRequest>();
             if (req == null) throw new ServerException(ErrorCode.None, "BagAcquireItemRequest is Null");
 
             GamePlayItemSandbox? sandbox = sandboxManager.GetSandbox<GamePlayItemSandbox>(

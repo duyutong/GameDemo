@@ -1,85 +1,75 @@
-﻿using Network.Transport.WebSocket;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.Network.Transport
 {
     public static class TransportUtil
     {
-        public static byte[] SerializeWsMessage<T>(WebSocketMessage<T> message)
+        /// <summary>
+        /// 将对象序列化为 byte[]，自动处理 JSON 或 Protobuf
+        /// JSON 会带 4 字节长度前缀，Protobuf 直接写入
+        /// </summary>
+        public static byte[] ToBytes<TData>(this TData data)
         {
+            if (data == null) return Array.Empty<byte>();
+
             if (GlobalSetting.Instance.format == ETransportFormat.Json)
             {
-                string json = JsonConvert.SerializeObject(message);
-                return Encoding.UTF8.GetBytes(json);
+                // JSON 序列化
+                string json = JsonConvert.SerializeObject(data);
+                byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+
+                // 前 4 字节写长度
+                byte[] result = new byte[4 + jsonBytes.Length];
+                BitConverter.GetBytes(jsonBytes.Length).CopyTo(result, 0);
+                Buffer.BlockCopy(jsonBytes, 0, result, 4, jsonBytes.Length);
+
+                return result;
             }
             else
             {
+                // Protobuf 序列化
                 using var ms = new MemoryStream();
-                ProtoBuf.Serializer.Serialize(ms, message);
-                return ms.ToArray();
+                ProtoBuf.Serializer.Serialize(ms, data);
+                byte[] protoBytes = ms.ToArray();
+
+                // 可选：给 Protobuf 也加长度前缀，更安全（可选）
+                byte[] result = new byte[4 + protoBytes.Length];
+                BitConverter.GetBytes(protoBytes.Length).CopyTo(result, 0);
+                Buffer.BlockCopy(protoBytes, 0, result, 4, protoBytes.Length);
+
+                return result;
             }
         }
-        public static WebSocketResultHeader DeserializeWsResultHeader(byte[] bytes)
+
+        /// <summary>
+        /// 将 byte[] 反序列化为对象，自动处理 JSON 或 Protobuf
+        /// JSON 和 Protobuf 都假设前 4 字节是长度
+        /// </summary>
+        public static TData ConvertData<TData>(this byte[] bytes) where TData : class
         {
+            if (bytes == null || bytes.Length < 4) return null;
+
+            int length = BitConverter.ToInt32(bytes, 0);
+            if (bytes.Length < 4 + length) return null;
+
+            byte[] dataBytes = new byte[length];
+            Array.Copy(bytes, 4, dataBytes, 0, length);
+
             if (GlobalSetting.Instance.format == ETransportFormat.Json)
             {
-                if (bytes.Length < 4) return null!;
-                int jsonLength = BitConverter.ToInt32(bytes, 0);
-                if (bytes.Length < 4 + jsonLength) return null!;
-
-                byte[] jsonBytes = new byte[jsonLength];
-                Array.Copy(bytes, 4, jsonBytes, 0, jsonLength);
-
-                string json = Encoding.UTF8.GetString(jsonBytes);
-                return JsonConvert.DeserializeObject<WebSocketResultHeader>(json)!;
+                string json = Encoding.UTF8.GetString(dataBytes);
+                return JsonConvert.DeserializeObject<TData>(json);
             }
             else
             {
-                var header = new WebSocketResultHeader();
-                using var ms = new MemoryStream(bytes);
-                using var reader = ProtoBuf.ProtoReader.Create(ms, ProtoBuf.Meta.RuntimeTypeModel.Default, null);
-                int fieldNumber;
-                while ((fieldNumber = reader.ReadFieldHeader()) > 0)
-                {
-                    switch (fieldNumber)
-                    {
-                        case 1: header.Code = reader.ReadInt32(); break;
-                        case 2: header.Message = reader.ReadString(); break;
-                        case 3: header.Pattern = reader.ReadString(); break;
-                        case 4: header.Path = reader.ReadString(); break;
-                        case 5: header.ServerFrame = reader.ReadInt32(); break;
-                        case 6: header.Timestamp = reader.ReadInt64(); break;
-                        default: reader.SkipField(); break;
-                    }
-                }
-                return header;
+                using var ms = new MemoryStream(dataBytes);
+                return ProtoBuf.Serializer.Deserialize<TData>(ms);
             }
         }
-        public static WebSocketResult<TData> DeserializeWsResult<TData>(byte[] bytes)
-        {
-            if (GlobalSetting.Instance.format == ETransportFormat.Json)
-            {
-                if (bytes.Length < 4) return null!;
-                int jsonLength = BitConverter.ToInt32(bytes, 0);
-                if (bytes.Length < 4 + jsonLength) return null!;
 
-                byte[] jsonBytes = new byte[jsonLength];
-                Array.Copy(bytes, 4, jsonBytes, 0, jsonLength);
-
-                string json = Encoding.UTF8.GetString(jsonBytes);
-                return JsonConvert.DeserializeObject<WebSocketResult<TData>>(json)!;
-            }
-            else
-            {
-                using var ms = new MemoryStream(bytes);
-                return ProtoBuf.Serializer.Deserialize<WebSocketResult<TData>>(ms);
-            }
-        }
     }
 }

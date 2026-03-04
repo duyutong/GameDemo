@@ -1,7 +1,7 @@
 ﻿namespace Network.Transport.WebSocket
 {
     [global::ProtoBuf.ProtoContract(Name = @"WebSocketMessage")]
-    public class WebSocketMessage<TData>
+    public class WebSocketMessage
     {
         public WebSocketMessage() { }
 
@@ -17,6 +17,6 @@
         public int InputFrame { get; set; } = 0;
 
         [global::ProtoBuf.ProtoMember(5)]
-        public TData Data { get; set; }
+        public byte[] Data { get; set; }
     }
 }

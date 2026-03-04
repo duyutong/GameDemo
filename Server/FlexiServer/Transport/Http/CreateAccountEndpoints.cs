@@ -12,15 +12,15 @@ namespace FlexiServer.Transport.Http
             
             app.MapPost("/createAccount/create", async (HttpContext context) =>
             {
-                HttpMessage<CreateAccountCreateRequest> msg = await TransportUtil.ReadHttpMessageAsync<CreateAccountCreateRequest>(context);
-                var result = new HttpResult<CreateAccountCreateResponse>();
+                HttpMessage msg = await TransportUtil.ReadHttpMessageAsync(context);
+                var result = new HttpResult();
                 try
                 {
                     CreateAccountService service = app.Services.GetRequiredService<CreateAccountService>();
                     var res = await service.CreateAccountCreate(msg);
                     result.Code = 200;
                     result.Message = "succ";
-                    result.Data = res;
+                    result.Data = res.ToBytes();
                 }
                 catch (ServerException ex)
                 {

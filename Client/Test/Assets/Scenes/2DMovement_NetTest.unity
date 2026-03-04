@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 444124154}
   - component: {fileID: 444124153}
   - component: {fileID: 444124157}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player_Remote
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -258,7 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36f6aa36bcdaa8841b55a37042ef4ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RemotePlayerMovement
-  account: ABC
+  account: DEF
   freezeZ: 1
 --- !u!95 &444124154
 Animator:

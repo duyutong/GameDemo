@@ -2,7 +2,7 @@
 set EXE_NAME=FlexiServer.exe
 set EXE_PATH=%~dp0FlexiServer\bin\Debug\net8.0\FlexiServer.exe
 set role=Debug
-set format=Protobuf
+set format=Json
 
 echo ==========================================
 echo [Unity] Starting FlexiServer for Unity...

@@ -12,15 +12,15 @@ namespace FlexiServer.Transport.Http
             
             app.MapPost("/clue/identify", async (HttpContext context) =>
             {
-                HttpMessage<ClueIdentifyRequest> msg = await TransportUtil.ReadHttpMessageAsync<ClueIdentifyRequest>(context);
-                var result = new HttpResult<ClueIdentifyResponse>();
+                HttpMessage msg = await TransportUtil.ReadHttpMessageAsync(context);
+                var result = new HttpResult();
                 try
                 {
                     ClueService service = app.Services.GetRequiredService<ClueService>();
                     var res = await service.ClueIdentify(msg);
                     result.Code = 200;
                     result.Message = "succ";
-                    result.Data = res;
+                    result.Data = res.ToBytes();
                 }
                 catch (ServerException ex)
                 {

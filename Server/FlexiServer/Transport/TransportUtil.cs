@@ -1,217 +1,86 @@
 ﻿using FlexiServer.Core;
-using FlexiServer.Models;
 using FlexiServer.Transport.Http;
-using FlexiServer.Transport.Interface;
-using FlexiServer.Transport.Udp;
-using FlexiServer.Transport.Web;
 using Newtonsoft.Json;
-using System;
 using System.Text;
 
 namespace FlexiServer.Transport
 {
     public static class TransportUtil
     {
-        public static async void ReturnHttpResultTask<TRes>(HttpContext context, HttpResult<TRes> result) 
+        public static async void ReturnHttpResultTask(HttpContext context, HttpResult result)
         {
-            ETransportFormat format = CheckTransportFormat(context);
-            if (format == ETransportFormat.Json)
+            byte[] resBytes = result.ToBytes();
+            context.Response.ContentLength = resBytes.Length;
+            await context.Response.Body.WriteAsync(resBytes, 0, resBytes.Length);
+        }
+        public static async Task<HttpMessage> ReadHttpMessageAsync(HttpContext context)
+        {
+            using var ms = new MemoryStream();
+            await context.Request.Body.CopyToAsync(ms);
+            byte[] bytes = ms.ToArray();
+
+            return bytes.ConvertData<HttpMessage>()!;
+        }
+        /// <summary>
+        /// 将对象序列化为 byte[]，自动处理 JSON 或 Protobuf
+        /// JSON 会带 4 字节长度前缀，Protobuf 直接写入
+        /// </summary>
+        public static byte[] ToBytes<TData>(this TData data)
+        {
+            if (data == null) return Array.Empty<byte>();
+
+            if (GlobalSetting.Format == ETransportFormat.Json)
             {
-                // 返回 JSON
-                await context.Response.WriteAsJsonAsync(result);
+                // JSON 序列化
+                string json = JsonConvert.SerializeObject(data);
+                byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+
+                // 前 4 字节写长度
+                byte[] result = new byte[4 + jsonBytes.Length];
+                BitConverter.GetBytes(jsonBytes.Length).CopyTo(result, 0);
+                Buffer.BlockCopy(jsonBytes, 0, result, 4, jsonBytes.Length);
+
+                return result;
             }
             else
             {
-                // 返回 protobuf
-                context.Response.ContentType = "application/x-protobuf";
-
-                // 使用 MemoryStream + 同步 Serializer.Serialize
+                // Protobuf 序列化
                 using var ms = new MemoryStream();
-                ProtoBuf.Serializer.Serialize(ms, result);
+                ProtoBuf.Serializer.Serialize(ms, data);
+                byte[] protoBytes = ms.ToArray();
 
-                ms.Position = 0;
-                await ms.CopyToAsync(context.Response.Body);
-            }
-        }
-        public static ETransportFormat CheckTransportFormat(HttpContext context) 
-        {
-            if (context.Request.ContentType?.Contains("application/x-protobuf") == true)return ETransportFormat.Protobuf;
-            return ETransportFormat.Json;
-        }
-        public static async Task<HttpMessage<TReq>> ReadHttpMessageAsync<TReq>(HttpContext context) 
-        {
-            HttpMessage<TReq> msg;
-            // 根据 Content-Type 判断
-            if (context.Request.ContentType?.Contains("application/x-protobuf") == true)
-            {
-                using var ms = new MemoryStream();
-                await context.Request.Body.CopyToAsync(ms);
-                ms.Position = 0;
+                // 可选：给 Protobuf 也加长度前缀，更安全（可选）
+                byte[] result = new byte[4 + protoBytes.Length];
+                BitConverter.GetBytes(protoBytes.Length).CopyTo(result, 0);
+                Buffer.BlockCopy(protoBytes, 0, result, 4, protoBytes.Length);
 
-                msg = ProtoBuf.Serializer.Deserialize<HttpMessage<TReq>>(ms);
-            }
-            else
-            {
-                msg = await context.Request.ReadFromJsonAsync<HttpMessage<TReq>>();
-            }
-            return msg!;
-        }
-        public static HttpResult<TData> DeserializeHttpResult<TData>(byte[] bytes)
-        {
-            if (GlobalSetting.Format == ETransportFormat.Json)
-            {
-                string json = Encoding.UTF8.GetString(bytes);
-                return JsonConvert.DeserializeObject<HttpResult<TData>>(json)!;
-            }
-            else
-            {
-                using var ms = new MemoryStream(bytes);
-                return ProtoBuf.Serializer.Deserialize<HttpResult<TData>>(ms)!;
+                return result;
             }
         }
-        public static byte[] SerializeHttpMessage<TData>(HttpMessage<TData> message)
-        {
-            if (GlobalSetting.Format == ETransportFormat.Json)
-            {
-                string json = JsonConvert.SerializeObject(message);
-                return Encoding.UTF8.GetBytes(json);
-            }
-            else
-            {
-                using var ms = new MemoryStream();
-                ProtoBuf.Serializer.Serialize(ms, message);
-                return ms.ToArray();
-            }
-        }
-        public static HttpMessage<TData> DeserializeHttpMessage<TData>(byte[] bytes)
-        {
-            if (GlobalSetting.Format == ETransportFormat.Json)
-            {
-                string json = Encoding.UTF8.GetString(bytes);
-                return JsonConvert.DeserializeObject<HttpMessage<TData>>(json)!;
-            }
-            else
-            {
-                using var ms = new MemoryStream(bytes);
-                return ProtoBuf.Serializer.Deserialize<HttpMessage<TData>>(ms)!;
-            }
-        }
-        public static byte[] SerializeHttpResult<TData>(HttpResult<TData> message)
-        {
-            if (GlobalSetting.Format == ETransportFormat.Json)
-            {
-                string json = JsonConvert.SerializeObject(message);
-                return Encoding.UTF8.GetBytes(json);
-            }
-            else
-            {
-                using var ms = new MemoryStream();
-                ProtoBuf.Serializer.Serialize(ms, message);
-                return ms.ToArray();
-            }
-        }
-        public static UdpMessageHeader DeserializeUdpMessageHeader(byte[] bytes) 
-        {
-            if(GlobalSetting.Format == ETransportFormat.Json) 
-            {
-                var json = Encoding.UTF8.GetString(bytes);
-                return JsonConvert.DeserializeObject<UdpMessageHeader>(json)!;
-            }
-            else
-            {
-                using var ms = new MemoryStream(bytes);
-                return ProtoBuf.Serializer.Deserialize<UdpMessageHeader>(ms);
-            }
-        }
-        public static UdpMessage<TData> DeserializeUdpMessage<TData>(byte[] bytes)
-        {
-            if (GlobalSetting.Format == ETransportFormat.Json)
-            {
-                string json = Encoding.UTF8.GetString(bytes);
-                return JsonConvert.DeserializeObject<UdpMessage<TData>>(json)!;
-            }
-            else
-            {
-                using var ms = new MemoryStream(bytes);
-                return ProtoBuf.Serializer.Deserialize<UdpMessage<TData>>(ms)!;
-            }
-        }
-        public static byte[] SerializeUdpResult<TData>(UdpResult<TData> message)
-        {
-            if (GlobalSetting.Format == ETransportFormat.Json)
-            {
-                string json = JsonConvert.SerializeObject(message);
-                return Encoding.UTF8.GetBytes(json);
-            }
-            else
-            {
-                using var ms = new MemoryStream();
-                ProtoBuf.Serializer.Serialize(ms, message);
-                return ms.ToArray();
-            }
-        }
-        public static WebSocketMessageHeader DeserializeWsMessageHeader(byte[] bytes) 
-        {
-            if (GlobalSetting.Format == ETransportFormat.Json) 
-            {
-                var json = Encoding.UTF8.GetString(bytes);
-                return JsonConvert.DeserializeObject<WebSocketMessageHeader>(json)!;
-            }
-            else
-            {
-                var header = new WebSocketMessageHeader();
-                using var ms = new MemoryStream(bytes);
-                using var reader = ProtoBuf.ProtoReader.Create(ms, ProtoBuf.Meta.RuntimeTypeModel.Default, null);
-                int fieldNumber;
-                while ((fieldNumber = reader.ReadFieldHeader()) > 0) 
-                {
-                    switch (fieldNumber) 
-                    {
-                        case 1: header.Pattern = reader.ReadString(); break;
-                        case 2: header.Path = reader.ReadString(); break;
-                        case 3: header.Timestamp = reader.ReadInt64(); break;
-                        case 4: header.InputFrame = reader.ReadInt32(); break;
-                        default:  reader.SkipField(); break;
-                    }
-                }
-                return header;
-            }
-               
-        }
-        public static WebSocketMessage<TData> DeserializeWsMessage<TData>(byte[] bytes)
-        {
-            if (GlobalSetting.Format == ETransportFormat.Json)
-            {
-                if (bytes.Length < 4) return null!; // 处理空数据的情况，避免 JSON 解析错误
 
-                int jsonLength = BitConverter.ToInt32(bytes, 0); // 读取前4字节长度
-
-                if (bytes.Length < 4 + jsonLength) return null!; // 数据长度不足，可能是传输不完整
-
-                byte[] jsonBytes = new byte[jsonLength];
-                Array.Copy(bytes, 4, jsonBytes, 0, jsonLength);
-
-                string json = Encoding.UTF8.GetString(jsonBytes);
-                return JsonConvert.DeserializeObject<WebSocketMessage<TData>>(json)!;
-            }
-            else
-            {
-                using var ms = new MemoryStream(bytes);
-                return ProtoBuf.Serializer.Deserialize<WebSocketMessage<TData>>(ms)!;
-            }
-        }
-        public static byte[] SerializeWsResult<TData>(WebSocketResult<TData> message)
+        /// <summary>
+        /// 将 byte[] 反序列化为对象，自动处理 JSON 或 Protobuf
+        /// JSON 和 Protobuf 都假设前 4 字节是长度
+        /// </summary>
+        public static TData? ConvertData<TData>(this byte[] bytes) where TData : class
         {
+            if (bytes == null || bytes.Length < 4) return null;
+
+            int length = BitConverter.ToInt32(bytes, 0);
+            if (bytes.Length < 4 + length) return null;
+
+            byte[] dataBytes = new byte[length];
+            Array.Copy(bytes, 4, dataBytes, 0, length);
+
             if (GlobalSetting.Format == ETransportFormat.Json)
             {
-                string json = JsonConvert.SerializeObject(message);
-                return Encoding.UTF8.GetBytes(json);
+                string json = Encoding.UTF8.GetString(dataBytes);
+                return JsonConvert.DeserializeObject<TData>(json)!;
             }
             else
             {
-                using var ms = new MemoryStream();
-                ProtoBuf.Serializer.Serialize(ms, message);
-                return ms.ToArray();
+                using var ms = new MemoryStream(dataBytes);
+                return ProtoBuf.Serializer.Deserialize<TData>(ms);
             }
         }
     }

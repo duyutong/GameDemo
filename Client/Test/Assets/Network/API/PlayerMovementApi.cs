@@ -11,7 +11,7 @@ namespace Network.API
         {
             SendUdpMessage(Pattern, path, messageObj);
         }
-        public override void OnDataRecieved(string pattern, UdpResult<object> result)
+        public override void OnDataRecieved(string pattern, UdpResult result)
         {
             base.OnDataRecieved(pattern, result);
         }

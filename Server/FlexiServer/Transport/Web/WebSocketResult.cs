@@ -1,7 +1,7 @@
 ﻿namespace FlexiServer.Transport.Web
 {
     [global::ProtoBuf.ProtoContract(Name = @"WebSocketResult")]
-    public class WebSocketResult<TData>
+    public class WebSocketResult
     {
         [global::ProtoBuf.ProtoMember(1)]
         public int Code { get; set; } = 200;
@@ -22,6 +22,6 @@
         public long Timestamp { get; set; }
 
         [global::ProtoBuf.ProtoMember(7)]
-        public TData? Data { get; set; }
+        public byte[]? Data { get; set; }
     }
 }

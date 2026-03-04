@@ -11,11 +11,17 @@ public class AutoTestFlow:MonoBehaviour
     public bool isAutoLogin;
     public BTRuntimeComponent bTRuntimeComp;
 
-    private GamePlayApi GamePlayApi => ApiManager.GetWebSoketApi<GamePlayApi>();
     private AccountInfo defaultAccount { get; } = new AccountInfo() { Account = "DEF", Password = "123" };
     public void Start()
     {
-        if (isAutoLogin) bTRuntimeComp.SendMsgToBTRuntime("AutoLogin_Start");
+        LoadGlobalSetting();
+    }
+    public void LoadGlobalSetting() 
+    {
+        GlobalSetting.LoadSetting(() => 
+        {
+            if (isAutoLogin) bTRuntimeComp.SendMsgToBTRuntime("AutoLogin_Start");
+        });
     }
     public void AutoLogin()
     {

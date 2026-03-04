@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "GlobalSetting", menuName = "Scriptable Objects/GlobalSetting")]
 public class GlobalSetting : ScriptableObject
@@ -11,10 +12,14 @@ public class GlobalSetting : ScriptableObject
     {
         get
         {
-            if (_instance == null)
-                ResourceLoader.Load<GlobalSetting>(assetPath, (_setting) => _instance = _setting);
+            if (_instance == null) ResourceLoader.Load<GlobalSetting>(assetPath, (_setting) => _instance = _setting);
             return _instance;
         }
+    }
+    public static void LoadSetting(Action call) 
+    {
+        ResourceLoader.Load<GlobalSetting>(assetPath, (_setting) => 
+        { _instance = _setting;call?.Invoke(); });
     }
 }
 public enum ELanguage

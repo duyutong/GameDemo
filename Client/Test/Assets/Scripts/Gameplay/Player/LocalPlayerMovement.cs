@@ -27,6 +27,7 @@ public class LocalPlayerMovement : MonoBehaviour
 
         if (operation == EOperationState.Begin || operation == EOperationState.Finish)
             gamePlayApi.SendWebSocketMessage(NetworkEventPaths.GamePlay_SetMovementState, movementInfo);
+        
         else if(operation == EOperationState.InProgress)
             playerMovementApi.SendUdpMessage(NetworkEventPaths.PlayerMovement_MoveInGame, movementInfo);
     }

@@ -1,10 +1,8 @@
+using Assets.Network.Transport;
 using Network.API;
 using Network.Core.Frame;
-using Newtonsoft.Json;
 using System;
-using System.IO;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -17,7 +15,8 @@ namespace Network.Transport.Udp
 
         public override void OnMessageReceived(byte[] buffer)
         {
-            UdpResult<object> udpResult = DeserializeUdpMessage<object>(buffer);
+            Debug.Log($"Received UDP message, length: {buffer.Length}");
+            var udpResult = buffer.ConvertData<UdpResult>();
             if (udpResult == null) return;
 
             frameManager.RefreshServerFrame(udpResult.ServerFrame, udpResult.Timestamp);
@@ -50,15 +49,15 @@ namespace Network.Transport.Udp
         {
             if (channel == null) return;
 
-            UdpMessage<TData> udpMessage = new UdpMessage<TData>();
+            UdpMessage udpMessage = new UdpMessage();
             udpMessage.Account = NetworkManager.Instance.Account;
             udpMessage.InputFrame = FrameManager.Instance.LocalCurrentFrame;
             udpMessage.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             udpMessage.Pattern = pattern;
             udpMessage.Path = path;
-            udpMessage.Data = messageObj;
+            udpMessage.Data = messageObj.ToBytes();
 
-            var buffer = SerializeUdpMessage(udpMessage);
+            var buffer = udpMessage.ToBytes();
             await channel.SendAsync(buffer, buffer.Length, host, port);
         }
 
@@ -73,33 +72,6 @@ namespace Network.Transport.Udp
                 }
                 catch (Exception) { }
 
-            }
-        }
-        private static byte[] SerializeUdpMessage<T>(UdpMessage<T> message)
-        {
-            if (GlobalSetting.Instance.format == ETransportFormat.Json)
-            {
-                string json = JsonConvert.SerializeObject(message);
-                return Encoding.UTF8.GetBytes(json);
-            }
-            else
-            {
-                using var ms = new MemoryStream();
-                ProtoBuf.Serializer.Serialize(ms, message);
-                return ms.ToArray();
-            }
-        }
-        private UdpResult<T> DeserializeUdpMessage<T>(byte[] bytes)
-        {
-            if (GlobalSetting.Instance.format == ETransportFormat.Json)
-            {
-                string json = Encoding.UTF8.GetString(bytes);
-                return JsonConvert.DeserializeObject<UdpResult<T>>(json)!;
-            }
-            else
-            {
-                using var ms = new MemoryStream(bytes);
-                return ProtoBuf.Serializer.Deserialize<UdpResult<T>>(ms);
             }
         }
     }

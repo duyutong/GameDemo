@@ -50,7 +50,7 @@ namespace Network.API
             }
             return (TApi)webSoketApiDict[type];
         }
-        public static void HandleUdpMessage(string pattern, UdpResult<object> result)
+        public static void HandleUdpMessage(string pattern, UdpResult result)
         {
             if (string.IsNullOrEmpty(pattern)) return;
 
@@ -71,7 +71,7 @@ namespace Network.API
                 return;
             }
         }
-        public static void HandleWebsocketMessage(string pattern, byte[] buffer)
+        public static void HandleWebsocketResult(string pattern, WebSocketResult result)
         {
             if (string.IsNullOrEmpty(pattern)) return;
 
@@ -83,7 +83,7 @@ namespace Network.API
                     if (apiInstance == null) goto Faile;
                     webSoketApiDict[type] = apiInstance;
                 }
-                webSoketApiDict[type].OnDataRecieved(pattern, buffer);
+                webSoketApiDict[type].OnDataRecieved(pattern, result);
                 return;
             }
         Faile:

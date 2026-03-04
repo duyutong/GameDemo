@@ -1,7 +1,7 @@
 ﻿namespace FlexiServer.Transport.Http
 {
     [global::ProtoBuf.ProtoContract(Name = @"HttpResult")]
-    public class HttpResult<TData>
+    public class HttpResult
     {
         [global::ProtoBuf.ProtoMember(1)]
         public int Code { get; set; }
@@ -10,6 +10,6 @@
         public string Message { get; set; }
 
         [global::ProtoBuf.ProtoMember(3)]
-        public TData Data { get; set; }
+        public byte[] Data { get; set; }
     }
 }

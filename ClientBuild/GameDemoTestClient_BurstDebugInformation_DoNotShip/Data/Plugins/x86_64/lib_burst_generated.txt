@@ -11,6 +11,7 @@ Library: F:\GameDemo\Client\Test\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_
 --linker-options=PdbAltPath="GameDemoTestClient_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=F:\GameDemo\Client\Test\Temp\Burst
+--debug=Full
 --key-folder=D:/Unity6000.3.6f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
 --decode-folder=F:\GameDemo\Client\Test\Library\Burst
 --output=F:\GameDemo\Client\Test\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
@@ -128,6 +129,7 @@ Library: F:\GameDemo\Client\Test\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_
 --linker-options=PdbAltPath="GameDemoTestClient_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=F:\GameDemo\Client\Test\Temp\Burst
+--debug=Full
 --key-folder=D:/Unity6000.3.6f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
 --decode-folder=F:\GameDemo\Client\Test\Library\Burst
 --output=F:\GameDemo\Client\Test\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
@@ -245,6 +247,7 @@ Library: F:\GameDemo\Client\Test\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_
 --linker-options=PdbAltPath="GameDemoTestClient_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=F:\GameDemo\Client\Test\Temp\Burst
+--debug=Full
 --key-folder=D:/Unity6000.3.6f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
 --decode-folder=F:\GameDemo\Client\Test\Library\Burst
 --output=F:\GameDemo\Client\Test\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
@@ -289,6 +292,7 @@ Library: F:\GameDemo\Client\Test\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_
 --linker-options=PdbAltPath="GameDemoTestClient_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=F:\GameDemo\Client\Test\Temp\Burst
+--debug=Full
 --key-folder=D:/Unity6000.3.6f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
 --decode-folder=F:\GameDemo\Client\Test\Library\Burst
 --output=F:\GameDemo\Client\Test\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
@@ -335,6 +339,7 @@ Library: F:\GameDemo\Client\Test\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_
 --linker-options=PdbAltPath="GameDemoTestClient_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=F:\GameDemo\Client\Test\Temp\Burst
+--debug=Full
 --key-folder=D:/Unity6000.3.6f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
 --decode-folder=F:\GameDemo\Client\Test\Library\Burst
 --output=F:\GameDemo\Client\Test\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
@@ -356,6 +361,7 @@ Library: F:\GameDemo\Client\Test\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_
 --linker-options=PdbAltPath="GameDemoTestClient_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=F:\GameDemo\Client\Test\Temp\Burst
+--debug=Full
 --key-folder=D:/Unity6000.3.6f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
 --decode-folder=F:\GameDemo\Client\Test\Library\Burst
 --output=F:\GameDemo\Client\Test\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
