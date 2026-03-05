@@ -94,8 +94,8 @@ public class AutomaticAtlas
         {
             int index = i;
             string _path = prefabPathList[index];
-            string shortPath = "Assets" + @"\" + _path.Replace(dataPath, "");
-            string FolderStrInfo = File.ReadAllText(shortPath);
+            //string shortPath = "Assets" + @"\" + _path.Replace(dataPath, "");
+            string FolderStrInfo = File.ReadAllText(_path);
             string[] strArray = FolderStrInfo.Split(new string[] { "---" }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string blockStr in strArray)
             {
