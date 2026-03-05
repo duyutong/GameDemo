@@ -48,7 +48,8 @@ public class ResourceLoader
     {
         string spriteName = Path.GetFileNameWithoutExtension(pathOrKey);
         string atlasName = Path.GetFileName(Path.GetDirectoryName(pathOrKey));
-        var handleAtlas = Addressables.LoadAssetAsync<SpriteAtlas>(atlasName);
+        string path = $"Assets/AddressableAssets/Art/Atlas/{atlasName}.spriteatlasv2";
+        var handleAtlas = Addressables.LoadAssetAsync<SpriteAtlas>(path);
         await handleAtlas.Task;
 
         if (handleAtlas.Status != AsyncOperationStatus.Succeeded)
@@ -60,8 +61,11 @@ public class ResourceLoader
         Sprite sprite = handleAtlas.Result.GetSprite(spriteName);
         if (sprite != null)
         {
-            if (!pool.ContainsKey(pathOrKey))
+            if (!pool.ContainsKey(pathOrKey)) 
+            {
                 pool[pathOrKey] = new Queue<UnityEngine.Object>();
+                pool[pathOrKey].Enqueue(sprite);
+            }  
         }
 
         onDone?.Invoke(sprite as T);

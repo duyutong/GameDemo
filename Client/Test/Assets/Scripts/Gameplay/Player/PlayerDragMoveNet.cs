@@ -1,6 +1,7 @@
 ﻿using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using static EnumDefinitions;
 
 public class PlayerDragMoveNet : MonoBehaviour
@@ -13,7 +14,6 @@ public class PlayerDragMoveNet : MonoBehaviour
     private RectTransform targetRect;
     private RectTransform parentRect;
     private Vector2 dragOffset;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

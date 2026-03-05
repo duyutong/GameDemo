@@ -30,6 +30,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2bcd2660ca9b64942af0de543d8d7100
+    m_Address: Assets/GameAssets/InputSystem_Actions.inputactions
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3a854c25c6aab0b4fbc4a6ebc0077540
     m_Address: Assets/AddressableAssets/Art/Atlas/Food.spriteatlasv2
     m_ReadOnly: 0
