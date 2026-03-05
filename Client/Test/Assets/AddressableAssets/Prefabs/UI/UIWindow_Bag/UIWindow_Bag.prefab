@@ -1528,7 +1528,7 @@ MonoBehaviour:
   bTRuntimeComp: {fileID: 6031345709194895731}
   btnUse: {fileID: 6522130720630090176}
   btnSubmit: {fileID: 7508569902288666516}
-  btnIdentified: {fileID: 0}
+  btnIdentified: {fileID: 8879559324767458127}
 --- !u!114 &6031345709194895731
 MonoBehaviour:
   m_ObjectHideFlags: 0
