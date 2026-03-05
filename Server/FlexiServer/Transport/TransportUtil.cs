@@ -7,20 +7,6 @@ namespace FlexiServer.Transport
 {
     public static class TransportUtil
     {
-        public static async void ReturnHttpResultTask(HttpContext context, HttpResult result)
-        {
-            byte[] resBytes = result.ToBytes();
-            context.Response.ContentLength = resBytes.Length;
-            await context.Response.Body.WriteAsync(resBytes, 0, resBytes.Length);
-        }
-        public static async Task<HttpMessage> ReadHttpMessageAsync(HttpContext context)
-        {
-            using var ms = new MemoryStream();
-            await context.Request.Body.CopyToAsync(ms);
-            byte[] bytes = ms.ToArray();
-
-            return bytes.ConvertData<HttpMessage>()!;
-        }
         /// <summary>
         /// 将对象序列化为 byte[]，自动处理 JSON 或 Protobuf
         /// JSON 会带 4 字节长度前缀，Protobuf 直接写入

@@ -17,7 +17,7 @@ public class UIManager : MonoBehaviour
         UICamera = uiRoot.GetComponentInChildren<Camera>();
         MainCanvas = UICanvas.transform;
     }
-    public void OpenWindow<T>(Action<T> onDone) where T : UIWindowComponentBase
+    public void OpenWindow<T>(Action<T> onDone = null) where T : UIWindowComponentBase
     {
         Type type = typeof(T);
         if (UIWinDic.TryGetValue(type, out GameObject winObj))

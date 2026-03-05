@@ -33,9 +33,7 @@ public class PlayerDragMoveNet : MonoBehaviour
 
     private void OnMoving(PointerEventData data)
     {
-        // ����Ļ����ת��Ϊ Canvas �ռ�����
         RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, data.position, data.pressEventCamera, out Vector2 localPoint);
-        // ���� UI Ԫ�ص� anchoredPosition
         targetRect.anchoredPosition = localPoint + dragOffset;
 
         playerMovement.SyncLocalPlayerMovement(EOperationState.InProgress, targetRect.position, moveLerpSpeed);

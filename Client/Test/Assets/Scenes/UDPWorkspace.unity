@@ -222,6 +222,7 @@ GameObject:
   - component: {fileID: 506390795}
   - component: {fileID: 506390794}
   - component: {fileID: 506390793}
+  - component: {fileID: 506390797}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -313,6 +314,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!225 &506390797
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506390792}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &587672192
 GameObject:
   m_ObjectHideFlags: 0
@@ -580,6 +593,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OtherMoveNet
   account: ABC
+  freezeZ: 1
 --- !u!114 &1475971242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -780,7 +794,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6353276487090259924, guid: 82d5f3125e9413a48977a0254ab93442, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

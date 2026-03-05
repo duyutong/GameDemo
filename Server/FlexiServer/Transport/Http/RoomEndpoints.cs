@@ -1,5 +1,4 @@
 using FlexiServer.Core;
-using FlexiServer.Models;
 using FlexiServer.Services;
 namespace FlexiServer.Transport.Http
 {
@@ -12,7 +11,7 @@ namespace FlexiServer.Transport.Http
             
             app.MapPost("/room/create", async (HttpContext context) =>
             {
-                HttpMessage msg = await TransportUtil.ReadHttpMessageAsync(context);
+                HttpMessage msg = await ReadHttpMessageAsync(context);
                 var result = new HttpResult();
                 try
                 {
@@ -27,12 +26,12 @@ namespace FlexiServer.Transport.Http
                     result.Code = ex.Code;                 // 可以自定义不同错误码
                     result.Message = ex.Message;
                 }
-                TransportUtil.ReturnHttpResultTask(context, result);
+                ReturnHttpResultTask(context, result);
             });
             
             app.MapPost("/room/getRooms", async (HttpContext context) =>
             {
-                HttpMessage msg = await TransportUtil.ReadHttpMessageAsync(context);
+                HttpMessage msg = await ReadHttpMessageAsync(context);
                 var result = new HttpResult();
                 try
                 {
@@ -47,12 +46,12 @@ namespace FlexiServer.Transport.Http
                     result.Code = ex.Code;                 // 可以自定义不同错误码
                     result.Message = ex.Message;
                 }
-                TransportUtil.ReturnHttpResultTask(context, result);
+                ReturnHttpResultTask(context, result);
             });
             
             app.MapPost("/room/findRoom", async (HttpContext context) =>
             {
-                HttpMessage msg = await TransportUtil.ReadHttpMessageAsync(context);
+                HttpMessage msg = await ReadHttpMessageAsync(context);
                 var result = new HttpResult();
                 try
                 {
@@ -67,7 +66,7 @@ namespace FlexiServer.Transport.Http
                     result.Code = ex.Code;                 // 可以自定义不同错误码
                     result.Message = ex.Message;
                 }
-                TransportUtil.ReturnHttpResultTask(context, result);
+                ReturnHttpResultTask(context, result);
             });
             
             #endregion MapPostStr

@@ -22,8 +22,8 @@ public class ResourceLoader
             }
         }
 
-        if (typeof(T) == typeof(Sprite)) { LoadSpriteAsync(pathOrKey, onDone); }
-        else { LoadAssetAsync(pathOrKey, onDone, usePool); }
+        if (typeof(T) == typeof(Sprite)) { _ = LoadSpriteAsync(pathOrKey, onDone); }
+        else { _ = LoadAssetAsync(pathOrKey, onDone, usePool); }
     }
     private static async Task LoadAssetAsync<T>(string pathOrKey, Action<T> onDone, bool usePool = false) where T : UnityEngine.Object
     {

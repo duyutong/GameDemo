@@ -49,7 +49,7 @@ namespace FlexiServer.Services
             if (movmentInfos.Count == 0) return;
 
             string path = NetworkEventPaths.PlayerMovement_MoveInGame;
-            TransportManager.SendMessageToClient<UdpTransport, List<MovementInfo>>(sandbox.GetPlayerClients(), Pattern, path, movmentInfos);
+            TransportManager.SendMessageToClient<UdpTransport, List<MovementInfo>>(sandbox.GetPlayerAccounts(), Pattern, path, movmentInfos);
             
         }
         public void OnDataRecieved(string ClientId, string Account, byte[] Buffer)
@@ -59,13 +59,13 @@ namespace FlexiServer.Services
 
             inputFrame = recievMsg.InputFrame;
 
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write("[PlayerMovementService]");
-            Console.ResetColor();
+            //Console.ForegroundColor = ConsoleColor.White;
+            //Console.Write("[PlayerMovementService]");
+            //Console.ResetColor();
 
-            Console.WriteLine(
-                $" OnDataRecieved | Pattern: {recievMsg.Pattern} | Path: {recievMsg.Path}"
-            );
+            //Console.WriteLine(
+            //    $" OnDataRecieved | Pattern: {recievMsg.Pattern} | Path: {recievMsg.Path}"
+            //);
 
             switch (recievMsg.Path)
             {

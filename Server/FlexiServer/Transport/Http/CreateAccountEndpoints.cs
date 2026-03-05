@@ -12,7 +12,7 @@ namespace FlexiServer.Transport.Http
             
             app.MapPost("/createAccount/create", async (HttpContext context) =>
             {
-                HttpMessage msg = await TransportUtil.ReadHttpMessageAsync(context);
+                HttpMessage msg = await ReadHttpMessageAsync(context);
                 var result = new HttpResult();
                 try
                 {
@@ -27,7 +27,7 @@ namespace FlexiServer.Transport.Http
                     result.Code = ex.Code;                 // 可以自定义不同错误码
                     result.Message = ex.Message;
                 }
-                TransportUtil.ReturnHttpResultTask(context, result);
+                ReturnHttpResultTask(context, result);
             });
             
             #endregion MapPostStr

@@ -98,7 +98,7 @@ public class NetworkProtocolSaveUtility
         foreach (NetworkProtocolEventSaveData eventSaveData in eventData)
         {
             string funcName = GetFuncNameFromPattern(eventSaveData.pattern);
-            if (exitStr.Contains($"{funcName}(HttpMessage<{funcName}Request> msg)")) continue;
+            if (exitStr.Contains($"{funcName}(HttpMessage msg)")) continue;
 
             string str = CSTemplate_Network.HttpFuncStr;
             str = str.Replace("#Func#", funcName);
@@ -248,7 +248,7 @@ public class NetworkProtocolSaveUtility
         {
             string path = eventData.pattern;
             string funcName = GetFuncNameFromPattern(path);
-            if (exitStr.Contains($"{funcName}Handle(ClientId, Account, recievMsg.Path, Msg);")) continue;
+            if (exitStr.Contains($"{funcName}Handle(ClientId, Account, recievMsg.Path, Buffer);")) continue;
 
             string str1 = CSTemplate_Network.SwitchHandleStr;
             str1 = str1.Replace("#Path#", path);

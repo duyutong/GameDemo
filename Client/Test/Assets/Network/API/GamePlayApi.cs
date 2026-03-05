@@ -10,13 +10,9 @@ namespace Network.API
         {
             base.SendWebSocketMessage(Pattern, path, messageObj);
         }
-        public override void AddListener(string path, Action<WebSocketResult> callBack)
+        public override void OnDataRecieved(string pattern, WebSocketResult result)
         {
-            base.AddListener(path, callBack);
-        }
-        public override void RemoveListener(string path, Action<WebSocketResult> callBack)
-        {
-            base.RemoveListener(path, callBack);
+            base.OnDataRecieved(pattern, result);
         }
     }
 }

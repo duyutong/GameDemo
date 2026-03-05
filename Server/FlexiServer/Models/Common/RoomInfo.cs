@@ -1,6 +1,5 @@
 using FlexiServer.Models;
 using FlexiServer.Models.Common;
-using System.Numerics;
 using static EnumDefinitions;
 namespace FlexiServer.Models.Common
 {
@@ -9,13 +8,13 @@ namespace FlexiServer.Models.Common
     {
         #region AutoContext
         
-        [global::ProtoBuf.ProtoMember(0)]
+        [global::ProtoBuf.ProtoMember(1)]
         public int RoomId { get; set; }
 
-        [global::ProtoBuf.ProtoMember(0)]
+        [global::ProtoBuf.ProtoMember(2)]
         public int MaxCount { get; set; }
 
-        [global::ProtoBuf.ProtoMember(0)]
+        [global::ProtoBuf.ProtoMember(3)]
         public int CurrCount { get; set; }
 
         #endregion Variable
