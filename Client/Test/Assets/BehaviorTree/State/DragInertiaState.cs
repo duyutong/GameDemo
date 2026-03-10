@@ -139,15 +139,12 @@ public class DragInertiaState : BehaviorTreeBaseState
     }
     public void RefreshRotation()
     {
-        if (!enter)
-        {
-            Vector3 currAngles = ResetRotation();
-            float targetZ = Mathf.Lerp(currAngles.z, 0, speed * Time.deltaTime);
-            float deltaZ = targetZ - currAngles.z;
+        Vector3 currAngles = ResetRotation();
+        float targetZ = Mathf.Lerp(currAngles.z, 0, speed * Time.deltaTime);
+        float deltaZ = targetZ - currAngles.z;
 
-            Vector3 deltaVec3 = deltaZ * Vector3.forward;
-            targetRect.localEulerAngles += deltaVec3;
-        }
+        Vector3 deltaVec3 = deltaZ * Vector3.forward;
+        targetRect.localEulerAngles += deltaVec3;
     }
     private Vector3 ResetRotation()
     {

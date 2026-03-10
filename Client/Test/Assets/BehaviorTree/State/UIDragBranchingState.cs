@@ -103,7 +103,6 @@ public class UIDragBranchingState : UIEventBranchingState
             trigger.AddTriggerEventListener(EventTriggerType.EndDrag, OnMyEndDrag);
             trigger.AddTriggerEventListener(EventTriggerType.PointerUp, OnPointerUp);
         }
-        OnExecute();
     }
     public override void OnRefresh()
     {
@@ -116,27 +115,27 @@ public class UIDragBranchingState : UIEventBranchingState
         endDrag = _stateObj.endDrag;
         idel = _stateObj.idel;
     }
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-        if (!isInitFinish) return;
-        //Debug.Log($"beginDrag:{beginDrag}  drag:{drag}  endDrag:{endDrag}  idel:{idel}");
-
-        OnExit();
-    }
     public override void OnExit()
     {
+        bool hasBeginDrag = false;
+        bool hasDrag = false;
+        bool hasEndDrag = false;
+        bool hasIdel = false;
+
         for (int i = 0; i < output.Count; i++)
         {
             BTOutputInfo info = output[i];
-            if (info.fromPortName == "beginDrag") info.value = beginDrag;
-            if (info.fromPortName == "drag") info.value = drag;
-            if (info.fromPortName == "endDrag") info.value = endDrag;
-            if (info.fromPortName == "idel") info.value = idel;
+            if (info.fromPortName == "beginDrag") { info.value = beginDrag; hasBeginDrag = true; }
+            if (info.fromPortName == "drag") { info.value = drag; hasDrag = true; }
+            if (info.fromPortName == "endDrag") { info.value = endDrag; hasEndDrag = true; }
+            if (info.fromPortName == "idel") { info.value = idel; hasIdel = true; }
             output[i] = info;
         }
 
-        base.OnExit();
+        bool canExit = (beginDrag && hasBeginDrag) || (drag && hasDrag) || (endDrag && hasEndDrag) || (idel && hasIdel);
+
+        if (canExit) base.OnExit();
+        else OnRefresh();
     }
     private void OnPointerUp(PointerEventData data)
     {
@@ -144,13 +143,19 @@ public class UIDragBranchingState : UIEventBranchingState
         drag = false;
         beginDrag = false;
         endDrag = false;
+
+        OnExit();
     }
     private void OnMyDrag(PointerEventData data)
     {
+        if (beginDrag) { beginDrag = false; return; }
+
         drag = true;
         beginDrag = false;
         endDrag = false;
         idel = false;
+
+        OnExit();
     }
 
     private void OnMyEndDrag(PointerEventData data)
@@ -159,6 +164,8 @@ public class UIDragBranchingState : UIEventBranchingState
         beginDrag = false;
         endDrag = true;
         idel = false;
+
+        OnExit();
     }
 
     private void OnMyBeginDrag(PointerEventData data)
@@ -167,6 +174,8 @@ public class UIDragBranchingState : UIEventBranchingState
         beginDrag = true;
         endDrag = false;
         idel = false;
+
+        OnExit();
     }
 }
 public class UIDragBranchingStateObj : BTStateObject
