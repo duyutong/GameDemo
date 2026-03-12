@@ -36,7 +36,7 @@ namespace Assets.Network.Transport
                 ProtoBuf.Serializer.Serialize(ms, data);
                 byte[] protoBytes = ms.ToArray();
 
-                // 可选：给 Protobuf 也加长度前缀，更安全（可选）
+                // 可选：给 Protobuf 也加长度前缀，更安全
                 byte[] result = new byte[4 + protoBytes.Length];
                 BitConverter.GetBytes(protoBytes.Length).CopyTo(result, 0);
                 Buffer.BlockCopy(protoBytes, 0, result, 4, protoBytes.Length);

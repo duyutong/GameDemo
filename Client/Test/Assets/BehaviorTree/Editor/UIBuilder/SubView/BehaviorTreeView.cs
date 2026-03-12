@@ -46,7 +46,7 @@ public partial class BehaviorTreeView : GraphView
         {
             SearchWindow.Open(new SearchWindowContext(contentRect.screenMousePosition), menu);
         };
-        menu.OnCreateSearchTreeAction = () =>
+        menu.OnCreateSearchTreeAction = () => 
         {
             List<SearchTreeEntry> entries = new List<SearchTreeEntry>();
             entries.Add(new SearchTreeGroupEntry(new GUIContent("创建新节点")));
@@ -282,6 +282,7 @@ public partial class BehaviorTreeView : GraphView
         });
         return change;
     }
+
     /// <summary>
     /// 创建并返回复制的节点
     /// </summary>
@@ -299,7 +300,7 @@ public partial class BehaviorTreeView : GraphView
         node.onSelectAction = onSelectAction;
         node.onUnselectedAction = onUnselectAction;
         node.target = selectionTarget;
-        node.btState = CopyBTState(nodeData,node.guid);
+        node.btState = CopyBTState(nodeData, node.guid);
         node.nodePos = pos;
         node.SetPosition(new Rect(pos, node.GetPosition().size));
 
@@ -334,6 +335,7 @@ public partial class BehaviorTreeView : GraphView
 
         return true;
     }
+
     /// <summary>
     /// 加载节点
     /// </summary>

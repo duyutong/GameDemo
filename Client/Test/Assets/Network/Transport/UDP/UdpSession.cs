@@ -15,7 +15,6 @@ namespace Network.Transport.Udp
 
         public override void OnMessageReceived(byte[] buffer)
         {
-            Debug.Log($"Received UDP message, length: {buffer.Length}");
             var udpResult = buffer.ConvertData<UdpResult>();
             if (udpResult == null) return;
 

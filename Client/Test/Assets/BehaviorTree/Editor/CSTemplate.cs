@@ -1,7 +1,7 @@
 ﻿// <summary>
 /// 自动生成cs文件时使用的预制文字
 /// </summary>
-public class CSTemplate_BT
+public class CSTemplate
 {
     public const string nodeStr =
 @"
@@ -40,8 +40,6 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
-
 [Serializable]
 public class #StateName#State : #BaseState#
 {
@@ -71,13 +69,8 @@ public class #StateName#State : #BaseState#
         DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(#StateName#StateObj));
         using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(param)))
         {
-            _stateObj = ScriptableObject.CreateInstance<#StateName#StateObj>();
-            var json = new StreamReader(stream).ReadToEnd();
-            JsonUtility.FromJsonOverwrite(json, _stateObj);
-
+            _stateObj = (#StateName#StateObj)jsonSerializer.ReadObject(stream);
             output = _stateObj.output;
-            interruptible = _stateObj.interruptible;
-            interruptTag = _stateObj.interruptTag;
             #SetPropValue#
         }
     }
@@ -85,7 +78,6 @@ public class #StateName#State : #BaseState#
     {
         if (StringComparer.Ordinal.Equals(fieldName, default)) return ESetFieldValueResult.Succ;
         #SetFieldValue#
-        else if (StringComparer.Ordinal.Equals(fieldName, ""pointerEventData"") && value is PointerEventData PointerEventDataValue) pointerEventData = PointerEventDataValue;
         else return ESetFieldValueResult.Fail;
 
         return ESetFieldValueResult.Succ;

@@ -34,8 +34,9 @@ public class Deco_SubBTContainer : DecoratorNode
 
             BehaviourTreeEditor editor = BehaviourTreeEditor.OpenWindow();
 
-            if (btState.runtime == null) editor.OpenBTAsset(state.container.target);
-            else editor.LoadRuntimeContainer(btState.runtime);
+            editor.OpenBTAsset(state.container.target);
+            //if (btState.runtime == null) editor.OpenBTAsset(state.container.target);
+            //else editor.LoadRuntimeContainer(btState.runtime);
 
             evt.StopPropagation();
         }

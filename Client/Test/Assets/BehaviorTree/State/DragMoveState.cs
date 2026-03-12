@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,6 +7,7 @@ using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
 [Serializable]
 public class DragMoveState : BehaviorTreeBaseState
 {
@@ -14,8 +15,8 @@ public class DragMoveState : BehaviorTreeBaseState
 
     public System.Boolean exit;
     public System.Boolean enter;
-    public BTTargetObject targetObj;
     public UnityEngine.Vector2 dragOffset;
+    public BTTargetObject targetObj;
 
     public override BTStateObject stateObj
     {
@@ -31,8 +32,8 @@ public class DragMoveState : BehaviorTreeBaseState
 
                 _stateObj.exit = exit;
                 _stateObj.enter = enter;
-                _stateObj.targetObj = targetObj;
                 _stateObj.dragOffset = dragOffset;
+                _stateObj.targetObj = targetObj;
             }
             return _stateObj;
         }
@@ -54,8 +55,8 @@ public class DragMoveState : BehaviorTreeBaseState
 
             exit = _stateObj.exit;
             enter = _stateObj.enter;
-            targetObj = _stateObj.targetObj;
             dragOffset = _stateObj.dragOffset;
+            targetObj = _stateObj.targetObj;
         }
     }
     protected override ESetFieldValueResult SetFieldValue(string fieldName, object value)
@@ -64,8 +65,8 @@ public class DragMoveState : BehaviorTreeBaseState
 
         else if (StringComparer.Ordinal.Equals(fieldName, "exit") && value is System.Boolean exitValue) exit = exitValue;
         else if (StringComparer.Ordinal.Equals(fieldName, "enter") && value is System.Boolean enterValue) enter = enterValue;
-        else if (StringComparer.Ordinal.Equals(fieldName, "targetObj") && value is BTTargetObject targetObjValue) targetObj = targetObjValue;
         else if (StringComparer.Ordinal.Equals(fieldName, "dragOffset") && value is UnityEngine.Vector2 dragOffsetValue) dragOffset = dragOffsetValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "targetObj") && value is BTTargetObject targetObjValue) targetObj = targetObjValue;
         else if (StringComparer.Ordinal.Equals(fieldName, "pointerEventData") && value is PointerEventData PointerEventDataValue) pointerEventData = PointerEventDataValue;
         else return ESetFieldValueResult.Fail;
 
@@ -80,12 +81,11 @@ public class DragMoveState : BehaviorTreeBaseState
 
         exit = _stateObj.exit;
         enter = _stateObj.enter;
-        targetObj = _stateObj.targetObj;
         dragOffset = _stateObj.dragOffset;
+        targetObj = _stateObj.targetObj;
     }
     #endregion
 
-    public PointerEventData pointerEventData;
     private RectTransform targetRect;
     private RectTransform parentRect;
     public override void OnEnter()
@@ -99,16 +99,14 @@ public class DragMoveState : BehaviorTreeBaseState
         if (isCanExecute) OnExecute();
         else OnRefresh();
     }
-    public override void OnExecute() 
+    public override void OnExecute()
     {
         OnDrag();
         OnExit();
     }
     private void OnDrag()
     {
-        // ����Ļ����ת��Ϊ Canvas �ռ�����
         RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, pointerEventData.position, pointerEventData.pressEventCamera, out Vector2 localPoint);
-        // ���� UI Ԫ�ص� anchoredPosition
         targetRect.anchoredPosition = localPoint + dragOffset;
     }
 }
@@ -120,7 +118,7 @@ public class DragMoveStateObj : BTStateObject
 
     public System.Boolean exit;
     public System.Boolean enter;
-    public BTTargetObject targetObj;
     public UnityEngine.Vector2 dragOffset;
+    public BTTargetObject targetObj;
 }
 #endregion

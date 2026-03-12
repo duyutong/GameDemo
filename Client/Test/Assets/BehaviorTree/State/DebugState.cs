@@ -1,4 +1,3 @@
-﻿
 using System;
 using System.IO;
 using System.Runtime.Serialization.Json;
@@ -44,6 +43,8 @@ public class DebugState : BehaviorTreeBaseState
             JsonUtility.FromJsonOverwrite(json, _stateObj);
 
             output = _stateObj.output;
+            interruptible = _stateObj.interruptible;
+            interruptTag = _stateObj.interruptTag;
 
             exit = _stateObj.exit;
             enter = _stateObj.enter;

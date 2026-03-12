@@ -178,6 +178,7 @@ public class UIDragBranchingState : UIEventBranchingState
         OnExit();
     }
 }
+#region AutoContext_BTStateObject
 public class UIDragBranchingStateObj : BTStateObject
 {
     public EBTState state;
@@ -190,3 +191,4 @@ public class UIDragBranchingStateObj : BTStateObject
     public BTTargetObject targetObj;
     public BTTargetObject uiCameraObj;
 }
+#endregion

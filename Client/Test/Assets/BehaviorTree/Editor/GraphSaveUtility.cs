@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Text.RegularExpressions;
 using Unity.Plastic.Newtonsoft.Json;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -230,12 +231,14 @@ public static class GraphSaveUtility
         tempStr = tempStr.Replace("#SetObjPropValue#", str3);
         tempStr = tempStr.Replace("#SetFieldValue#", str4);
 
-        //写入文件
         string csSavePath = Application.dataPath.Replace("\\", "/") + "/BehaviorTree/State/" + className + ".cs";
+        string exitStr = ReadFileIfExists(csSavePath);
+        string resultStr = MergeAutoContext(exitStr, tempStr);
+        //写入文件
         FileInfo saveInfo = new FileInfo(csSavePath);
         DirectoryInfo dir = saveInfo.Directory;
         if (!dir.Exists) dir.Create();
-        byte[] decBytes = Encoding.UTF8.GetBytes(tempStr);
+        byte[] decBytes = Encoding.UTF8.GetBytes(resultStr);
 
         FileStream fileStream = saveInfo.Create();
         fileStream.Write(decBytes, 0, decBytes.Length);
@@ -245,7 +248,26 @@ public static class GraphSaveUtility
         AssetDatabase.Refresh();
         Debug.Log("状态脚本生成完毕 " + className);
     }
+    public static string MergeAutoContext(string exitStr, string tempStr)
+    {
+        if (string.IsNullOrEmpty(exitStr)) return tempStr;
 
+        string patternBT = @"#region AutoContext_BTStateObject\s*[\s\S]*?#endregion";
+        string matchBT = Regex.Match(tempStr, patternBT).Value;
+        if (!string.IsNullOrEmpty(matchBT))
+        {
+            exitStr = Regex.Replace(exitStr, patternBT, matchBT);
+        }
+
+        string patternAC = @"#region AutoContext(?!_BTStateObject)[\s\S]*?#endregion";
+        string matchAC = Regex.Match(tempStr, patternAC).Value;
+        if (!string.IsNullOrEmpty(matchAC))
+        {
+            exitStr = Regex.Replace(exitStr, patternAC, matchAC);
+        }
+
+        return exitStr;
+    }
     /// <summary>
     /// 生成节点对应的C#脚本
     /// </summary>
@@ -418,7 +440,27 @@ public static class GraphSaveUtility
     {
         return JsonConvert.DeserializeObject<T>(json);
     }
-
+    /// <summary>
+    /// 检查指定文件是否存在，如果存在则读取文件内容
+    /// </summary>
+    /// <param name="filePath">文件路径，可以是绝对路径或相对路径</param>
+    /// <returns>文件内容，如果文件不存在或读取失败则返回 null</returns>
+    public static string ReadFileIfExists(string filePath)
+    {
+        // 判断文件是否存在
+        if (!File.Exists(filePath)) return string.Empty;
+        try
+        {
+            // 强制按 UTF8 无 BOM 读取
+            string content = File.ReadAllText(filePath);
+            return content;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"读取文件失败: {ex.Message}");
+            return string.Empty;
+        }
+    }
     #endregion
 }
 

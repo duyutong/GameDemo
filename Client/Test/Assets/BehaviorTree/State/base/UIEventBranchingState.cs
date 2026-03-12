@@ -61,7 +61,10 @@ public class UIEventBranchingState : BehaviorTreeBaseState
         if (bTTargetObject == null) return;
         if (bTTargetObject.target == null) return;
 
-        var rectTrans = bTTargetObject.target as RectTransform;
+        GameObject go = bTTargetObject.target as GameObject;
+        if(go == null) return;
+
+        var rectTrans = go.GetComponent<RectTransform>();
         if (rectTrans == null) return;
 
         trigger = rectTrans.transform.GetOrAddComponent<EventTrigger>();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [Serializable]
 public class BehaviorTreeBaseState
@@ -15,6 +16,8 @@ public class BehaviorTreeBaseState
     public List<BTOutputInfo> output = new List<BTOutputInfo>();
     public List<BehaviorTreeBaseState> lastStates;
     public virtual BTStateObject stateObj { get; }
+    [NonSerialized]
+    public PointerEventData pointerEventData;
 
     public Action onEnterForRuntime;
     public Action onExecuteForRuntime;

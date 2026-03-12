@@ -105,7 +105,7 @@ public class UIHoverBranchingState : UIEventBranchingState
         }
 
         bool isOver = IsMouseOverUIElement(rectTransform, uiCamera);
-        if (isOver && pointerEnter)
+        if (isOver)
         {
             pointerExit = false;
             pointerEnter = false;
@@ -113,9 +113,6 @@ public class UIHoverBranchingState : UIEventBranchingState
             idel = false;
             OnExit();
         }
-
-        if (hover) OnExit();
-        if (idel) OnExit();
     }
     public override void OnRefresh()
     {
@@ -165,7 +162,7 @@ public class UIHoverBranchingState : UIEventBranchingState
     {
         pointerEnter = true;
         pointerExit = false;
-        hover = false;
+        hover = true;
         idel = false;
 
         OnExit();

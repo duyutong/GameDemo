@@ -1,4 +1,3 @@
-﻿
 using System;
 using System.IO;
 using System.Runtime.Serialization.Json;
@@ -12,11 +11,12 @@ public class DragInertiaState : BehaviorTreeBaseState
 {
     #region AutoContext
 
-    public Boolean exit;
-    public Boolean enter;
-    public Single speed;
-    public Single AxisOffset_Z;
+    public System.Boolean exit;
+    public System.Boolean enter;
+    public System.Single speed;
+    public System.Single AxisOffset_Z;
     public BTTargetObject targetObj;
+
     public override BTStateObject stateObj
     {
         get
@@ -50,6 +50,8 @@ public class DragInertiaState : BehaviorTreeBaseState
             JsonUtility.FromJsonOverwrite(json, _stateObj);
 
             output = _stateObj.output;
+            interruptible = _stateObj.interruptible;
+            interruptTag = _stateObj.interruptTag;
 
             exit = _stateObj.exit;
             enter = _stateObj.enter;
@@ -57,6 +59,20 @@ public class DragInertiaState : BehaviorTreeBaseState
             AxisOffset_Z = _stateObj.AxisOffset_Z;
             targetObj = _stateObj.targetObj;
         }
+    }
+    protected override ESetFieldValueResult SetFieldValue(string fieldName, object value)
+    {
+        if (StringComparer.Ordinal.Equals(fieldName, default)) return ESetFieldValueResult.Succ;
+
+        else if (StringComparer.Ordinal.Equals(fieldName, "exit") && value is System.Boolean exitValue) exit = exitValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "enter") && value is System.Boolean enterValue) enter = enterValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "speed") && value is System.Single speedValue) speed = speedValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "AxisOffset_Z") && value is System.Single AxisOffset_ZValue) AxisOffset_Z = AxisOffset_ZValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "targetObj") && value is BTTargetObject targetObjValue) targetObj = targetObjValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "pointerEventData") && value is PointerEventData PointerEventDataValue) pointerEventData = PointerEventDataValue;
+        else return ESetFieldValueResult.Fail;
+
+        return ESetFieldValueResult.Succ;
     }
     public override void Save()
     {
@@ -72,8 +88,6 @@ public class DragInertiaState : BehaviorTreeBaseState
         targetObj = _stateObj.targetObj;
     }
     #endregion
-
-    public PointerEventData pointerEventData;
 
     private Vector2 lastPos;
 
@@ -155,13 +169,15 @@ public class DragInertiaState : BehaviorTreeBaseState
         return currAngles;
     }
 }
+#region AutoContext_BTStateObject
 public class DragInertiaStateObj : BTStateObject
 {
     public EBTState state;
 
-    public Boolean exit;
-    public Boolean enter;
-    public Single speed;
-    public Single AxisOffset_Z;
+    public System.Boolean exit;
+    public System.Boolean enter;
+    public System.Single speed;
+    public System.Single AxisOffset_Z;
     public BTTargetObject targetObj;
 }
+#endregion

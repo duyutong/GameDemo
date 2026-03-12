@@ -177,6 +177,26 @@ public class BTNodePortSetting
     public EPortType portType;
     public bool isShowAsPort = true;
 
+    public EPortType GetEPortTypeByType(Type type)
+    {
+        switch (type) 
+        {
+            case Type t when t == typeof(bool): return EPortType.Boolean;
+            case Type t when t == typeof(int): return EPortType.Int32;
+            case Type t when t == typeof(float): return EPortType.Float;
+            case Type t when t == typeof(long): return EPortType.Long;
+            case Type t when t == typeof(Vector3): return EPortType.Vector3;
+            case Type t when t == typeof(Vector4): return EPortType.Vector4;
+            case Type t when t == typeof(Vector2): return EPortType.Vector2;
+            case Type t when t == typeof(string): return EPortType.String;
+            case Type t when t == typeof(Color): return EPortType.Color;
+            case Type t when t == typeof(BTTargetAnimaCurve): return EPortType.AnimationCurve;
+            case Type t when t == typeof(BTTargetObject): return EPortType.Object;
+            case Type t when t == typeof(BTTargetEvent): return EPortType.Event;
+            case Type t when t == typeof(BTTargetContainer): return EPortType.BTContainer;
+        }
+        return EPortType.String;
+    }
     /// <summary>
     /// 根据端口类型获取对应的Type
     /// </summary>
