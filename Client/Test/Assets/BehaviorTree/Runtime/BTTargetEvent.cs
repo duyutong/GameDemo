@@ -51,6 +51,8 @@ public class BTTargetEvent
         if (targetEvent != null && targetEvent.GetPersistentEventCount() > 0) return;
         if (persistentDatas == null) return;
 
+        targetEvent ??= new UnityEvent();
+        targetEvent.RemoveAllListeners();
         for (int i = 0; i < persistentDatas.Length; i++)
         {
             int index = i;
@@ -82,96 +84,41 @@ public class BTTargetEvent
     }
     private void IntegrateEventInfo(int index)
     {
-        PersistentData persistentData = persistentDatas[index];
-        if (persistentData.target == null) return;
+        var data = persistentDatas[index];
+        if (data.target == null) return;
 
-        if (targetEvent == null) targetEvent = new UnityEvent();
-        // 获取 UnityEventBase 内部的 m_PersistentCalls
-        var baseType = typeof(UnityEventBase); // UnityEventBase 是 UnityEvent 的基类
-        var callsField = baseType.GetField("m_PersistentCalls", BindingFlags.NonPublic | BindingFlags.Instance);
-        var persistentCalls = callsField.GetValue(targetEvent);
-
-        // 获取 PersistentCallGroup 中的 m_Calls 列表
-        var callListType = persistentCalls.GetType();
-        var callsFieldInGroup = callListType.GetField("m_Calls", BindingFlags.NonPublic | BindingFlags.Instance);
-
-        // 使用反射获取 List<PersistentCall>
-        var calls = callsFieldInGroup.GetValue(persistentCalls) as IList;
-
-        // 获取指定索引的 PersistentCall
-        Type persistentCallType = Type.GetType("UnityEngine.Events.PersistentCall,UnityEngine.CoreModule");
-        var persistentCall = Activator.CreateInstance(persistentCallType);
-
-        // 通过反射获取 PersistentCall 的相关字段
-        FieldInfo targetAssemblyTypeNameField = persistentCallType.GetField("m_TargetAssemblyTypeName", BindingFlags.NonPublic | BindingFlags.Instance);
-        FieldInfo target = persistentCallType.GetField("m_Target", BindingFlags.NonPublic | BindingFlags.Instance);
-        FieldInfo methodName = persistentCallType.GetField("m_MethodName", BindingFlags.NonPublic | BindingFlags.Instance);
-        //赋值
-        targetAssemblyTypeNameField.SetValue(persistentCall, persistentData.assemblyTypeName);
-        UnityEngine.Object targetComponent = persistentData.target.GameObject().GetComponent(persistentData.assemblyTypeName);
-
+        var targetComponent = data.target.GameObject().GetComponent(data.assemblyTypeName);
         if (targetComponent == null) return;
-        target.SetValue(persistentCall, targetComponent);
-        methodName.SetValue(persistentCall, persistentData.methodName);
 
-        calls.Insert(index, persistentCall);
+        BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
+        var method = targetComponent.GetType().GetMethod(data.methodName, flags);
+        if (method == null) return;
 
-        callsFieldInGroup.SetValue(persistentCalls, calls);
+        if (Delegate.CreateDelegate(typeof(UnityAction), targetComponent, method) is UnityAction action)
+        {
+#if UNITY_EDITOR
+            UnityEventTools.AddPersistentListener(targetEvent, action);
+#else
+            targetEvent.AddListener(action);
+#endif
+        }
     }
     private PersistentData ExtractEventInfo(int index)
     {
-        // 获取 UnityEventBase 内部的 m_PersistentCalls
-        var baseType = typeof(UnityEventBase); // UnityEventBase 是 UnityEvent 的基类
-        var callsField = baseType.GetField("m_PersistentCalls", BindingFlags.NonPublic | BindingFlags.Instance);
-        if (callsField == null)
+        if (targetEvent == null) return null;
+        if (index < 0 || index >= targetEvent.GetPersistentEventCount()) return null;
+
+        var target = targetEvent.GetPersistentTarget(index);
+        if (target == null) return null;
+
+        string assemblyTypeName = target.GetType().FullName;
+        var methodName = targetEvent.GetPersistentMethodName(index);
+        
+        return new PersistentData
         {
-            Debug.LogError("Could not find m_PersistentCalls field in UnityEventBase.");
-            return null;
-        }
-
-        var persistentCalls = callsField.GetValue(targetEvent);
-        if (persistentCalls == null)
-        {
-            Debug.LogError("m_PersistentCalls is null.");
-            return null;
-        }
-
-        // 获取 PersistentCallGroup 中的 m_Calls 列表
-        var callListType = persistentCalls.GetType();
-        var callsFieldInGroup = callListType.GetField("m_Calls", BindingFlags.NonPublic | BindingFlags.Instance);
-        if (callsFieldInGroup == null)
-        {
-            Debug.LogError("Could not find m_Calls field in PersistentCallGroup.");
-            return null;
-        }
-
-        // 使用反射获取 List<PersistentCall>
-        var calls = callsFieldInGroup.GetValue(persistentCalls) as IList;
-        if (calls == null || calls.Count <= index)
-        {
-            Debug.LogError("Index out of range or no PersistentCalls available.");
-            return null;
-        }
-
-        // 获取指定索引的 PersistentCall
-        var persistentCall = calls[index];
-
-        // 通过反射获取 PersistentCall 的相关字段
-        Type persistentCallType = persistentCall.GetType();
-        var targetAssemblyTypeNameField = persistentCallType.GetField("m_TargetAssemblyTypeName", BindingFlags.NonPublic | BindingFlags.Instance);
-
-        if (targetAssemblyTypeNameField == null)
-        {
-            Debug.LogError("Failed to retrieve necessary fields from PersistentCall.");
-            return null;
-        }
-
-        // 获取值并赋值给目标变量
-        PersistentData data = new PersistentData();
-        data.target = targetEvent.GetPersistentTarget(index);
-        data.methodName = targetEvent.GetPersistentMethodName(index);
-        data.assemblyTypeName = (targetAssemblyTypeNameField.GetValue(persistentCall) as string).Split(",")[0];
-
-        return data;
+            target = target,
+            methodName = methodName,
+            assemblyTypeName = assemblyTypeName
+        };
     }
 }

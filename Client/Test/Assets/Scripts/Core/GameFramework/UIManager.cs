@@ -53,6 +53,11 @@ public class UIManager : MonoBehaviour
 
     public void CloseWindow<T>() where T : UIWindowComponentBase
     {
-
+        Type type = typeof(T);
+        if (UIWinDic.TryGetValue(type, out GameObject winObj))
+        {
+            T win = winObj.GetComponent<T>();
+            win?.Close();
+        }
     }
 }
