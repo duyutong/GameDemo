@@ -1,4 +1,4 @@
-using Assets.Network.Transport;
+﻿using Assets.Network.Transport;
 using Network.Models;
 using System;
 using UnityEngine;

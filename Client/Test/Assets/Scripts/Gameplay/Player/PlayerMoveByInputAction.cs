@@ -44,13 +44,13 @@ public class PlayerMoveByInputAction : MonoBehaviour
     {
         syncInterval = FrameManager.Instance.FrameSyncIntervalMs * 0.001f;
         isMoveStartde = true;
-        playerMovement.SyncLocalPlayerMovement(EOperationState.Begin, transform.position, moveLerpSpeed);
+        playerMovement?.SyncLocalPlayerMovement(EOperationState.Begin, transform.position, moveLerpSpeed);
     }
     private void OnMoveCanceled(InputAction.CallbackContext context)
     {
         isMoveStartde = false;
         rb.linearVelocity = Vector2.zero;
-        playerMovement.SyncLocalPlayerMovement(EOperationState.Finish, transform.position, moveLerpSpeed);
+        playerMovement?.SyncLocalPlayerMovement(EOperationState.Finish, transform.position, moveLerpSpeed);
     }
     private void FixedUpdate()
     {
@@ -66,7 +66,7 @@ public class PlayerMoveByInputAction : MonoBehaviour
             if (syncTimer <= 0)
             {
                 syncTimer = syncInterval;
-                playerMovement.SyncLocalPlayerMovement(EOperationState.InProgress, transform.position, moveLerpSpeed);
+                playerMovement?.SyncLocalPlayerMovement(EOperationState.InProgress, transform.position, moveLerpSpeed);
             }
         }
     }

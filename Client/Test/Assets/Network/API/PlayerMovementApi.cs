@@ -1,4 +1,4 @@
-using Network.Models.Common;
+﻿using Network.Models.Common;
 using Network.Transport.Udp;
 using UnityEngine;
 

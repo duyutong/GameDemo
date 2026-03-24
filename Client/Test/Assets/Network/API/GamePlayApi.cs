@@ -1,4 +1,4 @@
-using Network.Transport.WebSocket;
+﻿using Network.Transport.WebSocket;
 using System;
 namespace Network.API
 {

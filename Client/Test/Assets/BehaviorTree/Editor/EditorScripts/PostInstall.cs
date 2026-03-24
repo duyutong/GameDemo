@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEditor;
 using System.IO;
 
@@ -7,16 +7,16 @@ public static class PostInstall
 {
     static PostInstall()
     {
-        // Ô´ÎÄ¼þ¼Ð£º°üÀïµÄ AssetsContent
+        // Ô´ï¿½Ä¼ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ AssetsContent
         string source = Path.Combine("Packages", "com.duyutong.uianimabehaviortree");
-        // Ä¿±êÎÄ¼þ¼Ð£ºÏîÄ¿ Assets ÏÂ
+        // Ä¿ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ð£ï¿½ï¿½ï¿½Ä¿ Assets ï¿½ï¿½
         string dest = Path.Combine("Assets", "BehaviorTree");
 
         if (Directory.Exists(source) && !Directory.Exists(dest))
         {
             CopyDirectory(source, dest);
             AssetDatabase.Refresh();
-            Debug.Log("UIAnimaBehaviorTree ÒÑ°²×°µ½ Assets Ä¿Â¼ÏÂ£¡");
+            Debug.Log("UIAnimaBehaviorTree ï¿½Ñ°ï¿½×°ï¿½ï¿½ Assets Ä¿Â¼ï¿½Â£ï¿½");
         }
     }
 

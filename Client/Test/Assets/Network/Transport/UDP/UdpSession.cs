@@ -1,4 +1,4 @@
-using Assets.Network.Transport;
+ï»¿using Assets.Network.Transport;
 using Network.API;
 using Network.Core.Frame;
 using System;
@@ -23,7 +23,7 @@ namespace Network.Transport.Udp
             ApiManager.HandleUdpMessage(pattern, udpResult);
         }
         /// <summary>
-        /// Î±Á¬½Ó£¬ÊÂÊµÉÏÖ»³õÊ¼»¯ÁËÒ»Ð©±äÁ¿
+        /// Î±ï¿½ï¿½ï¿½Ó£ï¿½ï¿½ï¿½Êµï¿½ï¿½Ö»ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ò»Ð©ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         /// <returns></returns>
         public async Task Connect() { await ConnectAsync(string.Empty); }
@@ -32,7 +32,7 @@ namespace Network.Transport.Udp
             channel = new UdpClient();
             cts = new CancellationTokenSource();
 
-            // ¿Í»§¶Ë²»Á¬½Ó£¬·ñÔòÖØÁ¬ºóÒòÎª¶Ë¿Ú±ä»¯£¬»áµ¼ÖÂÏµÍ³µÄÁ¬½Ó¼ì²âÊ§°Ü
+            // ï¿½Í»ï¿½ï¿½Ë²ï¿½ï¿½ï¿½ï¿½Ó£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½Ë¿Ú±ä»¯ï¿½ï¿½ï¿½áµ¼ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½Ó¼ï¿½ï¿½Ê§ï¿½ï¿½
             //channel?.Connect(host, port);
             return Task.CompletedTask;
         }
