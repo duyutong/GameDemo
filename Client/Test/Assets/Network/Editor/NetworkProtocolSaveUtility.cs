@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using UnityEngine;
 
 public class NetworkProtocolSaveUtility
 {
@@ -28,10 +25,13 @@ public class NetworkProtocolSaveUtility
         tempStr = tempStr.Replace("#NamespaceStr#", isComm ? CSTemplate_Network.NamespaceStr_ModelsCommon : CSTemplate_Network.NamespaceStr_Models);
 
         string variableStr = "";
+        int pos = 0;
         foreach (NetworkProtocolBlockData block in blocks)
         {
             string str = block.isEnumerable ? CSTemplate_Network.ModelVariableListStr : CSTemplate_Network.ModelVariableStr;
             EditorUtilityExtensions.ToCamelAndPascal(block.variableName, out _, out string variableName_uc);
+            pos += 1;
+            str = str.Replace("#Pos#", pos.ToString());
             str = str.Replace("#TypeName#", block.typeName);
             str = str.Replace("#VariableName#", variableName_uc);
             variableStr += str;
@@ -98,7 +98,7 @@ public class NetworkProtocolSaveUtility
         foreach (NetworkProtocolEventSaveData eventSaveData in eventData)
         {
             string funcName = GetFuncNameFromPattern(eventSaveData.pattern);
-            if (exitStr.Contains($"public async Task<{funcName}Response> {funcName}(HttpMessage<{funcName}Request> msg)")) continue;
+            if (exitStr.Contains($"{funcName}(HttpMessage msg)")) continue;
 
             string str = CSTemplate_Network.HttpFuncStr;
             str = str.Replace("#Func#", funcName);
@@ -131,10 +131,13 @@ public class NetworkProtocolSaveUtility
         tempStr = tempStr.Replace("#ModelName#", modelName);
         tempStr = tempStr.Replace("#NamespaceStr#", isComm ? CSTemplate_Network.NamespaceStr_ModelsCommon : CSTemplate_Network.NamespaceStr_Models);
         string variableStr = "";
+        int pos = 0;
         foreach (NetworkProtocolBlockData block in blocks)
         {
             string str = block.isEnumerable ? CSTemplate_Network.ModelVariableListStr : CSTemplate_Network.ModelVariableStr;
+            pos += 1;
             EditorUtilityExtensions.ToCamelAndPascal(block.variableName, out _, out string variableName_uc);
+            str = str.Replace("#Pos#", pos.ToString());
             str = str.Replace("#TypeName#", block.typeName);
             str = str.Replace("#VariableName#", variableName_uc);
             variableStr += str;
@@ -194,6 +197,10 @@ public class NetworkProtocolSaveUtility
 
         string savePath = NetworkPathConfig.GetClientApiFullPath();
         string csSavePath = Path.Combine(savePath, $"{protocol_uc}Api.cs");
+
+        // 如果已经有文件了，就不生成了
+        if (File.Exists(csSavePath)) return;
+
         string tempStr = CSTemplate_Network.UdpMessageApiStr;
         tempStr = tempStr.Replace("#ProtocolName_UC#", protocol_uc);
         tempStr = tempStr.Replace("#ProtocolName_LC#", protocol_lc);
@@ -211,6 +218,10 @@ public class NetworkProtocolSaveUtility
 
         string savePath = NetworkPathConfig.GetClientApiFullPath();
         string csSavePath = Path.Combine(savePath, $"{protocol_uc}Api.cs");
+
+        // 如果已经有文件了，就不生成了
+        if (File.Exists(csSavePath)) return;
+
         string tempStr = CSTemplate_Network.WebSocketMessageApiStr;
         tempStr = tempStr.Replace("#ProtocolName_UC#", protocol_uc);
         tempStr = tempStr.Replace("#ProtocolName_LC#", protocol_lc);
@@ -237,7 +248,7 @@ public class NetworkProtocolSaveUtility
         {
             string path = eventData.pattern;
             string funcName = GetFuncNameFromPattern(path);
-            if (exitStr.Contains($"{funcName}Handle(ClientId, recievMsg.Path, Msg);")) continue;
+            if (exitStr.Contains($"{funcName}Handle(ClientId, Account, recievMsg.Path, Buffer);")) continue;
 
             string str1 = CSTemplate_Network.SwitchHandleStr;
             str1 = str1.Replace("#Path#", path);

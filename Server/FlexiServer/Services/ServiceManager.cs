@@ -3,10 +3,11 @@ using FlexiServer.Sandbox;
 using FlexiServer.Services.Interface;
 using FlexiServer.Transport;
 using System.Collections.Concurrent;
+using System.Linq.Expressions;
 
 namespace FlexiServer.Services
 {
-    public class ServiceManager(TransportManager transportMgr, SandboxManager sandboxManager,FrameManager frameManager)
+    public class ServiceManager(TransportManager transportMgr, SandboxManager sandboxManager, FrameManager frameManager)
     {
         private readonly ConcurrentDictionary<string, IService> services = new();
         public void Initialize()
@@ -18,12 +19,12 @@ namespace FlexiServer.Services
         {
             transportMgr.RemoveClientMsgHandler(OnClientMessageReceived);
         }
-        private void OnClientMessageReceived(string pattern, string clientId, string account, string msg)
+        private void OnClientMessageReceived(string pattern, string clientId, string account, byte[] buffer)
         {
             IService? service = GetService(pattern);
             if (service == null) return;
 
-            service.OnDataRecieved(clientId, account, msg);
+            service.OnDataRecieved(clientId, account, buffer);
         }
 
         public void RegisterService(IService? service)
@@ -48,18 +49,19 @@ namespace FlexiServer.Services
                     if (iface.IsGenericType)
                     {
                         var genericDef = iface.GetGenericTypeDefinition();
+                        var dataType = iface.GetGenericArguments()[0];
 
                         if (genericDef == typeof(ISandboxUpdateHandler<>))
                         {
                             var adapter = RegisterSandboxHandler(service, iface, "OnSandboxUpdate");
                             if (adapter != null)
-                                sandboxManager.OnManagerUpdated += adapter;
+                                sandboxManager.RegisterSandboxUpdateHandler(dataType, adapter);
                         }
                         else if (genericDef == typeof(ISandboxInitHandler<>))
                         {
                             var adapter = RegisterSandboxHandler(service, iface, "OnSandboxInit");
                             if (adapter != null)
-                                sandboxManager.OnManagerInited += adapter;
+                                sandboxManager.RegisterSandboxInitHandler(dataType, adapter);
                         }
                     }
                     // -------- 非泛型接口 --------
@@ -81,19 +83,21 @@ namespace FlexiServer.Services
             var method = iface.GetMethod(methodName);
             if (method == null) return null;
 
-            var typedHandler = Delegate.CreateDelegate(typeof(Action<int, List<FrameMessage>>), service, method);
-            void adapter(int _frame, List<FrameMessage> _list)
+            // 直接创建强类型委托
+            var delegateType = typeof(Action<int, List<FrameMessage>>);
+            var typedHandler = (Action<int, List<FrameMessage>>)Delegate.CreateDelegate(delegateType, service, method);
+
+            return (frame, list) =>
             {
                 List<FrameMessage> commands = [];
-                foreach (var frameMsg in _list)
+                foreach (var frameMsg in list)
                 {
-                    string pattern = frameMsg.Pattern;
-                    if (service.Pattern != pattern) continue;
+                    if (service.Pattern != frameMsg.Pattern) continue;
                     commands.Add(frameMsg);
-                    typedHandler.DynamicInvoke(_frame, commands);
                 }
-            }
-            return adapter;
+
+                if (commands.Count > 0) typedHandler(frame, commands);
+            };
         }
 
         private static Action<SandboxBase>? RegisterSandboxHandler(IService service, Type iface, string methodName)
@@ -102,14 +106,16 @@ namespace FlexiServer.Services
             var method = iface.GetMethod(methodName);
             if (method == null) return null;
 
-            var typedHandler = Delegate.CreateDelegate(typeof(Action<>).MakeGenericType(dataType), service, method);
-            void adapter(SandboxBase sandbox)
-            {
-                if (!dataType.IsInstanceOfType(sandbox)) return;
-                typedHandler.DynamicInvoke(sandbox);
-            }
+            var delegateType = typeof(Action<>).MakeGenericType(dataType);
+            var typedHandler = Delegate.CreateDelegate(delegateType, service, method);
 
-            return adapter;
+            var sandboxParam = Expression.Parameter(typeof(SandboxBase), "sandbox");
+            var casted = Expression.Convert(sandboxParam, dataType);
+            var handlerConst = Expression.Constant(typedHandler);
+            var invoke = Expression.Invoke(handlerConst, casted);
+            var lambda = Expression.Lambda<Action<SandboxBase>>(invoke, sandboxParam);
+
+            return lambda.Compile();
         }
     }
 }

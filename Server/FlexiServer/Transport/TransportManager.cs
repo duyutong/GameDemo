@@ -1,7 +1,5 @@
 ﻿using FlexiServer.Core;
 using FlexiServer.Transport.Interface;
-using System.Security.Claims;
-
 namespace FlexiServer.Transport
 {
     public class TransportManager
@@ -10,17 +8,17 @@ namespace FlexiServer.Transport
 
         #region 事件注册/注销
         private event Action<string, string, EPlayerConnectionState>? ClientConnEvent;
-        private event Action<string, string, string, string>? ClientMsgEvent;
+        private event Action<string, string, string, byte[]>? ClientMsgEvent;
         public void AddClientConnHandler(Action<string, string, EPlayerConnectionState> handler)
             => ClientConnEvent += handler;
         public void RemoveClientConnHandler(Action<string, string, EPlayerConnectionState> handler)
             => ClientConnEvent -= handler;
-        public void AddClientMsgHandler(Action<string, string, string, string> handler)
+        public void AddClientMsgHandler(Action<string, string, string, byte[]> handler)
             => ClientMsgEvent += handler;
-        public void RemoveClientMsgHandler(Action<string, string, string, string> handler)
+        public void RemoveClientMsgHandler(Action<string, string, string, byte[]> handler)
             => ClientMsgEvent -= handler;
         #endregion
-        public void RgiestTransport<T>(T? transport) where T : ITransport
+        public void RgiestTransport<T>(T? transport)where T : class, ITransport
         {
             if (transport == null) return;
             transport.SetMessageReceivedListener(OnMessageReceived);
@@ -33,24 +31,35 @@ namespace FlexiServer.Transport
             string clientId = connectData.ClientId;
             ClientConnEvent?.Invoke(clientId, account, connectionState);
         }
-        private void OnMessageReceived(SClientConnectData connectData, string pattern, string msg)
+        private void OnMessageReceived(SClientConnectData connectData, string pattern, byte[] buffer)
         {
             string account = connectData.Account;
             string clientId = connectData.ClientId;
-            ClientMsgEvent?.Invoke(pattern, clientId, account, msg);
+            ClientMsgEvent?.Invoke(pattern, clientId, account, buffer);
         }
-        public static void SendMessageToClient<T>(List<string> clienyKeys, string message) where T : class, ITransport
-        {
-            foreach (string key in clienyKeys)
-                SendMessageToClient<T>(key, message);
-        }
-        public static void SendMessageToClient<T>(string clientKey, string message) where T : class, ITransport
+        private static TTransport GetTransport<TTransport>() where TTransport : class, ITransport 
         {
             foreach (var tra in transports)
             {
-                var transport = tra as T;
-                transport?.SendMessage(clientKey, message);
+                var transport = tra as TTransport;
+                if (transport != null) return transport;
             }
+            return null!;
+        }
+        public static void SendMessageToClient<TTransport, TData>(List<string> clientKeys, string pattern, string path, TData? data) where TTransport : class, ITransport
+        {
+            TTransport transport = GetTransport<TTransport>();
+            if (transport == null) return;
+            
+            foreach (var clientKey in clientKeys)
+                transport.SendMessage(clientKey, pattern, path, data);
+        }
+        public static void SendMessageToClient<TTransport, TData>(string clientKey, string pattern, string path, TData? data) where TTransport : class, ITransport
+        {
+            TTransport transport = GetTransport<TTransport>();
+            if (transport == null) return;
+
+            transport.SendMessage(clientKey, pattern, path, data);
         }
         public void OnApplicationStarted()
         {

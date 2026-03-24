@@ -8,13 +8,12 @@ using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UIElements;
 
-public class AltasVisualElement : VisualElement
+public partial class AltasVisualElement : VisualElement
 {
     private Toggle toggle;
     private AltasInfo altasInfo;
     public Action<AltasInfo> onClearAltas;
     public Action<bool, AltasInfo> onSelectAltas;
-    public new class UxmlFactory : UxmlFactory<AltasVisualElement, UxmlTraits> { }
     public void SetAltasVE(AltasInfo _atlasInfo)
     {
         altasInfo = _atlasInfo;

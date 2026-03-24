@@ -5,23 +5,14 @@ using FlexiServer.Sandbox;
 using FlexiServer.Services.Interface;
 using FlexiServer.Transport;
 using FlexiServer.Transport.Udp;
-using Newtonsoft.Json;
-using System.Reflection.Metadata.Ecma335;
 
 namespace FlexiServer.Services
 {
     [ProcessFeature("PlayerMovement")]
-    public class PlayerMovementService : IService, IFrameResolvedHandler, ISandboxUpdateHandler<GamePlayMovementSandbox>
+    public class PlayerMovementService(SandboxManager sandboxManager, FrameManager frameManager) : IService, IFrameResolvedHandler, ISandboxUpdateHandler<GamePlayMovementSandbox>
     {
         public string Pattern => "/playerMovement";
-
-        private SandboxManager sandboxManager;
-        private FrameManager frameManager;
-        public PlayerMovementService(SandboxManager _sandboxManager, FrameManager _frameManager)
-        {
-            sandboxManager = _sandboxManager;
-            frameManager = _frameManager;
-        }
+        private int inputFrame;
         public void OnFrameResolved(int frame, List<FrameMessage> commands)
         {
             List<MovementInfo> movementInfos = [];
@@ -29,10 +20,13 @@ namespace FlexiServer.Services
             {
                 if (command.Path == NetworkEventPaths.PlayerMovement_MoveInGame)
                 {
-                    var recievMsg = JsonConvert.DeserializeObject<UdpMessage<MovementInfo>>(command.Command);
+                    var recievMsg = command.Command.ConvertData<UdpMessage>();
                     if (recievMsg == null) continue;
                     if (recievMsg.Data == null) continue;
-                    movementInfos.Add(recievMsg.Data);
+
+                    var info = recievMsg.Data.ConvertData<MovementInfo>();
+                    if (info == null) continue; 
+                    movementInfos.Add(info);
                 }
             }
 
@@ -46,26 +40,24 @@ namespace FlexiServer.Services
         }
         public void OnSandboxUpdate(GamePlayMovementSandbox sandbox)
         {
+            if (sandbox == null) return;
+
             int ServerCurrentFrame = frameManager.ServerCurrentFrame;
             if (!sandbox.HasSendableUpdate(ServerCurrentFrame)) return;
 
             var movmentInfos = sandbox.GetMoveInfos(ServerCurrentFrame);
             if (movmentInfos.Count == 0) return;
-            
-            UdpResult<List<MovementInfo>> sendMsg = new();
-            sendMsg.Pattern = Pattern;
-            sendMsg.Path = NetworkEventPaths.PlayerMovement_MoveInGame;
-            sendMsg.Data = movmentInfos;
-            sendMsg.ServerFrame = ServerCurrentFrame;
-            sendMsg.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-            string udpMsgJson = JsonConvert.SerializeObject(sendMsg);
-            TransportManager.SendMessageToClient<UdpTransport>(sandbox.GetPlayerAccounts(), udpMsgJson);
+            string path = NetworkEventPaths.PlayerMovement_MoveInGame;
+            TransportManager.SendMessageToClient<UdpTransport, List<MovementInfo>>(sandbox.GetPlayerAccounts(), Pattern, path, movmentInfos);
+            
         }
-        public void OnDataRecieved(string ClientId, string Account, string Msg)
+        public void OnDataRecieved(string ClientId, string Account, byte[] Buffer)
         {
-            TransportMessage? recievMsg = JsonConvert.DeserializeObject<TransportMessage>(Msg);
+            var recievMsg = Buffer.ConvertData<UdpMessage>();
             if (recievMsg == null) return;
+
+            inputFrame = recievMsg.InputFrame;
 
             //Console.ForegroundColor = ConsoleColor.White;
             //Console.Write("[PlayerMovementService]");
@@ -80,7 +72,7 @@ namespace FlexiServer.Services
                 #region AutoContext
 
                 case NetworkEventPaths.PlayerMovement_MoveInGame:
-                    MoveInGameHandle(ClientId, Account, recievMsg.Path, Msg);
+                    MoveInGameHandle(ClientId, Account, recievMsg.Path, Buffer);
                     break;
 
                 #endregion Switch_Handle
@@ -89,12 +81,9 @@ namespace FlexiServer.Services
             }
         }
         #region AutoContext
-        private void MoveInGameHandle(string clientId, string account, string path, string msg)
+        private void MoveInGameHandle(string clientId, string account, string path, byte[] buffer)
         {
-            var recievMsg = JsonConvert.DeserializeObject<UdpMessage<MovementInfo>>(msg);
-            if (recievMsg == null) return;
-
-            frameManager.AddFrameMessageToPool(recievMsg.InputFrame, clientId, Pattern, path, msg);
+            frameManager.AddFrameMessageToPool(inputFrame, clientId, Pattern, path, buffer);
         }
 
         #endregion Function_Handle

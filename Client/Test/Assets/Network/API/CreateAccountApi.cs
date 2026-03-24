@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using UnityEngine;
 using Network.Models;
+using Assets.Network.Transport;
 namespace Network.API
 {
     public class CreateAccountApi : HttpMessageApi
@@ -12,7 +13,7 @@ namespace Network.API
             {
                 bool success = result.Code == 200 && result.Data != null;
 
-                if (success) action?.Invoke(success, result.Data);
+                if (success) action?.Invoke(success, result.Data.ConvertData<CreateAccountCreateResponse>());
                 else
                 {
                     Debug.LogError($"CreateAccountApi CreateAccountCreate failed: Code={result.Code}, Message={result.Message}");

@@ -1,9 +1,8 @@
+using Assets.Network.Transport;
 using Network.API;
 using Network.Core.Frame;
-using Newtonsoft.Json;
 using System;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -14,14 +13,15 @@ namespace Network.Transport.Udp
         private FrameManager frameManager => FrameManager.Instance;
         public UdpSession(string host, int port) : base(host, port) { }
 
-        public override void OnMessageReceived(string msg)
+        public override void OnMessageReceived(byte[] buffer)
         {
-            UdpResult<object> udpResult = JsonConvert.DeserializeObject<UdpResult<object>>(msg);
+            Debug.Log($"Received UDP message, length: {buffer.Length}");
+            var udpResult = buffer.ConvertData<UdpResult>();
             if (udpResult == null) return;
 
             frameManager.RefreshServerFrame(udpResult.ServerFrame, udpResult.Timestamp);
             string pattern = udpResult.Pattern;
-            ApiManager.HandleUdpMessage(pattern, msg);
+            ApiManager.HandleUdpMessage(pattern, udpResult);
         }
         /// <summary>
         /// 伪连接，事实上只初始化了一些变量
@@ -45,10 +45,20 @@ namespace Network.Transport.Udp
             channel?.Dispose();
         }
 
-        protected override async void OnSendMessageAsync(string udpMessage)
+        protected override async void OnSendMessageAsync<TData>(string pattern, string path, TData messageObj)
         {
-            byte[] data = Encoding.UTF8.GetBytes(udpMessage);
-            await channel.SendAsync(data, data.Length, host, port);
+            if (channel == null) return;
+
+            UdpMessage udpMessage = new UdpMessage();
+            udpMessage.Account = NetworkManager.Instance.Account;
+            udpMessage.InputFrame = FrameManager.Instance.LocalCurrentFrame;
+            udpMessage.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            udpMessage.Pattern = pattern;
+            udpMessage.Path = path;
+            udpMessage.Data = messageObj.ToBytes();
+
+            var buffer = udpMessage.ToBytes();
+            await channel.SendAsync(buffer, buffer.Length, host, port);
         }
 
         protected override async void ReceiveLoopAsync()
@@ -58,8 +68,7 @@ namespace Network.Transport.Udp
                 try
                 {
                     UdpReceiveResult result = await channel.ReceiveAsync();
-                    string msg = Encoding.UTF8.GetString(result.Buffer);
-                    OnMessageReceived(msg);
+                    OnMessageReceived(result.Buffer);
                 }
                 catch (Exception) { }
 

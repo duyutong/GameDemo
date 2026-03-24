@@ -1,9 +1,15 @@
 ﻿namespace FlexiServer.Transport.Http
 {
-    public class HttpResult<T>
+    [global::ProtoBuf.ProtoContract(Name = @"HttpResult")]
+    public class HttpResult
     {
+        [global::ProtoBuf.ProtoMember(1)]
         public int Code { get; set; }
-        public string? Message { get; set; }
-        public T? Data { get; set; }
+
+        [global::ProtoBuf.ProtoMember(2)]
+        public string Message { get; set; }
+
+        [global::ProtoBuf.ProtoMember(3)]
+        public byte[] Data { get; set; }
     }
 }

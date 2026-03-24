@@ -1,14 +1,22 @@
 ﻿namespace Network.Transport.WebSocket
 {
-    public class WebSocketMessage<T>
+    [global::ProtoBuf.ProtoContract(Name = @"WebSocketMessage")]
+    public class WebSocketMessage
     {
         public WebSocketMessage() { }
-        public EWsMessageType Type { get; set; } = EWsMessageType.Normal;
+
+        [global::ProtoBuf.ProtoMember(1)]
         public string Pattern { get; set; } = "";
+        [global::ProtoBuf.ProtoMember(2)]
         public string Path { get; set; } = "";
-        public T Data { get; set; }
-        public int ServerFrame { get; set; } = 0;
-        public int InputFrame { get; set; } = 0;
+
+        [global::ProtoBuf.ProtoMember(3)]
         public long Timestamp { get; set; }
+
+        [global::ProtoBuf.ProtoMember(4)]
+        public int InputFrame { get; set; } = 0;
+
+        [global::ProtoBuf.ProtoMember(5)]
+        public byte[] Data { get; set; }
     }
 }

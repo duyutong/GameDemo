@@ -11,8 +11,12 @@ using FlexiServer.Transport.Udp;
 using FlexiServer.Transport.Web;
 
 var builder = WebApplication.CreateBuilder(args);
-var argDict = args.Select(a => a.Split('=', 2)) .Where(p => p.Length == 2).ToDictionary(p => p[0], p => p[1]);
+var argDict = args.Select(a => a.Split('=', 2)).Where(p => p.Length == 2).ToDictionary(p => p[0], p => p[1]);
+
 string role = argDict.GetValueOrDefault("role", "Debug");
+string format = argDict.GetValueOrDefault("format", "Protobuf");
+GlobalSetting.Role = role;
+GlobalSetting.FormatStr = format;
 
 var processes = builder.Configuration.GetSection("Processes").Get<Dictionary<string, ProcessInfo>>();
 var processInfo = processes != null && processes.ContainsKey(role) ? processes[role] : null;

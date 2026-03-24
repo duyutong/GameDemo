@@ -1,5 +1,4 @@
 using FlexiServer.Core;
-using FlexiServer.Models;
 using FlexiServer.Services;
 namespace FlexiServer.Transport.Http
 {
@@ -10,61 +9,64 @@ namespace FlexiServer.Transport.Http
         {
             #region AutoContext
             
-            app.MapPost("/room/create", async (HttpMessage<RoomCreateRequest> msg) =>
+            app.MapPost("/room/create", async (HttpContext context) =>
             {
-                var result = new HttpResult<RoomCreateResponse>();
+                HttpMessage msg = await ReadHttpMessageAsync(context);
+                var result = new HttpResult();
                 try
                 {
                     RoomService service = app.Services.GetRequiredService<RoomService>();
-                    var res = service.RoomCreate(msg);
+                    var res = await service.RoomCreate(msg);
                     result.Code = 200;
                     result.Message = "succ";
-                    result.Data = res;
+                    result.Data = res.ToBytes();
                 }
                 catch (ServerException ex)
                 {
-                    result.Code = 1;                 // 可以自定义不同错误码
+                    result.Code = ex.Code;                 // 可以自定义不同错误码
                     result.Message = ex.Message;
                 }
-                return result;
+                ReturnHttpResultTask(context, result);
             });
             
-            app.MapPost("/room/getRooms", async (HttpMessage<RoomGetRoomsRequest> msg) =>
+            app.MapPost("/room/getRooms", async (HttpContext context) =>
             {
-                var result = new HttpResult<RoomGetRoomsResponse>();
+                HttpMessage msg = await ReadHttpMessageAsync(context);
+                var result = new HttpResult();
                 try
                 {
                     RoomService service = app.Services.GetRequiredService<RoomService>();
-                    var res = service.RoomGetRooms(msg);
+                    var res = await service.RoomGetRooms(msg);
                     result.Code = 200;
                     result.Message = "succ";
-                    result.Data = res;
+                    result.Data = res.ToBytes();
                 }
                 catch (ServerException ex)
                 {
-                    result.Code = 1;                 // 可以自定义不同错误码
+                    result.Code = ex.Code;                 // 可以自定义不同错误码
                     result.Message = ex.Message;
                 }
-                return result;
+                ReturnHttpResultTask(context, result);
             });
             
-            app.MapPost("/room/findRoom", async (HttpMessage<RoomFindRoomRequest> msg) =>
+            app.MapPost("/room/findRoom", async (HttpContext context) =>
             {
-                var result = new HttpResult<RoomFindRoomResponse>();
+                HttpMessage msg = await ReadHttpMessageAsync(context);
+                var result = new HttpResult();
                 try
                 {
                     RoomService service = app.Services.GetRequiredService<RoomService>();
-                    var res = service.RoomFindRoom(msg);
+                    var res = await service.RoomFindRoom(msg);
                     result.Code = 200;
                     result.Message = "succ";
-                    result.Data = res;
+                    result.Data = res.ToBytes();
                 }
                 catch (ServerException ex)
                 {
-                    result.Code = 1;                 // 可以自定义不同错误码
+                    result.Code = ex.Code;                 // 可以自定义不同错误码
                     result.Message = ex.Message;
                 }
-                return result;
+                ReturnHttpResultTask(context, result);
             });
             
             #endregion MapPostStr

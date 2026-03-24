@@ -14,24 +14,7 @@ public class ResourceLoader
 
     public static void Load<T>(string pathOrKey, Action<T> onDone, bool usePool = false) where T : UnityEngine.Object
     {
-#if UNITY_EDITOR
-        if (typeof(T) == typeof(TextAsset))
-        {
-            string json = File.ReadAllText(pathOrKey);
-            onDone?.Invoke(new TextAsset(json) as T);
-        }
-        else if (typeof(T) == typeof(Sprite))
-        {
-            var sprite = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>(pathOrKey);
-            onDone?.Invoke(sprite as T);
-        }
-        else
-        {
-            var asset = UnityEditor.AssetDatabase.LoadAssetAtPath<T>(pathOrKey);
-            onDone?.Invoke(asset);
-        }
-#else
-         if (usePool)
+        if (usePool)
         {
             if (pool.TryGetValue(pathOrKey, out var q) && q.Count > 0)
             {
@@ -39,9 +22,8 @@ public class ResourceLoader
             }
         }
 
-        if (typeof(T) == typeof(Sprite)){ LoadSpriteAsync(pathOrKey,onDone);}
-        else { LoadAssetAsync(pathOrKey, onDone, usePool); }
-#endif
+        if (typeof(T) == typeof(Sprite)) { _ = LoadSpriteAsync(pathOrKey, onDone); }
+        else { _ = LoadAssetAsync(pathOrKey, onDone, usePool); }
     }
     private static async Task LoadAssetAsync<T>(string pathOrKey, Action<T> onDone, bool usePool = false) where T : UnityEngine.Object
     {
@@ -66,7 +48,8 @@ public class ResourceLoader
     {
         string spriteName = Path.GetFileNameWithoutExtension(pathOrKey);
         string atlasName = Path.GetFileName(Path.GetDirectoryName(pathOrKey));
-        var handleAtlas = Addressables.LoadAssetAsync<SpriteAtlas>(atlasName);
+        string path = $"Assets/AddressableAssets/Art/Atlas/{atlasName}.spriteatlasv2";
+        var handleAtlas = Addressables.LoadAssetAsync<SpriteAtlas>(path);
         await handleAtlas.Task;
 
         if (handleAtlas.Status != AsyncOperationStatus.Succeeded)
@@ -78,8 +61,11 @@ public class ResourceLoader
         Sprite sprite = handleAtlas.Result.GetSprite(spriteName);
         if (sprite != null)
         {
-            if (!pool.ContainsKey(pathOrKey))
+            if (!pool.ContainsKey(pathOrKey)) 
+            {
                 pool[pathOrKey] = new Queue<UnityEngine.Object>();
+                pool[pathOrKey].Enqueue(sprite);
+            }  
         }
 
         onDone?.Invoke(sprite as T);

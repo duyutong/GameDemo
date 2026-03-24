@@ -7,8 +7,6 @@ using Network.Models.Common;
 using Network.Transport.Http;
 using Network.Transport.Udp;
 using Network.Transport.WebSocket;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -81,6 +79,7 @@ namespace Network
 
             Account = response.Account;
             Token = response.Token;
+            FrameManager.Instance.FrameSyncIntervalMs = response.FrameSyncIntervalMs;
             Debug.Log($"Login Success! Account: {Account}");
 
             var processes = response.ProcessInfos;
@@ -99,7 +98,7 @@ namespace Network
                 webSocketTransport.RegistService(host, port, info.Modules);
                 udpTransport.RegistService(host, port, info.Modules);
 
-               // if (info.UseWebSocket) WebSocketConnect(role);
+                // if (info.UseWebSocket) WebSocketConnect(role);
             }
         }
         private void HandleError(ErrorCode errorCode)
@@ -121,7 +120,7 @@ namespace Network
             Token = response.Token;
         }
         #region 协议支持
-        public async Task<HttpResult<TRes>> HttpPostAsync<TReq, TRes>(string path, TReq req)
+        public async Task<HttpResult> HttpPostAsync<TReq, TRes>(string path, TReq req)
         {
             var result = await httpTransport.PostAsync<TReq, TRes>(path, req);
             return result;
@@ -134,35 +133,17 @@ namespace Network
         }
         public void SendWebSocketMessage<T>(string pattern, string path, T messageObj)
         {
-            WebSocketMessage<T> wsMessage = new WebSocketMessage<T>();
-            wsMessage.Type = EWsMessageType.Normal;
-            wsMessage.InputFrame = FrameManager.Instance.LocalCurrentFrame;
-            wsMessage.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            wsMessage.Pattern = pattern;
-            wsMessage.Path = path;
-            wsMessage.Data = messageObj;
-
-            string msg = JsonConvert.SerializeObject(wsMessage);
-            webSocketTransport.SendMessage(pattern, msg);
+            webSocketTransport.SendMessage(pattern, path, messageObj);
         }
 
-        public async void  UpdConnect(string role) 
+        public async void UpdConnect(string role)
         {
             int port = rolePortDic.ContainsKey(role) ? rolePortDic[role] : this.port;
             await udpTransport.Connect(port);
         }
-        public void SendUdpMessage<T>(string pattern, string path, T messageObj) 
+        public void SendUdpMessage<T>(string pattern, string path, T messageObj)
         {
-            UdpMessage<T> udpMessage = new UdpMessage<T>();
-            udpMessage.Account = Account;
-            udpMessage.InputFrame = FrameManager.Instance.LocalCurrentFrame;
-            udpMessage.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            udpMessage.Pattern = pattern;
-            udpMessage.Path = path;
-            udpMessage.Data = messageObj;
-
-            string msg = JsonConvert.SerializeObject(udpMessage);
-            udpTransport.SendMessage(pattern, msg);
+            udpTransport.SendMessage(pattern, path, messageObj);
         }
         #endregion
     }

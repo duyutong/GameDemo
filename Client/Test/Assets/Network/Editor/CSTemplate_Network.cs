@@ -9,10 +9,10 @@ public class CSTemplate_Network
     public const string ModelStr =
 @"using FlexiServer.Models;
 using FlexiServer.Models.Common;
-using System.Numerics;
 using static EnumDefinitions;
 namespace FlexiServer#NamespaceStr#
 {
+    [global::ProtoBuf.ProtoContract(Name = @""#ModelName#"")]
     public class #ModelName#
     {
         #region AutoContext
@@ -25,10 +25,10 @@ namespace FlexiServer#NamespaceStr#
 @"using System;
 using System.Collections.Generic;
 using Network.Models.Common;
-using System.Numerics;
 using static EnumDefinitions;
 namespace Network#NamespaceStr#
 {
+    [global::ProtoBuf.ProtoContract(Name = @""#ModelName#"")]
     public class #ModelName#
     {
         #region AutoContext
@@ -38,14 +38,17 @@ namespace Network#NamespaceStr#
 }
 ";
     public const string ModelVariableListStr = @"
-        public List<#TypeName#> #VariableName# { get; set; }";
+        [global::ProtoBuf.ProtoMember(#Pos#)]
+        public List<#TypeName#> #VariableName# { get; set; }
+";
 
     public const string ModelVariableStr = @"
-        public #TypeName# #VariableName# { get; set; }";
+        [global::ProtoBuf.ProtoMember(#Pos#)]
+        public #TypeName# #VariableName# { get; set; }
+";
 
     public const string HttpEndpointsStr =
 @"using FlexiServer.Core;
-using FlexiServer.Models;
 using FlexiServer.Services;
 namespace FlexiServer.Transport.Http
 {
@@ -61,23 +64,24 @@ namespace FlexiServer.Transport.Http
     }
 }";
     public const string MapPostStr = @"
-            app.MapPost(""#Pattern#"", async (HttpMessage<#Func#Request> msg) =>
+            app.MapPost(""#Pattern#"", async (HttpContext context) =>
             {
-                var result = new HttpResult<#Func#Response>();
+                HttpMessage msg = await ReadHttpMessageAsync(context);
+                var result = new HttpResult();
                 try
                 {
                     #ProtocolName_UC#Service service = app.Services.GetRequiredService<#ProtocolName_UC#Service>();
                     var res = await service.#Func#(msg);
                     result.Code = 200;
                     result.Message = ""succ"";
-                    result.Data = res;
+                    result.Data = res.ToBytes();
                 }
                 catch (ServerException ex)
                 {
                     result.Code = ex.Code;                 // 可以自定义不同错误码
                     result.Message = ex.Message;
                 }
-                return result;
+                ReturnHttpResultTask(context, result);
             });
             ";
 
@@ -96,12 +100,14 @@ namespace FlexiServer.Services
     }
 }";
     public const string HttpFuncStr = @"
-        public async Task<#Func#Response> #Func#(HttpMessage<#Func#Request> msg)
+        public async Task<#Func#Response> #Func#(HttpMessage msg)
         {
-            #Func#Request? req = msg.Data;
+            if (msg == null || msg.Data == null) throw new ServerException(ErrorCode.None, ""Data is Null"");
+
+            #Func#Request? req = msg.Data.ConvertData<#Func#Request>();
             if (req == null) throw new ServerException(ErrorCode.None, ""#Func#Request is Null"");
             
-            #Func#Response res = new #Func#Response();
+            #Func#Response res = new();
             return res;
         }";
     public const string HttpApiStr =
@@ -124,7 +130,7 @@ namespace Network.API
             {
                 bool success = result.Code == 200 && result.Data != null;
 
-                if (success) action?.Invoke(success, result.Data);
+                if (success) action?.Invoke(success, result.Data.ConvertData<#Func#Response>());
                 else 
                 {
                     Debug.LogError($""#ProtocolName_UC#Api #Func# failed: Code={result.Code}, Message={result.Message}"");
@@ -144,19 +150,17 @@ namespace Network.API
         {
             SendUdpMessage(Pattern, path, messageObj);
         }
-        public override void OnDataRecieved(string pattern, string msg)
+        public override void OnDataRecieved(string pattern, UdpResult result)
         {
-            Debug.Log($""[#ProtocolName_UC#Api] OnDataRecieved {msg}"");
-            base.OnDataRecieved(pattern, msg);
+            // Debug.Log($""[#ProtocolName_UC#Api] OnDataRecieved | ServerFrame: {result.ServerFrame}"");
+            base.OnDataRecieved(pattern, result);
         }
     }
 }
 ";
     public const string WebSocketMessageApiStr =
 @"using Network;
-using Network.Models.Common;
 using Network.Transport.WebSocket;
-using Newtonsoft.Json;
 using System;
 using UnityEngine;
 namespace Network.API
@@ -169,18 +173,10 @@ namespace Network.API
         {
             base.SendWebSocketMessage(Pattern, path, messageObj);
         }
-        public override void AddListener<TResult>(string path, Action<WebSocketResult<TResult>> callBack)
+        public override void OnDataRecieved(string pattern, WebSocketResult result)
         {
-            base.AddListener(path, callBack);
-        }
-        public override void RemoveListener<TResult>(string path, Action<WebSocketResult<TResult>> callBack)
-        {
-            base.RemoveListener(path, callBack);
-        }
-        public override void OnDataRecieved(string pattern, string msg)
-        {
-            Debug.Log($""[#ProtocolName_UC#Api] OnDataRecieved {msg}"");
-            base.OnDataRecieved(pattern, msg);
+            Debug.Log($""[#ProtocolName_UC#Api] OnDataRecieved"");
+            base.OnDataRecieved(pattern, result);
         }
     }
 }";
@@ -190,16 +186,15 @@ using FlexiServer.Models.Common;
 using FlexiServer.Services.Interface;
 using FlexiServer.Transport;
 using FlexiServer.Transport.Web;
-using Newtonsoft.Json;
 namespace FlexiServer.Services
 {
     [ProcessFeature(""#ProtocolName_UC#"")]
     public class #ProtocolName_UC#Service : IService
     {
         public string Pattern => ""#Pattern#"";
-        public void OnDataRecieved(string ClientId, string Acount, string Msg)
+        public void OnDataRecieved(string ClientId, string Account, byte[] Buffer)
         {
-            WebSocketMessage<object>? recievMsg = JsonConvert.DeserializeObject<WebSocketMessage<object>>(Msg);
+            var recievMsg = Buffer.ConvertData<WebSocketMessage>();
             if (recievMsg == null) return;
 
             Console.ForegroundColor = ConsoleColor.White;
@@ -225,12 +220,12 @@ namespace FlexiServer.Services
     public const string SwitchHandleStr =
 @"              
                 case NetworkEventPaths.#Pattern_UC#_#Func#:
-                    #Func#Handle(ClientId, Account, recievMsg.Path, Msg);
+                    #Func#Handle(ClientId, Account, recievMsg.Path, Buffer);
                     break;
 ";
     public const string FunctionHandleStr =
         @"
-        private void #Func#Handle(string clientId, string account, string path, string msg)
+        private void #Func#Handle(string clientId, string account, string path, byte[] buffer)
         {
             
         }";

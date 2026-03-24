@@ -14,7 +14,7 @@ using Edge = UnityEditor.Experimental.GraphView.Edge;
 
 public static class GraphSaveUtility
 {
-    private static List<BTTargetAnimaCurve>bTTargetAnimaCurves = new List<BTTargetAnimaCurve>();
+    private static List<BTTargetAnimaCurve> bTTargetAnimaCurves = new List<BTTargetAnimaCurve>();
     private static List<BTTargetObject> bTTargetObjects = new List<BTTargetObject>();
     private static List<BTTargetEvent> bTTargetEvents = new List<BTTargetEvent>();
     private static List<BTTargetContainer> bTTargetContainers = new List<BTTargetContainer>();
@@ -151,7 +151,7 @@ public static class GraphSaveUtility
                 bTTargetContainer?.SerializeSelf();
                 bTTargetContainers.Add(bTTargetContainer);
             }
-            if (field.FieldType == typeof(BTTargetAnimaCurve)) 
+            if (field.FieldType == typeof(BTTargetAnimaCurve))
             {
                 BTTargetAnimaCurve bTTargetAnimaCurve = (BTTargetAnimaCurve)field.GetValue(bTState);
                 bTTargetAnimaCurve?.SerializeSelf();
@@ -336,9 +336,10 @@ public static class GraphSaveUtility
         {
             BTBaseNode baseNode = node as BTBaseNode;
             if (baseNode == null) continue;
+
             baseNode.btState.Save();
-            NodeData data = new NodeData();
-            Dictionary<string, object> _variableValues = new Dictionary<string, object>();
+            NodeData data = new();
+            Dictionary<string, object> _variableValues = new();
             FieldInfo[] fields = baseNode.btState.GetType().GetFields();
             foreach (FieldInfo field in fields)
             {

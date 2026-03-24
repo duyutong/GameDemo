@@ -3,6 +3,7 @@
     public enum ErrorCode
     {
         None = 0,
+        TokenExpired = 401,
         InvalidAccount = 1001,
         InvalidPassword = 1002,
         AccountNotExists = 1003,

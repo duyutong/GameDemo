@@ -1,13 +1,27 @@
 namespace FlexiServer.Transport.Udp
 {
-    public class UdpResult<T>
+    [global::ProtoBuf.ProtoContract(Name = @"UdpResult")]
+    public class UdpResult
     {
+        [global::ProtoBuf.ProtoMember(1)]
         public int Code { get; set; } = 200;
+
+        [global::ProtoBuf.ProtoMember(2)]
         public string Message { get; set; } = "succ";
+
+        [global::ProtoBuf.ProtoMember(3)]
         public string Pattern { get; set; } = "";
+
+        [global::ProtoBuf.ProtoMember(4)]
         public string Path { get; set; } = "";
-        public T? Data { get; set; }
+
+        [global::ProtoBuf.ProtoMember(5)]
+        public byte[]? Data { get; set; }
+
+        [global::ProtoBuf.ProtoMember(6)]
         public int ServerFrame { get; set; } = 0;
+
+        [global::ProtoBuf.ProtoMember(7)]
         public long Timestamp { get; set; }
     }
 }

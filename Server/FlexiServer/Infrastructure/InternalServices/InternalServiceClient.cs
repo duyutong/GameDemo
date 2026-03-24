@@ -1,4 +1,5 @@
 ﻿using FlexiServer.Models.Common;
+using FlexiServer.Transport;
 using FlexiServer.Transport.Http;
 using Newtonsoft.Json;
 using System.Text;
@@ -8,21 +9,30 @@ namespace FlexiServer.Infrastructure.InternalServices
     public class InternalServiceClient(IConfiguration config)
     {
         private HttpClient client = new HttpClient();
-        public async Task<HttpResult<TRes>> PostAsync<TReq, TRes>(string role, string path, TReq req)
+        public async Task<HttpResult> PostAsync<TReq, TRes>(string role, string path, TReq req)
         {
             string url = $"{GetUrlByRole(role)}{path}";
 
-            HttpMessage<TReq> message = new()
+            HttpMessage message = new()
             {
                 Account = "Server",
-                Data = req,
+                Data = req.ToBytes(),
             };
-            string json = JsonConvert.SerializeObject(message);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync(url, content);
-            string resJson = await response.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<HttpResult<TRes>>(resJson)!;
+            HttpContent content = GetHttpContent(message);
+            var response = await client.PostAsync(url, content);
+            byte[] resBytes = await response.Content.ReadAsByteArrayAsync();
+
+            return resBytes.ConvertData<HttpResult>()!;
+        }
+        private HttpContent GetHttpContent(HttpMessage message)
+        {
+            HttpContent content;
+            byte[] bytes = message.ToBytes();
+            content = new ByteArrayContent(bytes);
+            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-protobuf");
+
+            return content;
         }
         private string GetUrlByRole(string role)
         {

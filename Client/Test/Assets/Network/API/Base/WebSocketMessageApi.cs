@@ -1,6 +1,4 @@
 ﻿using Network.Transport.WebSocket;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
@@ -9,83 +7,49 @@ namespace Network.API
     public abstract class WebSocketMessageApi
     {
         public abstract string Pattern { get; set; }
-        private Dictionary<string, Dictionary<Delegate, Action<WebSocketResult<object>>>> listeners = new();
+        private readonly Dictionary<string, List<Action<WebSocketResult>>> listeners = new();
         public virtual void SendWebSocketMessage<T>(string pattern, string path, T messageObj)
         {
             NetworkManager.Instance.SendWebSocketMessage(pattern, path, messageObj);
         }
-        public virtual void OnDataRecieved(string pattern, string msg)
+        public virtual void OnDataRecieved(string pattern, WebSocketResult result)
         {
-            WebSocketResult<object> objResult = JsonConvert.DeserializeObject<WebSocketResult<object>>(msg);
-            if (objResult == null) return;
-            Dispatch(objResult.Path, objResult);
+            if (result == null) return;
+            Dispatch(result);
         }
-        private void Dispatch(string path, WebSocketResult<object> result)
+        private void Dispatch(WebSocketResult result)
         {
-            if (listeners.TryGetValue(path, out var map))
-            {
-                foreach (var wrapper in map.Values)
-                    wrapper(result);
-            }
-        }
+            string path = result.Path;
+            if (string.IsNullOrEmpty(path)) return;
+            if (!listeners.TryGetValue(path, out var list)) return;
 
-        protected float GetDeltaSeconds(WebSocketResult<object> wsMessage)
-        {
-            long currTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            long inputTime = wsMessage.Timestamp;
-            float deltaSeconds = (currTime - inputTime) / 1000f;
-            return deltaSeconds;
+            foreach (var callback in list) callback(result);
         }
-        public virtual void AddListener<T>(string path, Action<WebSocketResult<T>> callBack)
+        public virtual void AddListener(string path, Action<WebSocketResult> callback)
         {
-            if (callBack == null) return;
+            if (string.IsNullOrEmpty(path) || callback == null) return;
 
-            if (!listeners.TryGetValue(path, out var map))
+            if (!listeners.TryGetValue(path, out var list))
             {
-                map = new Dictionary<Delegate, Action<WebSocketResult<object>>>();
-                listeners[path] = map;
+                list = new List<Action<WebSocketResult>>();
+                listeners[path] = list;
             }
 
-            // 已经注册过，直接 return
-            if (map.ContainsKey(callBack)) return;
+            // 防止重复注册同一个 delegate 实例
+            if (list.Contains(callback)) return;
 
-            Action<WebSocketResult<object>> wrapper = (objResult) =>
-            {
-                var real = new WebSocketResult<T>
-                {
-                    Code = objResult.Code,
-                    Message = objResult.Message,
-                    ServerFrame = objResult.ServerFrame,
-                    Timestamp = objResult.Timestamp,
-                    Path = objResult.Path,
-                    Pattern = objResult.Pattern,
-                    Data = ConvertData<T>(objResult.Data)
-                };
-
-                callBack(real);
-            };
-
-            map[callBack] = wrapper;
+            list.Add(callback);
         }
 
-        public virtual void RemoveListener<T>(string path, Action<WebSocketResult<T>> callBack)
+        public virtual void RemoveListener(string path, Action<WebSocketResult> callback)
         {
-            if (callBack == null) return;
-            if (!listeners.TryGetValue(path, out var map)) return;
-            if (!map.Remove(callBack)) return;
+            if (string.IsNullOrEmpty(path) || callback == null) return;
+            if (!listeners.TryGetValue(path, out var list)) return;
 
-            if (map.Count == 0) listeners.Remove(path);
-        }
-        private T ConvertData<T>(object data)
-        {
-            if (data == null) return default;
+            list.Remove(callback);
 
-            if (data is T value) return value;
-
-            if (data is JToken token)
-                return token.ToObject<T>();
-
-            return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(data));
+            // 如果列表为空，删除整个 path
+            if (list.Count == 0) listeners.Remove(path);
         }
     }
 }

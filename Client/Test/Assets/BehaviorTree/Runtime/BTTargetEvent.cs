@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Reflection;
 using Unity.VisualScripting;
-using UnityEditor.Events;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -29,8 +27,12 @@ public class PersistentData
     }
     private bool IsPrefabStage()
     {
-        var stage = PrefabStageUtility.GetCurrentPrefabStage();
+#if UNITY_EDITOR
+        var stage = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
         return stage != null; // 如果不为空，说明当前是 Prefab 编辑窗口
+#else
+        return false;
+#endif
     }
 }
 

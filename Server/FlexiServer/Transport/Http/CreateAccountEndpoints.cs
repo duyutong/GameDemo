@@ -10,23 +10,24 @@ namespace FlexiServer.Transport.Http
         {
             #region AutoContext
             
-            app.MapPost("/createAccount/create", async (HttpMessage<CreateAccountCreateRequest> msg) =>
+            app.MapPost("/createAccount/create", async (HttpContext context) =>
             {
-                var result = new HttpResult<CreateAccountCreateResponse>();
+                HttpMessage msg = await ReadHttpMessageAsync(context);
+                var result = new HttpResult();
                 try
                 {
                     CreateAccountService service = app.Services.GetRequiredService<CreateAccountService>();
                     var res = await service.CreateAccountCreate(msg);
                     result.Code = 200;
                     result.Message = "succ";
-                    result.Data = res;
+                    result.Data = res.ToBytes();
                 }
                 catch (ServerException ex)
                 {
                     result.Code = ex.Code;                 // 可以自定义不同错误码
                     result.Message = ex.Message;
                 }
-                return result;
+                ReturnHttpResultTask(context, result);
             });
             
             #endregion MapPostStr

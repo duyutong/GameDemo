@@ -13,18 +13,22 @@ using System.Threading.Tasks;
 namespace FlexiServer.Services
 {
     [ProcessFeature("Login")]
-    public class LoginService(TokenManager tokenService, SandboxManager sandboxManager, Database db, IConfiguration config)
+    public class LoginService(TokenManager tokenService, FrameManager frameManager, Database db, IConfiguration config)
     {
         #region AutoContext
-        public async Task<LoginHttpLoginResponse> LoginHttpLogin(HttpMessage<LoginHttpLoginRequest> msg)
+        public async Task<LoginHttpLoginResponse> LoginHttpLogin(HttpMessage msg)
         {
-            LoginHttpLoginRequest? req = msg.Data;
+            if (msg == null || msg.Data == null) throw new ServerException(ErrorCode.None, "Data is Null");
+
+            var req = msg.Data.ConvertData<LoginHttpLoginRequest>();
             return req == null ? throw new ServerException(ErrorCode.None, "LoginRequest is Null")
                 : await RequestHandler(req);
         }
-        public async Task<LoginValidateResponse> LoginValidate(HttpMessage<LoginValidateRequest> msg)
+        public async Task<LoginValidateResponse> LoginValidate(HttpMessage msg)
         {
-            LoginValidateRequest? req = msg.Data;
+            if (msg == null || msg.Data == null) throw new ServerException(ErrorCode.None, "Data is Null");
+
+            var req = msg.Data.ConvertData<LoginValidateRequest>();
             if (req == null) throw new ServerException(ErrorCode.None, "LoginValidateRequest is Null");
 
             string account = req.Account ?? throw new ServerException(ErrorCode.None, "Account is Null");
@@ -49,6 +53,7 @@ namespace FlexiServer.Services
                 res.Code = code;
                 res.Account = req.Account;
                 res.Token = token;
+                res.FrameSyncIntervalMs = frameManager.FrameSyncIntervalMs;
                 res.ProcessInfos = processes.Values.ToList();
                 return res;
             }

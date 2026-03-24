@@ -1,9 +1,5 @@
-using Network;
-using Network.Models.Common;
 using Network.Transport.WebSocket;
-using Newtonsoft.Json;
 using System;
-using UnityEngine;
 namespace Network.API
 {
     public class GamePlayApi : WebSocketMessageApi
@@ -14,18 +10,9 @@ namespace Network.API
         {
             base.SendWebSocketMessage(Pattern, path, messageObj);
         }
-        public override void AddListener<TResult>(string path, Action<WebSocketResult<TResult>> callBack)
+        public override void OnDataRecieved(string pattern, WebSocketResult result)
         {
-            base.AddListener(path, callBack);
-        }
-        public override void RemoveListener<TResult>(string path, Action<WebSocketResult<TResult>> callBack)
-        {
-            base.RemoveListener(path, callBack);
-        }
-        public override void OnDataRecieved(string pattern, string msg)
-        {
-            //Debug.Log($"[GamePlayApi] OnDataRecieved {msg}");
-            base.OnDataRecieved(pattern, msg);
+            base.OnDataRecieved(pattern, result);
         }
     }
 }

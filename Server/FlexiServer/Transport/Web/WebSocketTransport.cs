@@ -1,12 +1,11 @@
 ﻿using FlexiServer.Core;
 using FlexiServer.Core.Frame;
 using FlexiServer.Core.Tick;
+using FlexiServer.Services;
 using FlexiServer.Transport.Interface;
-using Newtonsoft.Json;
 using System.Buffers;
 using System.Collections.Concurrent;
 using System.Net.WebSockets;
-using System.Text;
 
 namespace FlexiServer.Transport.Web
 {
@@ -26,7 +25,7 @@ namespace FlexiServer.Transport.Web
         private CancellationTokenSource? cts;
 
         private TickHandle? tickHandle;
-        private Action<SClientConnectData, string, string>? OnReceived;
+        private Action<SClientConnectData, string, byte[]>? OnReceived;
         private Action<SClientConnectData, EPlayerConnectionState>? OnConnStateChanged;
         public void Start()
         {
@@ -51,18 +50,19 @@ namespace FlexiServer.Transport.Web
         {
             if (ws.State != WebSocketState.Open) return;
 
-            WebSocketResult<string> wsMessage = new WebSocketResult<string>();
-            wsMessage.Type = EWsMessageType.Relogin;
-            wsMessage.Data = "Token expired, please login again.";
+            WebSocketResult wsResult = new();
+            wsResult.Code = (int)ErrorCode.TokenExpired;
+            wsResult.Data = "Token expired, please login again.".ToBytes();
 
-            string msg = JsonConvert.SerializeObject(wsMessage);
-            var buffer = Encoding.UTF8.GetBytes(msg);
+            var buffer = wsResult.ToBytes();
+            var segment = new ArraySegment<byte>(buffer);
+            
             try
             {
                 int timeoutMs = 2000;
                 using var _cts = new CancellationTokenSource();
                 _cts.CancelAfter(timeoutMs);
-                await ws.SendAsync(buffer, WebSocketMessageType.Text, true, _cts.Token);
+                await ws.SendAsync(segment, WebSocketMessageType.Binary, true, _cts.Token);
                 await ws.CloseAsync(WebSocketCloseStatus.PolicyViolation, "Token expired", _cts.Token);
             }
             catch (Exception ex)
@@ -155,11 +155,20 @@ namespace FlexiServer.Transport.Web
                         // 客户端发任何消息时刷新上次活动时间
                         client.LastActiveTime = DateTime.UtcNow;
 
+                        using var ms = new MemoryStream();
+                        ms.Write(buffer, 0, request.Count);
+                        while (!request.EndOfMessage)
+                        {
+                            request = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), client.Cts.Token);
+                            ms.Write(buffer, 0, request.Count);
+                        }
+                        // 拿到完整消息
+                        var messageBytes = ms.ToArray();
+
                         // 解析客户端发送的数据
-                        var msg = Encoding.UTF8.GetString(buffer, 0, request.Count);
                         clientConnect.ClientId = clientId;
                         clientConnect.Account = client.Account;
-                        OnMessageReceived(clientConnect, msg);
+                        OnMessageReceived(clientConnect, buffer);
                     }
                 }
             }
@@ -175,31 +184,42 @@ namespace FlexiServer.Transport.Web
             }
         }
 
-        private void OnMessageReceived(SClientConnectData connectData, string msg)
+        private void OnMessageReceived(SClientConnectData connectData, byte[] buffer)
         {
-            WebSocketMessage<object>? wsMessage = JsonConvert.DeserializeObject<WebSocketMessage<object>>(msg);
+            var wsMessage = buffer.ConvertData<WebSocketMessage>();
             if (wsMessage == null) return;
-            if (wsMessage.Type == EWsMessageType.Heartbeat) return;
 
             string pattern = wsMessage.Pattern;
-            OnReceived?.Invoke(connectData, pattern, msg);
+            if (string.IsNullOrEmpty(pattern)) return;
+            if (pattern == "/ping") return; // 心跳包不处理
+
+            OnReceived?.Invoke(connectData, pattern, buffer);
         }
-        public void SetMessageReceivedListener(Action<SClientConnectData, string, string> receivedCall)
+        public void SetMessageReceivedListener(Action<SClientConnectData, string, byte[]> receivedCall)
         {
             OnReceived = receivedCall;
         }
-        public void SendMessage(string clientId, string message)
+        public void SendMessage<TData>(string clientKey, string pattern, string path, TData data)
         {
-            if (!clients.ContainsKey(clientId)) return;
-            WebSocket? ws = clients[clientId].WebSocket;
+            if (!clients.ContainsKey(clientKey)) return;
+            WebSocket? ws = clients[clientKey].WebSocket;
 
             if (ws != null && ws.State != WebSocketState.Open) return;
 
+            WebSocketResult wsResult = new WebSocketResult();
+            wsResult.Pattern = pattern;
+            wsResult.Code = 200;
+            wsResult.Path = path;
+            wsResult.Data = data.ToBytes();
+            wsResult.ServerFrame = frameManager.ServerCurrentFrame;
+            wsResult.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
             try
             {
-                var buffer = Encoding.UTF8.GetBytes(message);
+                var buffer = wsResult.ToBytes();
                 var segment = new ArraySegment<byte>(buffer);
-                ws?.SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None);
+
+                ws?.SendAsync(segment, WebSocketMessageType.Binary, true, CancellationToken.None);
             }
             catch (WebSocketException wsex)
             {
@@ -222,15 +242,13 @@ namespace FlexiServer.Transport.Web
         {
             tickHandle?.Stop();
         }
-        private async void HeartbeatLoop()
+        private void HeartbeatLoop()
         {
             if (heartbeatRunning) return; // 避免重入
 
             try
             {
                 heartbeatRunning = true;
-                WebSocketResult<string> wsMessage = new WebSocketResult<string>();
-                wsMessage.Type = EWsMessageType.Heartbeat;
                 foreach (var kvp in clients.ToArray()) // 避免枚举时修改异常
                 {
                     var clientId = kvp.Key;
@@ -256,11 +274,8 @@ namespace FlexiServer.Transport.Web
 
                         continue;
                     }
-                    wsMessage.ServerFrame = frameManager.ServerCurrentFrame;
-                    wsMessage.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                    string heartbeatJson = JsonConvert.SerializeObject(wsMessage);
                     // 发送心跳包
-                    SendMessage(clientId, heartbeatJson);
+                    SendMessage(clientId, string.Empty, string.Empty, "/heartbeat");
                 }
             }
             finally

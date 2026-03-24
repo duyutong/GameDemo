@@ -12,8 +12,8 @@ namespace FlexiServer.Sandbox
         public static float DeltaTime { get { return _deltaTime; } }
         private static float _deltaTime;
 
-        public Action<SandboxBase>? OnManagerInited;
-        public Action<SandboxBase>? OnManagerUpdated;
+        private Dictionary<Type, Action<SandboxBase>> OnSandboxInited = [];
+        private Dictionary<Type, Action<SandboxBase>> OnSandboxUpdated = [];
 
         private SandBoxPool pool = new();
         private TickHandle? tickHandle;
@@ -35,7 +35,7 @@ namespace FlexiServer.Sandbox
             tickHandle?.Stop();
             pool.ClearAll();
         }
-       
+
         public void OnReleaseSandbox(SandboxBase instance)
         {
             var type = instance.GetType();
@@ -44,8 +44,8 @@ namespace FlexiServer.Sandbox
         }
         public TSandBox? GetSandbox<TSandBox>(Func<TSandBox, bool>? select = null) where TSandBox : SandboxBase
         {
-            if (select != null) return currDic.Values.SelectMany(x => x) .OfType<TSandBox>() .FirstOrDefault(select);
-            else return currDic.Values.SelectMany(x => x) .OfType<TSandBox>() .FirstOrDefault();
+            if (select != null) return currDic.Values.SelectMany(x => x).OfType<TSandBox>().FirstOrDefault(select);
+            else return currDic.Values.SelectMany(x => x).OfType<TSandBox>().FirstOrDefault();
         }
         public List<SandboxBase>? GetSandboxs(Func<SandboxBase, bool> select)
         {
@@ -58,7 +58,7 @@ namespace FlexiServer.Sandbox
             Type sandBoxType = typeof(TSandbox);
             TSandbox? sandBox;
             int nextId = 0;
-            if (!currDic.TryGetValue(sandBoxType, out var list)) 
+            if (!currDic.TryGetValue(sandBoxType, out var list))
             {
                 list = new List<SandboxBase>();
                 currDic[sandBoxType] = list;
@@ -71,7 +71,7 @@ namespace FlexiServer.Sandbox
                     sandBox.Init(init);
                     sandBox.OnReleaseAction = OnReleaseSandbox;
                     sandBox.SandboxId = Interlocked.Increment(ref nextId);
-                    OnManagerInited?.Invoke(sandBox);
+                    ExcuteSandboxInitAction(sandBox);
 
                     if (select == null) currDic[sandBoxType].Add(sandBox);
                     if (select != null && select.Invoke(sandBox)) currDic[sandBoxType].Add(sandBox);
@@ -94,7 +94,7 @@ namespace FlexiServer.Sandbox
                     sandBox.OnReleaseAction = OnReleaseSandbox;
                     sandBox.SandboxId = Interlocked.Increment(ref nextId);
 
-                    OnManagerInited?.Invoke(sandBox);
+                    ExcuteSandboxInitAction(sandBox);
                 }
                 return sandBox;
             }
@@ -122,8 +122,34 @@ namespace FlexiServer.Sandbox
             foreach (var sandBox in currDic.Values.SelectMany(x => x))
             {
                 sandBox.OnUpdate();
-                OnManagerUpdated?.Invoke(sandBox);
+                ExcuteSandboxUpdateAction(sandBox);
             }
+        }
+        public void RegisterSandboxInitHandler(Type genericArgType, Action<SandboxBase> handler)
+        {
+            if (OnSandboxInited.ContainsKey(genericArgType))
+                OnSandboxInited[genericArgType] += (sandbox) => handler(sandbox);
+            else
+                OnSandboxInited[genericArgType] = (sandbox) => handler(sandbox);
+        }
+        public void RegisterSandboxUpdateHandler(Type genericArgType,Action<SandboxBase> handler)
+        {
+            if (OnSandboxUpdated.ContainsKey(genericArgType))
+                OnSandboxUpdated[genericArgType] += (sandbox) => handler(sandbox);
+            else
+                OnSandboxUpdated[genericArgType] = (sandbox) => handler(sandbox);
+        }
+        private void  ExcuteSandboxUpdateAction(SandboxBase sandbox)
+        {
+            var type = sandbox.GetType();
+            if (OnSandboxUpdated.TryGetValue(type, out Action<SandboxBase>? value))
+                value?.Invoke(sandbox);
+        }
+        private void ExcuteSandboxInitAction(SandboxBase sandbox)
+        {
+            var type = sandbox.GetType();
+            if (OnSandboxInited.TryGetValue(type, out Action<SandboxBase>? value))
+                value?.Invoke(sandbox);
         }
     }
 }
