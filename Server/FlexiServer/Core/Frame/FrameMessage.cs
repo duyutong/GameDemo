@@ -5,6 +5,7 @@
         public int InputFrame { get; set; } = 0;
         public string ClientId { get; set; } = "";
         public string Pattern { get; set; } = "";
+        public string Path { get; set; } = "";
         public string Command { get; set; } = "";
     }
 }

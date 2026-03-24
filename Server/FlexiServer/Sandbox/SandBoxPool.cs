@@ -16,7 +16,7 @@
             }
             pool.Clear();
         }
-        public SandboxBase? GetSandBox(Type? sandBoxType)
+        public SandboxBase? GetSandbox(Type? sandBoxType)
         {
             if (sandBoxType == null) return null;
 

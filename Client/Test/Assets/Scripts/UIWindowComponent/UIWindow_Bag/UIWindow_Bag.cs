@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIWindow_Bag : UIWindowComponentBase
 {
@@ -34,9 +35,5 @@ public class UIWindow_Bag : UIWindowComponentBase
         action = null;
         itemView.Uninitialize();
         base.OnUninit();
-    }
-    public void OnClickBtnIdentify() 
-    {
-
     }
 }

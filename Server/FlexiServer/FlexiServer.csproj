@@ -19,7 +19,6 @@
     <Folder Include="ConfigData\Config\Binary\" />
     <Folder Include="Infrastructure\Data\" />
     <Folder Include="Models\Common\" />
-    <Folder Include="Transport\Udp\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -16,7 +16,7 @@ namespace FlexiServer.Services
             BagAcquireItemRequest? req = msg.Data;
             if (req == null) throw new ServerException(ErrorCode.None, "BagAcquireItemRequest is Null");
 
-            GamePlayItemSandbox? sandbox = sandboxManager.GetSandBox<GamePlayItemSandbox>(
+            GamePlayItemSandbox? sandbox = sandboxManager.GetSandbox<GamePlayItemSandbox>(
                 (_sandbox) => { return _sandbox.ContainsPlayer(msg.Account); })
                 ?? throw new ServerException(ErrorCode.None, "The match does not exist.");
 

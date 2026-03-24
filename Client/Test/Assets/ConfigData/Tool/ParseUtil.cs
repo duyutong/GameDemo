@@ -13,9 +13,9 @@ public static class ParseUtil
     /// <typeparam name="T"></typeparam>
     /// <param name="self"></param>
     /// <returns></returns>
-    public static T ToEnum<T>(this object self) 
+    public static T ToEnum<T>(this object self)
     {
-        if (int.TryParse(self.ToString(),out int intValue)) return default(T);
+        if (int.TryParse(self.ToString(), out int intValue)) return default(T);
         return (T)Enum.ToObject(typeof(T), intValue);
     }
     /// <summary>
@@ -95,13 +95,15 @@ public static class ParseUtil
         if (type == "List<List<int>>") return "ToIntArrays";
         if (type == "int") return "ToInt";
         if (type == "Dictionary<int,int>") return "ToDictionary";
-        if(CheckIsEnum(type))return $"ToEnum<{type}>";
+        if (CheckIsEnum(type)) return $"ToEnum<{type}>";
 
         return "ToString";
     }
     public static bool CheckIsEnum(string enumName)
     {
         // 规则：E + 首字母大写的若干字符 + Type
-        return Regex.IsMatch(enumName, @"^E[A-Z].*Type$");
+        bool isType = Regex.IsMatch(enumName, @"^E[A-Z].*Type$");
+        bool isState = Regex.IsMatch(enumName, @"^E[A-Z].*State$");
+        return isType || isState;
     }
 }

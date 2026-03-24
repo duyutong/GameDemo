@@ -184,6 +184,23 @@ public class NetworkProtocolSaveUtility
         exitStr = exitStr.Replace("#ProtocolName_LC#", protocol_lc);
         SaveToFile(csSavePath, exitStr);
     }
+    public static void GenClient_UdpMessageApi(string protoclName) 
+    {
+        if (string.IsNullOrEmpty(protoclName)) return;
+
+        string protocol_uc, protocol_lc;
+        EditorUtilityExtensions.ToCamelAndPascal(protoclName, out protocol_lc, out protocol_uc);
+        string pattern = $"/{protocol_lc}";
+
+        string savePath = NetworkPathConfig.GetClientApiFullPath();
+        string csSavePath = Path.Combine(savePath, $"{protocol_uc}Api.cs");
+        string tempStr = CSTemplate_Network.UdpMessageApiStr;
+        tempStr = tempStr.Replace("#ProtocolName_UC#", protocol_uc);
+        tempStr = tempStr.Replace("#ProtocolName_LC#", protocol_lc);
+        tempStr = tempStr.Replace("#Pattern#", pattern);
+        //保存文件
+        SaveToFile(csSavePath, tempStr);
+    }
     public static void GenClient_WebSocketMessageApi(string protoclName)
     {
         if (string.IsNullOrEmpty(protoclName)) return;
@@ -201,7 +218,7 @@ public class NetworkProtocolSaveUtility
         //保存文件
         SaveToFile(csSavePath, tempStr);
     }
-    public static void GenServer_WebSocketHandler(string protoclName, NetworkProtocolSaveData saveData)
+    public static void GenServer_SocketHandler(string protoclName, NetworkProtocolSaveData saveData)
     {
         if (string.IsNullOrEmpty(protoclName)) return;
 
@@ -214,7 +231,7 @@ public class NetworkProtocolSaveUtility
         string savePath = NetworkPathConfig.GetServerServiceFullPath();
         string csSavePath = Path.Combine(savePath, $"{protocol_uc}Service.cs");
         string exitStr = EditorUtilityExtensions.ReadFileIfExists(csSavePath);
-        exitStr = string.IsNullOrEmpty(exitStr)? CSTemplate_Network.WebSocketHandlerStr:exitStr;
+        exitStr = string.IsNullOrEmpty(exitStr)? CSTemplate_Network.SocketHandlerStr:exitStr;
         
         foreach (NetworkProtocolEventSaveData eventData in saveData.eventData)
         {
@@ -241,7 +258,7 @@ public class NetworkProtocolSaveUtility
         //保存文件
         SaveToFile(csSavePath, exitStr);
     }
-    public static void RefreshApiManager_WebSocket(string protoclName)
+    public static void RefreshApiManager_Socket(string protoclName)
     {
         if (string.IsNullOrEmpty(protoclName)) return;
 
@@ -250,7 +267,7 @@ public class NetworkProtocolSaveUtility
         string csSavePath = NetworkPathConfig.GetClientApiManagerFullPath();
         string exitStr = EditorUtilityExtensions.ReadFileIfExists(csSavePath);
         // 注入WebSocket协议的API映射
-        string wsApiMapping = CSTemplate_Network.WebSocketApiMappingStr;
+        string wsApiMapping = CSTemplate_Network.SocketApiMappingStr;
         wsApiMapping = wsApiMapping.Replace("#ProtocolName_UC#", protocol_uc);
         wsApiMapping = wsApiMapping.Replace("#ProtocolName_LC#", protocol_lc);
         wsApiMapping = wsApiMapping.Replace("#Pattern#", $"/{protocol_lc}");
@@ -262,7 +279,7 @@ public class NetworkProtocolSaveUtility
         //保存文件
         SaveToFile(csSavePath, exitStr);
     }
-    public static void RefreshNetworkEventPaths_WebSocket(string pattern,NetworkProtocolSaveData saveData) 
+    public static void RefreshNetworkEventPaths_Socket(string pattern,NetworkProtocolSaveData saveData) 
     {
         string csSavePath_client = NetworkPathConfig.GetClientNetworkEventPathsPath();
         string exitStr_client = EditorUtilityExtensions.ReadFileIfExists(csSavePath_client);

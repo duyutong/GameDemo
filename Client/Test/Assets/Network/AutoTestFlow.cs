@@ -1,6 +1,8 @@
 ﻿using Network;
 using Network.API;
 using Network.Models.Common;
+using Network.Transport.WebSocket;
+using System;
 using UnityEngine;
 
 public class AutoTestFlow:MonoBehaviour
@@ -26,14 +28,19 @@ public class AutoTestFlow:MonoBehaviour
     }
     public void TestAction1() 
     {
-        GamePlayApi.SendWebSocketMessage(NetworkEventPaths.GamePlay_StartGame, string.Empty);
+        network.UpdConnect("Debug");
     }
     public void TestAction2()
     {
-        GamePlayApi.SendWebSocketMessage(NetworkEventPaths.GamePlay_JoinGame, string.Empty);
+        GamePlayApi gamePlayApi = ApiManager.GetWebSoketApi<GamePlayApi>();
+        gamePlayApi.SendWebSocketMessage<string>(NetworkEventPaths.GamePlay_StartGame, null);
     }
     public void TestAction3()
     {
-        GameFramework.UIMgr.OpenWindow<UIWindow_Bag>(null);
+        PlayerGameInfo playerGameInfo = new PlayerGameInfo();
+        playerGameInfo.Account = NetworkManager.Instance.Account;
+
+        GamePlayApi gamePlayApi = ApiManager.GetWebSoketApi<GamePlayApi>();
+        gamePlayApi.SendWebSocketMessage(NetworkEventPaths.GamePlay_JoinGame, playerGameInfo);
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 
 namespace Network.Transport.Udp
@@ -32,12 +33,12 @@ namespace Network.Transport.Udp
             UdpSession session = sessionDic[port];
             session.SendMessageAsync(msg);
         }
-        public void Connect(int port) 
+        public async Task Connect(int port) 
         {
             if (!sessionDic.ContainsKey(port)) return;
 
             UdpSession session = sessionDic[port];
-            session.Connect();
+            await session.Connect();
 
         }
         public void Stop()

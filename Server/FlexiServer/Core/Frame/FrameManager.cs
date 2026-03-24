@@ -22,13 +22,14 @@ namespace FlexiServer.Core.Frame
         private TickHandle? tickHandle;
         // 回滚后帧管理器返回给 Service 的回调函数
         public Action<int, List<FrameMessage>>? OnFrameResolved;
-        public void AddFrameMessageToPool(int inputFrame,string clientId, string pattern, string command)
+        public void AddFrameMessageToPool(int inputFrame,string clientId, string pattern,string path, string command)
         {
             if (inputFrame < ServerCurrentFrame - MaxRollbackFrames) return;
             rollbackStartFrame = Math.Min(rollbackStartFrame, inputFrame);
 
             var msg = FrameMessagePool.Get();
             msg.Pattern = pattern;
+            msg.Path = path;
             msg.InputFrame = inputFrame;
             msg.ClientId = clientId;
             msg.Command = command;
@@ -50,6 +51,13 @@ namespace FlexiServer.Core.Frame
             OnFrameResolved = null;
             messagePool.Clear();
             tickHandle?.Stop();
+        }
+        private void ClearMessagePool(int frame) 
+        {
+            messagePool.TryGetValue(frame, out var msg);
+            if (msg == null) { messagePool.TryRemove(frame,out _); return; }
+
+            foreach (var frameMsg in msg) FrameMessagePool.Return(frameMsg);
         }
         private void FrameLoop()
         {
@@ -81,14 +89,13 @@ namespace FlexiServer.Core.Frame
                             }
                         );
                     }
-
+                    
                     OnFrameResolved?.Invoke(checkFrame, [.. rollbackQuene[checkFrame]]);
                 }
             }
 
-            messagePool.TryRemove(currFrame - MaxRollbackFrames, out _);
+            ClearMessagePool(currFrame - MaxRollbackFrames);
             rollbackStartFrame = currFrame;
-
         }
     }
 }

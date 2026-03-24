@@ -2,6 +2,7 @@ using FlexiServer.Core;
 using FlexiServer.Core.Frame;
 using FlexiServer.Core.Tick;
 using FlexiServer.Sandbox.Interface;
+using FlexiServer.Services;
 using FlexiServer.Transport;
 using System.Collections.Concurrent;
 namespace FlexiServer.Sandbox
@@ -11,17 +12,17 @@ namespace FlexiServer.Sandbox
         public static float DeltaTime { get { return _deltaTime; } }
         private static float _deltaTime;
 
+        public Action<SandboxBase>? OnManagerInited;
+        public Action<SandboxBase>? OnManagerUpdated;
+
         private SandBoxPool pool = new();
-
         private TickHandle? tickHandle;
-
         private ConcurrentDictionary<Type, List<SandboxBase>> currDic = [];
         public void StarSandboxUpdateLoop()
         {
             transportMgr.AddClientConnHandler(OnClientConnectionStateChanged);
 
             int frameSyncIntervalMs = frameMgr.FrameSyncIntervalMs;
-            _deltaTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             tickHandle = tickMgr.RegisterTick(frameSyncIntervalMs, UpdateLoop);
         }
         public void StopSandboxUpdateLoop()
@@ -34,28 +35,29 @@ namespace FlexiServer.Sandbox
             tickHandle?.Stop();
             pool.ClearAll();
         }
-        public void ReleaseSandBox(SandboxBase instance)
+       
+        public void OnReleaseSandbox(SandboxBase instance)
         {
             var type = instance.GetType();
             if (currDic.ContainsKey(type)) currDic[type].Remove(instance);
             pool.Release(instance);
         }
-        public TSandBox? GetSandBox<TSandBox>(Func<TSandBox, bool> select) where TSandBox : SandboxBase
+        public TSandBox? GetSandbox<TSandBox>(Func<TSandBox, bool>? select = null) where TSandBox : SandboxBase
         {
-            return currDic.Values.SelectMany(x => x)
-                           .OfType<TSandBox>()    // 先过滤类型
-                           .FirstOrDefault(select); // 再筛选
+            if (select != null) return currDic.Values.SelectMany(x => x) .OfType<TSandBox>() .FirstOrDefault(select);
+            else return currDic.Values.SelectMany(x => x) .OfType<TSandBox>() .FirstOrDefault();
         }
-        public List<SandboxBase>? GetSandBox(Func<SandboxBase, bool> select)
+        public List<SandboxBase>? GetSandboxs(Func<SandboxBase, bool> select)
         {
             var list = currDic.Values.SelectMany(x => x).ToList();
             var result = list.Where(select).ToList();
             return result.Count > 0 ? result : null;
         }
-        public TSandBox? GetOrCreateSandBox<TSandBox>(Func<TSandBox, bool>? select = null, Action<TSandBox>? init = null) where TSandBox : SandboxBase
+        public TSandbox? GetOrCreateSandbox<TSandbox>(Func<TSandbox, bool>? select = null, Action<TSandbox>? init = null) where TSandbox : SandboxBase
         {
-            Type sandBoxType = typeof(TSandBox);
-            TSandBox? sandBox;
+            Type sandBoxType = typeof(TSandbox);
+            TSandbox? sandBox;
+            int nextId = 0;
             if (!currDic.TryGetValue(sandBoxType, out var list)) 
             {
                 list = new List<SandboxBase>();
@@ -63,11 +65,13 @@ namespace FlexiServer.Sandbox
             }
             if (currDic[sandBoxType].Count == 0)
             {
-                sandBox = (TSandBox?)pool.GetSandBox(sandBoxType);
+                sandBox = (TSandbox?)pool.GetSandbox(sandBoxType);
                 if (sandBox != null)
                 {
                     sandBox.Init(init);
-                    sandBox.OnReleaseAction = ReleaseSandBox;
+                    sandBox.OnReleaseAction = OnReleaseSandbox;
+                    sandBox.SandboxId = Interlocked.Increment(ref nextId);
+                    OnManagerInited?.Invoke(sandBox);
 
                     if (select == null) currDic[sandBoxType].Add(sandBox);
                     if (select != null && select.Invoke(sandBox)) currDic[sandBoxType].Add(sandBox);
@@ -76,18 +80,21 @@ namespace FlexiServer.Sandbox
             }
             if (currDic[sandBoxType].Count > 0)
             {
-                var checkList = currDic[sandBoxType].OfType<TSandBox>();
+                var checkList = currDic[sandBoxType].OfType<TSandbox>();
                 sandBox = select != null ? checkList.FirstOrDefault(select) : checkList.First();
                 if (sandBox != null) return sandBox;
 
-                sandBox ??= (TSandBox?)pool.GetSandBox(sandBoxType);
+                sandBox ??= (TSandbox?)pool.GetSandbox(sandBoxType);
                 if (sandBox != null)
                 {
                     if (init != null) sandBox.Init(init);
                     if (select == null) currDic[sandBoxType].Add(sandBox);
                     if (select != null && select.Invoke(sandBox)) currDic[sandBoxType].Add(sandBox);
 
-                    sandBox.OnReleaseAction = ReleaseSandBox;
+                    sandBox.OnReleaseAction = OnReleaseSandbox;
+                    sandBox.SandboxId = Interlocked.Increment(ref nextId);
+
+                    OnManagerInited?.Invoke(sandBox);
                 }
                 return sandBox;
             }
@@ -95,7 +102,7 @@ namespace FlexiServer.Sandbox
         }
         private void OnClientConnectionStateChanged(string clientId, string account, EPlayerConnectionState connectionState)
         {
-            var list = GetSandBox(s => s is ISandboxPlayer p && p.ContainsPlayer(account))
+            var list = GetSandboxs(s => s is ISandboxPlayer p && p.ContainsPlayer(account))
                 ?.OfType<ISandboxPlayer>();
 
             foreach (var sandbox in list ?? [])
@@ -115,6 +122,7 @@ namespace FlexiServer.Sandbox
             foreach (var sandBox in currDic.Values.SelectMany(x => x))
             {
                 sandBox.OnUpdate();
+                OnManagerUpdated?.Invoke(sandBox);
             }
         }
     }

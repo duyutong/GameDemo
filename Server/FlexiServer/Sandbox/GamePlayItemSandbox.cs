@@ -19,9 +19,18 @@ namespace FlexiServer.Sandbox
         }
         private ConcurrentDictionary<string, string> ClientIdToAccountMap = new();
         private ConcurrentDictionary<string, string> AccountToClientIdMap = new();
-        private ConcurrentDictionary<int, string> itemOwnerMap = new();
+        private ConcurrentDictionary<int, string> itemOwnerMap = new(); //本沙盒内一共有多少线索
         private ConcurrentDictionary<string, PlayerInfo> playerMap = new();//Key:account
-
+        public List<string> GetPlayerAccounts(Func<string ,bool>? select) 
+        {
+            List<string> accounts = new List<string>();
+            foreach (var account in AccountToClientIdMap.Keys) 
+            {
+                if(select!=null&& select.Invoke(account))accounts.Add(account);
+                else accounts.Add(account);
+            }
+            return accounts;
+        }
         public void GrantItemToPlayer(string account, out int itemId, out int bagSlotIndex)
         {
             itemId = 0;
@@ -88,6 +97,7 @@ namespace FlexiServer.Sandbox
                 List<int> allIds = [.. ConfigLoader.GetConfigDatas<ItemConfig>(100).Select(item => item.ID)];
                 foreach (var id in allIds) itemOwnerMap.TryAdd(id, string.Empty);
             }
+            base.OnInit();
         }
         public override void OnDestroy()
         {

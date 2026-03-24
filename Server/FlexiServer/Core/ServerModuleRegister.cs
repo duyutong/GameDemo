@@ -42,12 +42,12 @@ namespace FlexiServer.Core
             }
         }
         /// <summary>
-        /// 根据指定的模块列表，从当前程序域中查找所有符合条件的 WebSocket 服务类（继承 <see cref="IService"/> 且标记了 <see cref="ProcessFeatureAttribute"/>），
+        /// 根据指定的模块列表，从当前程序域中查找所有符合条件的 Socket 服务类（继承 <see cref="IService"/> 且标记了 <see cref="ProcessFeatureAttribute"/>），
         /// 并将其实例从依赖注入容器中获取后注册到 <see cref="ServiceManager"/>。
         /// </summary>
         /// <param name="app">当前的 <see cref="WebApplication"/> 实例。</param>
         /// <param name="modules">需要注册的模块名称列表，只有服务类的模块在列表中才会被注册。</param>
-        public static void RegisterWebSocketServiceByConfig(this WebApplication app, List<string>? modules)
+        public static void RegisterSocketServiceByConfig(this WebApplication app, List<string>? modules)
         {
             if (app == null) return;
             if (modules == null) return;

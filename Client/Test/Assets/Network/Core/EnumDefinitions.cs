@@ -6,13 +6,14 @@ using System.Reflection;
 
 public class EnumDefinitions
 {
+    // 所有枚举必须要使用 E{枚举名}State 或者 E{枚举名}Type的命名规则
     public enum EOperationState
     {
         None,
         Begin,      // 开始
         InProgress, // 持续
         Finish      // 结束
-    }
+    }   
     public enum EChatMsgType
     {
         Private,

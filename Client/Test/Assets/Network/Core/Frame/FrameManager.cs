@@ -43,9 +43,9 @@ namespace Network.Core.Frame
         public void RefreshServerFrame(int serverFrame, long serverSendTimestamp)
         {
             ServerCurrentFrame = serverFrame;
-            if (LocalCurrentFrame == 0) LocalCurrentFrame = serverFrame;
-
             LastServerSendTimestamp = serverSendTimestamp;
+
+            if (LocalCurrentFrame == 0) LocalCurrentFrame = serverFrame;
 
             long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             // 单次RTT估算（消息到达时间 - 消息发送时间）

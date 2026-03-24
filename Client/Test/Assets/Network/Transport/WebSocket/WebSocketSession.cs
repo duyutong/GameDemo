@@ -44,28 +44,31 @@ namespace Network.Transport.WebSocket
         
         public override void OnMessageReceived(string msg)
         {
-            WebSocketResult<object> wsMessage = JsonConvert.DeserializeObject<WebSocketResult<object>>(msg);
-            if (wsMessage == null) return;
+            WebSocketResult<object> wsResult = JsonConvert.DeserializeObject<WebSocketResult<object>>(msg);
+            if (wsResult == null) return;
 
-            if (wsMessage.Type == EWsMessageType.Normal)
+            if (wsResult.Type == EWsMessageType.Normal)
             {
-                string pattern = wsMessage.Pattern;
+                string pattern = wsResult.Pattern;
                 ApiManager.HandleMessage(pattern, msg);
             }
-            else if (wsMessage.Type == EWsMessageType.Heartbeat)
+            else if (wsResult.Type == EWsMessageType.Heartbeat)
             {
                 // 处理心跳响应（如果需要）
+                FrameManager.Instance.RefreshServerFrame(wsResult.ServerFrame, wsResult.Timestamp);
             }
-            else if (wsMessage.Type == EWsMessageType.Relogin)
+            else if (wsResult.Type == EWsMessageType.Relogin)
             {
-                Debug.Log("收到重新登录请求，需重新认证身份");
                 // 处理重新登录逻辑
+                Debug.Log("收到重新登录请求，需重新认证身份");
                 NetworkManager.Instance.HttpLogin();
             }
-            else if (wsMessage.Type == EWsMessageType.FrameSync)
+            else if (wsResult.Type == EWsMessageType.FrameSync)
             {
                 // 处理帧同步消息
-                FrameManager.Instance.RefreshServerFrame(wsMessage.ServerFrame, wsMessage.Timestamp);
+                FrameManager.Instance.RefreshServerFrame(wsResult.ServerFrame, wsResult.Timestamp);
+                string pattern = wsResult.Pattern;
+                ApiManager.HandleMessage(pattern, msg);
             }
         }
         protected override async void OnSendMessageAsync(string wsMessage)

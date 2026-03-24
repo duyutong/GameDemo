@@ -1,0 +1,71 @@
+# =====================
+# Unity 常规忽略文件
+# =====================
+
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+UserSettings/
+ProjectSettings/UnityConnectSettings.asset
+
+# Auto-generated VS/IDE files
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+# Unity 3D Cache
+*.svm
+*.pidb.meta
+*.pdb
+*.mdb
+
+# Asset meta data should be tracked
+!*.meta
+
+# =====================
+# Visual Studio / Rider / Server 缓存
+# =====================
+
+.vs/
+*.vsconfig
+*.vsmdi
+*.vscode/
+*.user
+*.suo
+*.sln.docstates
+*.DotSettings.user
+*.db
+*.cache
+*.bak
+*.backup
+*.tmp
+*.dtb
+*.dtbcache
+*.futdcache
+*.CodeChunks.db
+*.SemanticSymbols.db
+*.DesignTimeBuild*.dtbcache.v2
+*.DocumentLayout.backup.json
+*.DocumentLayout.json
+
+# GitHub Copilot cache (VS相关)
+**/CopilotIndices/
+**/CopilotSettings/
+
+# =====================
+# OS / temp files
+# =====================
+.DS_Store
+Thumbs.db
+desktop.ini
