@@ -16,9 +16,10 @@ public class UIPanel_Bag_ItemView : MonoBehaviour
         ClearSlots();
         RefreshItems();
     }
-    public void AddItems(int itemId)
+    public void AddItems(int itemId,int soltIndex)
     {
-        currItems.Add(itemId);
+        if (itemId == 0) { Debug.Log("发完了！");return; }
+        currItems.Insert(soltIndex,itemId);
         RefreshItems();
     }
     public void RemoveItems(int itemId)
@@ -68,7 +69,6 @@ public class UIPanel_Bag_ItemView : MonoBehaviour
             itemObj.GetComponent<UIItem_Bag_Item>().ItemBroadcast = itemBroadcast;
         }
     }
-
     private void ClearSlots()
     {
         foreach (RectTransform slot in slotList)

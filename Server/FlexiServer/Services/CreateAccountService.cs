@@ -33,7 +33,7 @@ namespace FlexiServer.Services
 
             try 
             {
-                db.Accounts.Insert(new AccountInfo
+                db.Accounts.Insert(new AccountInfo_DB
                 {
                     Account = req.Account,
                     PasswordHash = hash,

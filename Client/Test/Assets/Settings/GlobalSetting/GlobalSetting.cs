@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "GlobalSetting", menuName = "Scriptable Objects/GlobalSetting")]
 public class GlobalSetting : ScriptableObject

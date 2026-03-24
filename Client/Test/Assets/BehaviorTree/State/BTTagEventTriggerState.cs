@@ -60,8 +60,6 @@ public class BTTagEventTriggerState : TiggerBaseState
     public override void OnEnter()
     {
         base.OnEnter();
-
-        exit = true;
         OnExit();
     }
     public override void OnExit()
@@ -69,7 +67,7 @@ public class BTTagEventTriggerState : TiggerBaseState
         for (int i = 0; i < output.Count; i++)
         {
             BTOutputInfo info = output[i];
-            if (info.fromPortName == "exit") info.value = exit;
+            if (info.fromPortName == "exit") info.value = true;
         }
         base.OnExit();
     }

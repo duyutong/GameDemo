@@ -1,4 +1,4 @@
-using Network;
+﻿using Network;
 using Network.Models.Common;
 using Network.Transport.WebSocket;
 using Newtonsoft.Json;

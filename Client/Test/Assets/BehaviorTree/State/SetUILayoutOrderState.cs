@@ -110,7 +110,6 @@ public class SetUILayoutOrderState : BehaviorTreeBaseState
         base.OnExecute();
         if (canvas == null) return;
 
-
         canvas.sortingLayerName = sortingLayerName;
         canvas.sortingOrder = sortingOrder;
 

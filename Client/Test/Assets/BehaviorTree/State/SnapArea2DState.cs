@@ -1,4 +1,4 @@
-
+﻿
 using System;
 using System.IO;
 using System.Runtime.Serialization.Json;
@@ -161,7 +161,7 @@ public class SnapArea2DState : BehaviorTreeBaseState
         }
     }
     /// <summary>
-    /// 开始执行移???
+    /// 开始执行移动
     /// </summary>
     private void StartSnap()
     {

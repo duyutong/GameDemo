@@ -173,7 +173,17 @@ public class BehaviorTreeBaseState
     /// <summary>
     /// 打断
     /// </summary>
-    public virtual void OnInterrupt() { state = EBTState.中断; }
+    public virtual void OnInterrupt() 
+    {
+        state = EBTState.中断;
+        Infect((_s) =>
+        {
+            _s.OnRefresh();
+        }, (_s) =>
+        {
+            return false;
+        });
+    }
     /// <summary>
     /// 恢复打断状态
     /// </summary>

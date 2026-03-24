@@ -74,6 +74,8 @@ public class #StateName#State : #BaseState#
             JsonUtility.FromJsonOverwrite(json, _stateObj);
 
             output = _stateObj.output;
+            interruptible = _stateObj.interruptible;
+            interruptTag = _stateObj.interruptTag;
             #SetPropValue#
         }
     }

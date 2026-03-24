@@ -165,13 +165,15 @@ namespace Network.API
     }
 }";
     public const string WebSocketHandlerStr =
-@"using FlexiServer.Models.Common;
+@"using FlexiServer.Core;
+using FlexiServer.Models.Common;
 using FlexiServer.Services.Interface;
 using FlexiServer.Transport;
 using FlexiServer.Transport.Web;
 using Newtonsoft.Json;
 namespace FlexiServer.Services
 {
+    [ProcessFeature(""#ProtocolName_UC#"")]
     public class #ProtocolName_UC#Service : IService
     {
         public string Pattern => ""#Pattern#"";

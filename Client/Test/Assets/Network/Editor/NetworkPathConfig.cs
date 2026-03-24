@@ -94,7 +94,7 @@ public class NetworkPathConfig
     public static string GetClientApiManagerFullPath()
     {
         if (pathLibrary == null) InitPathLibrary();
-        return Path.Combine(clientRoot, clientNetworkRoot, "Manager/ApiManager.cs");
+        return Path.Combine(clientRoot, clientNetworkRoot, "Api/ApiManager.cs");
     }
     public static string GetClientEnumDefinitionsPath() 
     {

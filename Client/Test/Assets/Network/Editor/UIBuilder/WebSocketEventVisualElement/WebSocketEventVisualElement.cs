@@ -1,4 +1,4 @@
-using UnityEngine.UIElements;
+﻿using UnityEngine.UIElements;
 [UxmlElement]
 public partial class WebSocketEventVisualElement : EventVisualElement
 {

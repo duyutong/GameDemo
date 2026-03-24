@@ -35,4 +35,8 @@ public class UIWindow_Bag : UIWindowComponentBase
         itemView.Uninitialize();
         base.OnUninit();
     }
+    public void OnClickBtnIdentify() 
+    {
+
+    }
 }

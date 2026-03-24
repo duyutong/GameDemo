@@ -12,7 +12,7 @@ public class GameFramework : MonoBehaviour
     }
     public void Start()
     {
-        UIMgr.OpenWindow<UIWindow_Bag>(null);
+       
     }
     public void Init()
     {

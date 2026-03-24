@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UIElements;
 using ObjectField = UnityEditor.UIElements.ObjectField;
@@ -58,13 +59,16 @@ public class BehaviourTreeEditor : EditorWindow
         treeField.value = container;
         nameTextField.value = container.name;
 
-        saveBtn.SetEnabled(false);
-        loadBtn.SetEnabled(false);
-        nameTextField.SetEnabled(false);
-        treeField.SetEnabled(false);
+        bool isPlaying = Application.isPlaying;
+        bool buttonEnable = !isPlaying;
+
+        saveBtn.SetEnabled(buttonEnable);
+        loadBtn.SetEnabled(buttonEnable);
+        nameTextField.SetEnabled(buttonEnable);
+        treeField.SetEnabled(buttonEnable);
 
         behaviorTreeView.ClearAllNodeAndEdge();
-        bool isPlaying = Application.isPlaying;
+        
         if (isPlaying) behaviorTreeView.LoadRuntimeData(runtime);
         else behaviorTreeView.LoadData(container, runtime);
     }

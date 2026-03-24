@@ -8,12 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Utils\**" />
+    <Content Remove="Utils\**" />
+    <EmbeddedResource Remove="Utils\**" />
+    <None Remove="Utils\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="ConfigData\Config\Json\" />
     <Folder Include="ConfigData\Config\Binary\" />
     <Folder Include="Infrastructure\Data\" />
     <Folder Include="Models\Common\" />
     <Folder Include="Transport\Udp\" />
-    <Folder Include="Utils\" />
   </ItemGroup>
 
   <ItemGroup>

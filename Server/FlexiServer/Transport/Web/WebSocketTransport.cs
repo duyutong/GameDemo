@@ -82,8 +82,8 @@ namespace FlexiServer.Transport.Web
             client.Account = account;
             client.Token = token;
             client.LastActiveTime = DateTime.UtcNow;
-            client.ClientId = GetOrGenerateClientId(account,out oldClient);
-            
+            client.ClientId = GetOrGenerateClientId(account, out oldClient);
+
             // 挤掉线or重连？
             oldClient?.Cts.Cancel();
             oldClient?.SafeCloseAsync(WebSocketCloseStatus.NormalClosure, "Reconnecting");
@@ -100,7 +100,7 @@ namespace FlexiServer.Transport.Web
                 client.SafeCloseAsync(WebSocketCloseStatus.NormalClosure, "Removing client").Wait();
             }
         }
-        private string GetOrGenerateClientId(string account,out ClientConnection oldClient)
+        private string GetOrGenerateClientId(string account, out ClientConnection oldClient)
         {
             ClientConnection client = clients.FirstOrDefault(kvp => kvp.Value.Account == account).Value;
             oldClient = client;
@@ -135,6 +135,8 @@ namespace FlexiServer.Transport.Web
                         // 不再重复 CloseAsync，如果已经是 Aborted，则直接退出
                         if (ws.State != WebSocketState.Aborted)
                             await client.SafeCloseAsync(WebSocketCloseStatus.InternalServerError, "Receive exception");
+
+                        Console.WriteLine("发生 WebSocket 异常（例如远端强制关闭） WebSocketManager");
                         break;
                     }
 
@@ -144,6 +146,7 @@ namespace FlexiServer.Transport.Web
                     {
                         client.Cts.Cancel();
                         await client.SafeCloseAsync(WebSocketCloseStatus.NormalClosure, "Client closed connection");
+                        ClientCloseConnect(clientId);
                         Console.WriteLine("客户端断开 WebSocketManager");
                         break;
                     }
@@ -190,7 +193,7 @@ namespace FlexiServer.Transport.Web
             WebSocket? ws = clients[clientId].WebSocket;
 
             if (ws != null && ws.State != WebSocketState.Open) return;
-           
+
             try
             {
                 var buffer = Encoding.UTF8.GetBytes(message);
@@ -264,6 +267,17 @@ namespace FlexiServer.Transport.Web
                 heartbeatRunning = false;
             }
         }
+        private void ClientCloseConnect(string clientId)
+        {
+            OnConnStateChanged?.Invoke(
+                new ClientConnectData
+                {
+                    ClientId = clientId,
+                    Account = clients.ContainsKey(clientId) ? clients[clientId].Account : ""
+                },
+                EPlayerConnectionState.Closed
+            );
+        }
         private void HeartbeatTimeout(string clientId)
         {
             OnConnStateChanged?.Invoke(
@@ -283,7 +297,7 @@ namespace FlexiServer.Transport.Web
             public string Account { get; set; } = "";
             public DateTime LastActiveTime { get; set; } = DateTime.UtcNow;
             public WebSocket? WebSocket { get; set; } = new ClientWebSocket();
-            
+
             public CancellationTokenSource Cts = new();
 
             private int _closed = 0;

@@ -5,6 +5,7 @@ using Network.Core.Tick;
 using Network.Models;
 using Network.Models.Common;
 using Network.Transport.Http;
+using Network.Transport.Udp;
 using Network.Transport.WebSocket;
 using Newtonsoft.Json;
 using System;
@@ -15,18 +16,17 @@ namespace Network
 {
     public class NetworkManager : MonoBehaviour
     {
-        public bool isAutoLogin = false;
         public string host = "127.0.0.1";
         public int port = 8080;
         public bool isDebug = false;
 
         private HttpTransport httpTransport;
         private WebSocketTransport webSocketTransport;
+        private UdpTransport udpTransport;
         public static NetworkManager Instance { get; private set; }
         public string Token { get; set; } = string.Empty;
         public string Account { get; set; } = string.Empty;
 
-        private AccountInfo defaultAccount { get; } = new AccountInfo() { Account = "ABC", Password = "123" };
         private AccountInfo currLoginInfo = new AccountInfo();
         private Dictionary<string, int> rolePortDic = new();
         private void Awake()
@@ -36,6 +36,7 @@ namespace Network
 
             httpTransport = new HttpTransport();
             webSocketTransport = new WebSocketTransport();
+            udpTransport = new UdpTransport();
 
             TickManager.Instance.StartTickLoop();
             FrameManager.Instance.StartFrameLoop();
@@ -43,13 +44,14 @@ namespace Network
         private void Start()
         {
             httpTransport.RegistService(host, port, null);
-            if (isAutoLogin) AutoLogin();
         }
-
-        private void AutoLogin()
+        private void OnApplicationQuit()
         {
-            SetLoginInfo(defaultAccount.Account, defaultAccount.Password);
-            HttpLogin();
+            rolePortDic.Clear();
+            webSocketTransport.Stop();
+            udpTransport.Stop();
+            TickManager.Instance.StopTickLoop();
+            FrameManager.Instance.StopFrameLoop();
         }
         public void SetLoginInfo(string account, string password)
         {
@@ -71,7 +73,7 @@ namespace Network
         {
             if (!succ) return;
 
-            if (response.Code != 200) 
+            if (response.Code != 200)
             {
                 HandleError((ErrorCode)response.Code);
                 return;
@@ -80,7 +82,7 @@ namespace Network
             Account = response.Account;
             Token = response.Token;
             Debug.Log($"Login Success! Account: {Account}");
-            
+
             var processes = response.ProcessInfos;
             foreach (var info in processes)
             {
@@ -95,9 +97,9 @@ namespace Network
                 rolePortDic.AddOrReplace(role, port);
                 httpTransport.RegistService(host, port, info.Modules);
                 webSocketTransport.RegistService(host, port, info.Modules);
+                udpTransport.RegistService(host, port, info.Modules);
 
-                //直接连接WebSocket
-                // if(info.UseWebSocket) WebSocketConnect(role);
+               // if (info.UseWebSocket) WebSocketConnect(role);
             }
         }
         private void HandleError(ErrorCode errorCode)
@@ -118,24 +120,18 @@ namespace Network
             Account = response.Account;
             Token = response.Token;
         }
-        private void OnApplicationQuit()
-        {
-            rolePortDic.Clear();
-            webSocketTransport.Stop();
-            TickManager.Instance.StopTickLoop();
-            FrameManager.Instance.StopFrameLoop();
-        }
-        public async void WebSocketConnect(string role)
-        {
-            int port = rolePortDic.ContainsKey(role) ? rolePortDic[role] : this.port;
-            await webSocketTransport.ConnectAsync(port, Token);
-        }
+        #region 协议支持
         public async Task<HttpResult<TRes>> HttpPostAsync<TReq, TRes>(string path, TReq req)
         {
             var result = await httpTransport.PostAsync<TReq, TRes>(path, req);
             return result;
         }
 
+        public async void WebSocketConnect(string role)
+        {
+            int port = rolePortDic.ContainsKey(role) ? rolePortDic[role] : this.port;
+            await webSocketTransport.ConnectAsync(port, Token);
+        }
         public void SendWebSocketMessage<T>(string pattern, string path, T messageObj)
         {
             WebSocketMessage<T> wsMessage = new WebSocketMessage<T>();
@@ -149,5 +145,16 @@ namespace Network
             string msg = JsonConvert.SerializeObject(wsMessage);
             webSocketTransport.SendMessage(pattern, msg);
         }
+
+        public void UpdConnect(string role) 
+        {
+            int port = rolePortDic.ContainsKey(role) ? rolePortDic[role] : this.port;
+            udpTransport.Connect(port);
+        }
+        public void SendUdpMessage<T>(string pattern, string path, T messageObj) 
+        {
+            
+        }
+        #endregion
     }
 }
