@@ -281,7 +281,7 @@ public static class ExpandMethod
         for (int i = childCount - 1; i >= 0; i--)
         {
             Transform child = parent.GetChild(i);
-            GameObject.Destroy(child.gameObject);
+            GameObject.DestroyImmediate(child.gameObject);
         }
     }
     /// <summary>

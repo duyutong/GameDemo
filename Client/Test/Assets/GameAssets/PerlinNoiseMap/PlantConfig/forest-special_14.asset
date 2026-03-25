@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 333ae64d0cd297347aa3d4d9cdfcd45e, type: 3}
+  m_Name: forest-special_14
+  m_EditorClassIdentifier: Assembly-CSharp::PlantConfig
+  plantName: forest-special_14
+  prefab: {fileID: 540638760038206200, guid: e33dc889fe9a22e4c93bc93defc8eac6, type: 3}
+  min: 0.1
+  max: 0.5
+  probability: 0.5
