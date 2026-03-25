@@ -221,6 +221,37 @@ public static class EditorUtilityExtensions
         return fileName;
     }
     /// <summary>
+    /// 从 source 中提取被 start 和 end 包裹的内容（包含标记），
+    /// 并替换 target 中对应的内容。
+    /// </summary>
+    /// <param name="start">起始标记</param>
+    /// <param name="end">结束标记</param>
+    /// <param name="source">提取来源</param>
+    /// <param name="target">被替换目标</param>
+    /// <returns>替换后的字符串；未匹配则返回原 target</returns>
+    public static string ReplaceWrappedContent(string start, string end, string source, string target)
+    {
+        if (string.IsNullOrEmpty(start) || string.IsNullOrEmpty(end) ||
+            string.IsNullOrEmpty(source) || string.IsNullOrEmpty(target))
+            return target;
+
+        // 转义，防止特殊字符影响正则
+        string escStart = Regex.Escape(start);
+        string escEnd = Regex.Escape(end);
+
+        // 匹配被包裹的内容（包含start和end）
+        string pattern = $"{escStart}.*?{escEnd}";
+
+        // 从 source 提取
+        var match = Regex.Match(source, pattern);
+        if (!match.Success) return target;
+
+        string extracted = match.Value;
+
+        // 替换 target 中的对应部分
+        return Regex.Replace(target, pattern, extracted);
+    }
+    /// <summary>
     /// 检查指定文件是否存在，如果存在则读取文件内容
     /// </summary>
     /// <param name="filePath">文件路径，可以是绝对路径或相对路径</param>
