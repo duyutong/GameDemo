@@ -15,5 +15,5 @@ MonoBehaviour:
   plantName: forest-trees_2
   prefab: {fileID: 9051612175384993779, guid: 058ae2fd91749654bb11886eb19db27a, type: 3}
   min: 0
-  max: 0.5
+  max: 0.4
   probability: {x: 0.8, y: 1}

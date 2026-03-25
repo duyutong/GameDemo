@@ -229,15 +229,15 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 4b98f2f4552bb443af2d45fb24972297_0
+      name: forest-plants_0
       rect:
         serializedVersion: 2
         x: 109
         y: 1642
         width: 519
         height: 352
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -251,15 +251,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 4b98f2f4552bb443af2d45fb24972297_5
+      name: forest-plants_2
       rect:
         serializedVersion: 2
         x: 1506
         y: 1603
         width: 536
         height: 439
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -273,15 +273,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 4b98f2f4552bb443af2d45fb24972297_27
+      name: forest-plants_3
       rect:
         serializedVersion: 2
         x: 102
         y: 1083
         width: 487
         height: 428
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -295,15 +295,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 4b98f2f4552bb443af2d45fb24972297_28
+      name: forest-plants_4
       rect:
         serializedVersion: 2
         x: 779
         y: 1044
         width: 495
         height: 515
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -317,15 +317,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 4b98f2f4552bb443af2d45fb24972297_29
+      name: forest-plants_5
       rect:
         serializedVersion: 2
         x: 1430
         y: 1081
         width: 265
         height: 416
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -339,15 +339,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 4b98f2f4552bb443af2d45fb24972297_30
+      name: forest-plants_6
       rect:
         serializedVersion: 2
         x: 1786
         y: 953
         width: 393
         height: 635
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -361,15 +361,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 4b98f2f4552bb443af2d45fb24972297_31
+      name: forest-plants_7
       rect:
         serializedVersion: 2
         x: 84
         y: 609
         width: 590
         height: 376
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -383,15 +383,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 4b98f2f4552bb443af2d45fb24972297_32
+      name: forest-plants_8
       rect:
         serializedVersion: 2
         x: 755
         y: 559
         width: 688
         height: 428
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -405,15 +405,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 4b98f2f4552bb443af2d45fb24972297_38
+      name: forest-plants_10
       rect:
         serializedVersion: 2
         x: 1744
-        y: 640
+        y: 644
         width: 469
         height: 202
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -427,15 +427,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 4b98f2f4552bb443af2d45fb24972297_40
+      name: forest-plants_11
       rect:
         serializedVersion: 2
         x: 93
         y: 58
         width: 593
         height: 498
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -449,15 +449,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 4b98f2f4552bb443af2d45fb24972297_41
+      name: forest-plants_12
       rect:
         serializedVersion: 2
         x: 778
         y: 147
         width: 475
         height: 251
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -471,15 +471,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 4b98f2f4552bb443af2d45fb24972297_42
+      name: forest-plants_13
       rect:
         serializedVersion: 2
         x: 1305
         y: 157
         width: 420
         height: 333
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -493,15 +493,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 4b98f2f4552bb443af2d45fb24972297_43
+      name: forest-plants_14
       rect:
         serializedVersion: 2
         x: 1848
         y: 78
         width: 355
         height: 507
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -515,15 +515,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-plants_0
+      name: forest-plants_1
       rect:
         serializedVersion: 2
         x: 780
         y: 1619
         width: 592
         height: 419
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -537,15 +537,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-plants_1
+      name: forest-plants_9
       rect:
         serializedVersion: 2
         x: 1443
         y: 647
         width: 273
         height: 288
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -570,9 +570,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceOnImport
+        value: False
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      4b98f2f4552bb443af2d45fb24972297_0: 4374905888859964502
       4b98f2f4552bb443af2d45fb24972297_1: -813137857081488328
       4b98f2f4552bb443af2d45fb24972297_10: 711461617408309698
       4b98f2f4552bb443af2d45fb24972297_11: 2273703703350704220
@@ -592,32 +595,33 @@ TextureImporter:
       4b98f2f4552bb443af2d45fb24972297_24: 5707377228703966784
       4b98f2f4552bb443af2d45fb24972297_25: -6267882119363021349
       4b98f2f4552bb443af2d45fb24972297_26: -1999170793871896853
-      4b98f2f4552bb443af2d45fb24972297_27: 5739386097534816782
-      4b98f2f4552bb443af2d45fb24972297_28: 7394991768772281172
-      4b98f2f4552bb443af2d45fb24972297_29: -8767786556876787015
       4b98f2f4552bb443af2d45fb24972297_3: -4504803987762455615
-      4b98f2f4552bb443af2d45fb24972297_30: -4156729774415084673
-      4b98f2f4552bb443af2d45fb24972297_31: -2177016692857306469
-      4b98f2f4552bb443af2d45fb24972297_32: 1628046482942471312
       4b98f2f4552bb443af2d45fb24972297_33: -6803865402562113019
       4b98f2f4552bb443af2d45fb24972297_34: 2826461886857304929
       4b98f2f4552bb443af2d45fb24972297_35: -1484730446865404948
       4b98f2f4552bb443af2d45fb24972297_36: -1672955329025023577
       4b98f2f4552bb443af2d45fb24972297_37: 1672664945508779647
-      4b98f2f4552bb443af2d45fb24972297_38: 1733058423582418147
       4b98f2f4552bb443af2d45fb24972297_39: 3080956967781574238
       4b98f2f4552bb443af2d45fb24972297_4: -2025954454567512763
-      4b98f2f4552bb443af2d45fb24972297_40: 4810993878427490804
-      4b98f2f4552bb443af2d45fb24972297_41: -1373052192169520783
-      4b98f2f4552bb443af2d45fb24972297_42: 4030696361559617953
-      4b98f2f4552bb443af2d45fb24972297_43: 2383447663121028395
-      4b98f2f4552bb443af2d45fb24972297_5: 4767153489474041340
       4b98f2f4552bb443af2d45fb24972297_6: 8984762327492785207
       4b98f2f4552bb443af2d45fb24972297_7: -3226186287342435968
       4b98f2f4552bb443af2d45fb24972297_8: -458799472280142573
       4b98f2f4552bb443af2d45fb24972297_9: -5159722071483790381
-      forest-plants_0: -1408873541
-      forest-plants_1: 1446240993
+      forest-plants_0: 4374905888859964502
+      forest-plants_1: -1408873541
+      forest-plants_10: 1733058423582418147
+      forest-plants_11: 4810993878427490804
+      forest-plants_12: -1373052192169520783
+      forest-plants_13: 4030696361559617953
+      forest-plants_14: 2383447663121028395
+      forest-plants_2: 4767153489474041340
+      forest-plants_3: 5739386097534816782
+      forest-plants_4: 7394991768772281172
+      forest-plants_5: -8767786556876787015
+      forest-plants_6: -4156729774415084673
+      forest-plants_7: -2177016692857306469
+      forest-plants_8: 1628046482942471312
+      forest-plants_9: 1446240993
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

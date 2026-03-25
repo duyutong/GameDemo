@@ -6,6 +6,8 @@ using static EnumDefinitions;
 
 public class LocalPlayerMovement : MonoBehaviour
 {
+    public MovementInfo MovementInfo{ get { return movementInfo; } }
+
     private string account = "ABC";
     private MovementInfo movementInfo;
     private GamePlayApi gamePlayApi => ApiManager.GetWebSoketApi<GamePlayApi>();

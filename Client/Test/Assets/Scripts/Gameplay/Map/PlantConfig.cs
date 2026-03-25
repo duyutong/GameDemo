@@ -20,10 +20,11 @@ public class PlantConfig : ScriptableObject
     public void SetPlantRoot(Transform root) => plantRoot = root;
     public void SetGroundThreshold(float threshold) => groundThreshold = threshold;
     public void SetGroundSize(int width, int height) { this.width = width; this.height = height; }
-    public bool GenPlant(float noise, Vector2 pos, float chance)
+    public bool GenPlant(float groundNoise, Vector2 pos, float chance)
     {
-        float plantNoise = Mathf.InverseLerp(0, groundThreshold, noise);
+        float plantNoise = Mathf.InverseLerp(0, groundThreshold, groundNoise);
         int layout = height - Mathf.RoundToInt(Mathf.InverseLerp(-0.5f * height, 0.5f * height, pos.y) * height);
+        layout *= 10;
         if (min <= plantNoise && plantNoise <= max)
         {
             if (probability.x <= chance && chance < probability.y)
