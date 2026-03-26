@@ -52,6 +52,9 @@ public class PlantConfig : ScriptableObject
         }
         return (false,null);
     }
+
+    #region 临时编辑器工具
+
     [MenuItem("GameObject/UpdatePlantPrefab", false, 0)]
     public static void UpdatePlantPrefab() 
     {
@@ -75,26 +78,21 @@ public class PlantConfig : ScriptableObject
         {
             if (selected == null) continue;
 
-            // �����Ѿ��и������ǿ���������
+
             if (selected.transform.parent != null && selected.transform.parent.name == selected.name + "_Root")
                 continue;
 
-            // ��ԭ������Ӵ�������ײ��
             BoxCollider2D collider2D = selected.GetOrAddComponent<BoxCollider2D>();
             collider2D.isTrigger = true;
 
-            // ���� Layer
             selected.layer = layer;
 
-            // ������������Ϊ������
             GameObject parent = new GameObject(selected.name + "_Root");
             parent.transform.position = selected.transform.position;
             parent.transform.rotation = selected.transform.rotation;
 
-            // ��ԭ����ҵ��¸�������
             selected.transform.SetParent(parent.transform);
 
-            //���ø����� Layer�������Ĳ��������߹����
             parent.layer = layer;
 
             MapObstacleObj mapObstacleObj = parent.GetOrAddComponent<MapObstacleObj>();
@@ -117,4 +115,5 @@ public class PlantConfig : ScriptableObject
             AssetDatabase.CreateAsset(config, filePath);
         }
     }
+    #endregion
 }

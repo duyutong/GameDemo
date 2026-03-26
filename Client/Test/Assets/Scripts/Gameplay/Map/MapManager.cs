@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using Unity.Cinemachine;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class MapGenerator : MonoBehaviour
+public class MapManager : MonoBehaviour
 {
     public int width;
     public int height;
@@ -23,10 +24,9 @@ public class MapGenerator : MonoBehaviour
     public float threshold = 0.3f;
     public List<PlantConfig> plantConfigs;
 
-    public static MapGenerator Instance { private set; get; }
+    public static MapManager Instance { private set; get; }
 
     private MapQuadTree mapQuadTree;
-    private QuadTreeNode root;
     private Dictionary<Vector2Int, MapObstacleObj> obstracleDic = new();
     private float[,] groundTileNoiseValue;
     private BitArray obstacleBitMap;
@@ -34,7 +34,7 @@ public class MapGenerator : MonoBehaviour
 
     private Vector3 lastUpdatePos;
     private int minLeafSize = 8;
-    public MapGenerator()
+    public MapManager()
     {
         Instance = this;
     }
@@ -82,7 +82,7 @@ public class MapGenerator : MonoBehaviour
 
         int mapSize = Mathf.NextPowerOfTwo(Mathf.Max(width, height));
 
-        root = mapQuadTree.BuildQuadTree(0, 0, mapSize, minLeafSize);
+        mapQuadTree.BuildQuadTree(0, 0, mapSize, minLeafSize);
     }
     public void UpdateVisibleNodes()
     {
@@ -116,7 +116,7 @@ public class MapGenerator : MonoBehaviour
 
         RectInt viewRect = new(xMin: minX, xMax: maxX, yMin: minY, yMax: maxY);
 
-        mapQuadTree.UpdateVisibleNodes(root, viewRect);
+        mapQuadTree.UpdateVisibleNodes(viewRect);
     }
 
     public MapObstacleObj GetObstacleAt(int x, int y)
@@ -124,6 +124,17 @@ public class MapGenerator : MonoBehaviour
         Vector2Int index = new(x, y);
         obstracleDic.TryGetValue(index, out MapObstacleObj result);
         return result;
+    }
+    private bool IsGround(Vector2Int index) 
+    {
+        if (groundTileNoiseValue == null) return false;
+
+        int x = index.x;
+        int y = index.y;
+        if (x < 0 || x >= width || y < 0 || y >= height) return false;
+
+        bool isGround = groundTileNoiseValue[x, y] <= threshold;
+        return isGround;
     }
     public bool IsObstacle(Vector2 vec2Pos)
     {
@@ -141,30 +152,28 @@ public class MapGenerator : MonoBehaviour
 
         return obstacleBitMap[index];
     }
+    public bool IsEmptyTile(Vector2 vec2Pos) 
+    {
+        // 将世界坐标映射回数组索引
+        int x = Mathf.RoundToInt(vec2Pos.x + 0.5f * width);
+        int y = Mathf.RoundToInt(vec2Pos.y + 0.5f * height);
+
+        bool isGround = IsGround(new Vector2Int(x, y));
+        return !isGround;
+    }
     private bool IsEdgeTileOrEmpty(Vector2Int index)
     {
-        if (groundTileNoiseValue == null) return true;
-
-        int x = index.x;
-        int y = index.y;
-
-        // 检查边界
-        if (x < 0 || x >= width || y < 0 || y >= height) return true;
-
-        // 判断该格子是否是地面
-        bool isGround = groundTileNoiseValue[x, y] <= threshold;
-
-        // 如果不是地面（空格）或者处于边缘，就返回 true
+        bool isGround = IsGround(index);
         if (!isGround) return true;
 
-        // 可选：判断是否是边缘格子（周围有空格）
+        // 判断是否是边缘格子（周围有空格）
         for (int dx = -1; dx <= 1; dx++)
         {
             for (int dy = -1; dy <= 1; dy++)
             {
                 if (dx == 0 && dy == 0) continue;
-                int nx = x + dx;
-                int ny = y + dy;
+                int nx = index.x + dx;
+                int ny = index.y + dy;
                 if (nx < 0 || nx >= width || ny < 0 || ny >= height) return true; // 边缘
                 if (groundTileNoiseValue[nx, ny] > threshold) return true; // 周围是空格，说明是边缘
             }
@@ -285,7 +294,7 @@ public class MapGenerator : MonoBehaviour
     private void Update()
     {
         Vector3 camPos = cinemachineCamera.transform.position;
-        if (Vector3.Magnitude(camPos - lastUpdatePos) >= minLeafSize * 0.5f)
+        if (Vector3.Magnitude(camPos - lastUpdatePos) >= minLeafSize * 0.25f)
         {
             lastUpdatePos = camPos;
             UpdateVisibleNodes();
@@ -297,5 +306,47 @@ public class MapGenerator : MonoBehaviour
         obstracleDic.Clear();
         tilemap.ClearAllTiles();
         plantRoot.RemoveChildren();
+    }
+}
+[Serializable]
+public class MapGenerator 
+{
+    public class MapGeneratorData 
+    {
+        public int width;
+        public int height;
+        public float lacunarity;    //频率
+        public float threshold;     //阈值
+        public int seed;
+    }
+
+    public List<ScriptableObject> spawnConfigs;
+
+    public float[,] NoiseValue { get { return noiseValue; } }
+    private float[,] noiseValue;
+
+    private System.Random random;
+
+    private int width;
+    private int height;
+    private float lacunarity;    //频率
+    private float threshold;     //阈值
+    private int seed;
+
+    private MapGeneratorData generatorData;
+    
+    public MapGenerator(MapGeneratorData data) 
+    {
+        generatorData = data;
+
+        width = generatorData.width;
+        height = generatorData.height;
+        lacunarity = generatorData.lacunarity;
+        threshold = generatorData.threshold;
+        seed = generatorData.seed;
+
+        noiseValue = new float[width, height];
+        random = new(seed);
+
     }
 }

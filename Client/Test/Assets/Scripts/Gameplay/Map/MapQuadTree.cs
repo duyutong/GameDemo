@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class MapQuadTree
 {
+    public QuadTreeNode TreeRoot { get { return root; } }
+    private QuadTreeNode root;
+
     private int width;
     private int height;
     private BitArray obstacleBitMap;
@@ -13,6 +16,7 @@ public class MapQuadTree
     public void SetObstacleBitMap(BitArray obstacleBitMap) => this.obstacleBitMap = obstacleBitMap;
     public void ClearTree() 
     {
+        root = null;
         obstacleBitMap = null;
         activeNodes.Clear();
     }
@@ -20,37 +24,35 @@ public class MapQuadTree
     {
         QuadTreeNode node = new QuadTreeNode(startX, startY, size);
 
-        // �������С�ڻ������СҶ�ӳߴ磬�͵���Ҷ��
         if (size <= minLeafSize)
         {
-            // �������ڵ��ϰ�����ӵ�Ҷ�ӽڵ�
             for (int x = startX; x < startX + size && x < width; x++)
             {
                 for (int y = startY; y < startY + size && y < height; y++)
                 {
                     if (obstacleBitMap[y * width + x])
                     {
-                        MapObstacleObj obj = MapGenerator.Instance.GetObstacleAt(x, y); // �����Լ�ʵ�ֻ�ȡ���Ӷ�Ӧ���ϰ���
+                        MapObstacleObj obj = MapManager.Instance.GetObstacleAt(x, y);
                         if (obj != null) node.obstacles.Add(obj);
                     }
                 }
             }
+
             return node;
         }
 
-        // ���򻮷��ĸ��ӽڵ�
         int half = Mathf.CeilToInt(size / 2f);
         node.children = new QuadTreeNode[4];
-        node.children[0] = BuildQuadTree(startX, startY, half, minLeafSize);               // ����
-        node.children[1] = BuildQuadTree(startX + half, startY, half, minLeafSize);        // ����
-        node.children[2] = BuildQuadTree(startX, startY + half, half, minLeafSize);        // ����
-        node.children[3] = BuildQuadTree(startX + half, startY + half, half, minLeafSize); // ����
+        node.children[0] = BuildQuadTree(startX, startY, half, minLeafSize);     
+        node.children[1] = BuildQuadTree(startX + half, startY, half, minLeafSize);       
+        node.children[2] = BuildQuadTree(startX, startY + half, half, minLeafSize);      
+        node.children[3] = BuildQuadTree(startX + half, startY + half, half, minLeafSize);
 
+        root = node;
         return node;
     }
     public void QueryNodes(QuadTreeNode node, RectInt range, List<QuadTreeNode> result)
     {
-        // ���ֱཻ�Ӽ�֦
         bool isIntersects = range.Intersects(node.startX, node.startY, node.size);
         if (!isIntersects) return;
 
@@ -65,14 +67,13 @@ public class MapQuadTree
     }
     
 
-    public void UpdateVisibleNodes(QuadTreeNode root, RectInt viewRect)
+    public void UpdateVisibleNodes(RectInt viewRect)
     {
         List<QuadTreeNode> currentNodes = new();
-        QueryNodes(root, viewRect, currentNodes);
+        QueryNodes(TreeRoot, viewRect, currentNodes);
 
         HashSet<QuadTreeNode> newSet = new HashSet<QuadTreeNode>(currentNodes);
 
-        // �����½���Ľڵ�
         foreach (var node in newSet)
         {
             if (!activeNodes.Contains(node))
@@ -95,10 +96,10 @@ public class MapQuadTree
 }
 public class QuadTreeNode
 {
-    public int startX, startY;      // �������½�
-    public int size;                // ����߳�
-    public QuadTreeNode[] children; // �ĸ��ӽڵ㣬�����Ҷ����Ϊ null
-    public List<MapObstacleObj> obstacles; // Ҷ�ӽڵ�洢���ϰ���
+    public int startX, startY;      
+    public int size;             
+    public QuadTreeNode[] children; 
+    public List<MapObstacleObj> obstacles; 
 
     public bool isLeaf => children == null;
 

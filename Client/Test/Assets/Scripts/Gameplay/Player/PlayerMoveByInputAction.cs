@@ -60,13 +60,13 @@ public class PlayerMoveByInputAction : MonoBehaviour
     }
     private bool CheckMove(Vector2 checkPos)
     {
-        if (MapGenerator.Instance == null) return true;
+        if (MapManager.Instance == null) return true;
         
         // 暂时不对障碍物做响应
         //bool IsObstacle = MapGenerator.Instance.IsObstacle(checkPos);
         //if (IsObstacle) return false;
 
-        bool IsEdgeTileOrEmpty = MapGenerator.Instance.IsEdgeTileOrEmpty(checkPos);
+        bool IsEdgeTileOrEmpty = MapManager.Instance.IsEmptyTile(checkPos);
         if(IsEdgeTileOrEmpty)return false;
 
         return true;
@@ -81,7 +81,7 @@ public class PlayerMoveByInputAction : MonoBehaviour
             Vector2 velocity = moveSpeed * move;
 
             float dt = Time.fixedDeltaTime;
-            Vector2 checkPos = rb.position + velocity * dt - 0.5f * Vector2.right;
+            Vector2 checkPos = rb.position + velocity * dt * 10 - 0.5f * Vector2.right;
             rb.linearVelocity = CheckMove(checkPos) ? velocity : Vector2.zero;
 
             syncTimer -= Time.fixedDeltaTime;
