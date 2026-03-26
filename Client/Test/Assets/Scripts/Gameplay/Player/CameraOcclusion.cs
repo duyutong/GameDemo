@@ -14,6 +14,8 @@ public class CameraOcclusion : MonoBehaviour
     [Header("SpriteRenderer")]
     public SpriteRenderer playerRenderer;
 
+    private ContactFilter2D filter = new ContactFilter2D();
+    private RaycastHit2D[] hits = new RaycastHit2D[16];
     private Camera cam;
 
     // 当前帧命中的
@@ -24,9 +26,12 @@ public class CameraOcclusion : MonoBehaviour
     void Start()
     {
         cam = Camera.main;
+
+        filter.SetLayerMask(checkLayer);
+        filter.useTriggers = true;
     }
 
-    void LateUpdate()
+   private void LateUpdate()
     {
         currentHits.Clear();
 
@@ -39,14 +44,19 @@ public class CameraOcclusion : MonoBehaviour
             Vector3 end = corner;
             end.z = 0;
 
-            var hits = Physics2D.LinecastAll(start, end, checkLayer);
-            foreach (var h in hits)
+           
+            int count = Physics2D.Linecast(start, end, filter, hits);
+
+            for (int i = 0; i < count; i++) 
             {
-                if (h.collider.TryGetComponent<SpriteRenderer>(out var sr))
-                {
-                    if (sr.sortingOrder < playerRenderer.sortingOrder) continue;
-                    currentHits.Add(sr);
-                }
+                var h = hits[i];
+                var col = h.collider;
+
+                if (!col) continue;
+                if (!col.TryGetComponent<SpriteRenderer>(out var sr)) continue;
+                if (sr.sortingOrder < playerRenderer.sortingOrder) continue;
+
+                currentHits.Add(sr);
             }
         }
 

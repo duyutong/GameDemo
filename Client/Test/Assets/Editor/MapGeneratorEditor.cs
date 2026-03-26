@@ -18,5 +18,9 @@ public class MapGeneratorEditor:Editor
         {
             ((MapGenerator)target).ClearTileMap();
         }
+        if (GUILayout.Button("ShowPlant"))
+        {
+            ((MapGenerator)target).ShowAllPlant();
+        }
     }
 }

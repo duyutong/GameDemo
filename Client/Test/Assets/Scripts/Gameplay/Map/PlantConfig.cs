@@ -1,4 +1,4 @@
-using Unity.Cinemachine;
+﻿using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -19,12 +19,17 @@ public class PlantConfig : ScriptableObject
     private int height;
     public void SetPlantRoot(Transform root) => plantRoot = root;
     public void SetGroundThreshold(float threshold) => groundThreshold = threshold;
-    public void SetGroundSize(int width, int height) { this.width = width; this.height = height; }
-    public bool GenPlant(float groundNoise, Vector2 pos, float chance)
+    public void SetMapSize(int width, int height) { this.width = width; this.height = height; }
+    public (bool, MapObstacleObj) GenPlant(float groundNoise, Vector2Int index, float chance)
     {
+        float posX = index.x - 0.5f * width;
+        float posY = index.y - 0.5f * height;
+        Vector2 pos = new(posX, posY);
+
         float plantNoise = Mathf.InverseLerp(0, groundThreshold, groundNoise);
         int layout = height - Mathf.RoundToInt(Mathf.InverseLerp(-0.5f * height, 0.5f * height, pos.y) * height);
-        layout *= 10;
+        layout *= 10; pos += offset;
+
         if (min <= plantNoise && plantNoise <= max)
         {
             if (probability.x <= chance && chance < probability.y)
@@ -32,22 +37,77 @@ public class PlantConfig : ScriptableObject
                 GameObject plant = Instantiate(prefab);
                 plant.transform.SetParent(plantRoot);
                 plant.transform.Reset();
-                plant.transform.localPosition = pos + offset;
+                plant.transform.localPosition = pos;
 
-                SpriteRenderer sr = plant.GetComponent<SpriteRenderer>();
+                MapObstacleObj mapObstacleObj = plant.GetComponent<MapObstacleObj>();
+                mapObstacleObj.SetIndexOnMap(index);
+                mapObstacleObj.SetVisible(false,true);
+
+                SpriteRenderer sr = mapObstacleObj.spriteRenderer;
+                sr.flipX = plant.transform.GetSiblingIndex() % 3 == 1;
                 sr.sortingOrder = layout;
 
-                return true;
+                return (true, mapObstacleObj);
             }
         }
-        return false;
+        return (false,null);
+    }
+    [MenuItem("GameObject/UpdatePlantPrefab", false, 0)]
+    public static void UpdatePlantPrefab() 
+    {
+        foreach (var selected in Selection.gameObjects) 
+        {
+            if (selected == null) continue;
+            if (selected.transform.childCount == 0 )continue;
+
+            MapObstacleObj mapObstacleObj = selected.GetOrAddComponent<MapObstacleObj>();
+            mapObstacleObj.spriteRenderer = selected.transform.GetChild(0).GetComponent<SpriteRenderer>();
+            mapObstacleObj.boxCollider = selected.transform.GetChild(0).GetComponent<BoxCollider2D>();
+        }
+    }
+    [MenuItem("GameObject/CreatePlantPrefab", false, 0)]
+    public static void CreatePlantPrefab()
+    {
+        string layerName = "Environment";
+        int layer = LayerMask.NameToLayer(layerName);
+
+        foreach (var selected in Selection.gameObjects)
+        {
+            if (selected == null) continue;
+
+            // �����Ѿ��и������ǿ���������
+            if (selected.transform.parent != null && selected.transform.parent.name == selected.name + "_Root")
+                continue;
+
+            // ��ԭ������Ӵ�������ײ��
+            BoxCollider2D collider2D = selected.GetOrAddComponent<BoxCollider2D>();
+            collider2D.isTrigger = true;
+
+            // ���� Layer
+            selected.layer = layer;
+
+            // ������������Ϊ������
+            GameObject parent = new GameObject(selected.name + "_Root");
+            parent.transform.position = selected.transform.position;
+            parent.transform.rotation = selected.transform.rotation;
+
+            // ��ԭ����ҵ��¸�������
+            selected.transform.SetParent(parent.transform);
+
+            //���ø����� Layer�������Ĳ��������߹����
+            parent.layer = layer;
+
+            MapObstacleObj mapObstacleObj = parent.GetOrAddComponent<MapObstacleObj>();
+            mapObstacleObj.spriteRenderer = selected.GetComponent<SpriteRenderer>();
+            mapObstacleObj.boxCollider = collider2D;
+        }
     }
     [MenuItem("GameObject/CreatePlantConfig", false, 0)]
     public static void CreatePlantConfig()
     {
         foreach (var selected in Selection.gameObjects)
         {
-            if (selected == null) return;
+            if (selected == null) continue;
 
             PlantConfig config = CreateInstance<PlantConfig>();
             config.plantName = selected.name;

@@ -1,10 +1,10 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using static EnumDefinitions;
 using static UnityEditor.PlayerSettings;
 
 public class LocalPlayerController : MonoBehaviour
 {
-    public MapGenerator mapGenerator;//Î´À´Òª·ÅÔÚÈ«¾Ö¿ØÖÆÆ÷Àï»ñÈ¡
+    public MapGenerator mapGenerator;//Î´ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½È«ï¿½Ö¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡
     public SpriteRenderer playerRenderer;
     public Animator playerAnimator;
 
