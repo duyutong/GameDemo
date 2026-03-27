@@ -48,6 +48,7 @@ public class MapGeneratorDataEditor : Editor
         }
         if (GUILayout.Button("GenerateMap")) MapManager.Instance.GenerateMap(data);
         if (GUILayout.Button("ClearMap")) MapManager.Instance.ClearMap(data.layer);
+        if (GUILayout.Button("ShowAllSpawn")) MapManager.Instance.ShowAllSpawn(data.layer);
     }
 }
 #endif

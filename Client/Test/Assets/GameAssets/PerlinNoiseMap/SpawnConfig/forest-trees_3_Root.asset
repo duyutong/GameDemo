@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlantConfig
   spawnName: 
   prefab: {fileID: 5862323130448951338, guid: 45da6ad20d7e0f34490e960b0c3b99f7, type: 3}
-  min: 0.3
-  max: 0.6
-  probability: {x: 0, y: 0.1}
+  min: 0.5
+  max: 1
+  probability: {x: 0, y: 1}

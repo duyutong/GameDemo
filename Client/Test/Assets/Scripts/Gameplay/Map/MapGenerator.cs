@@ -17,7 +17,7 @@ public class MapGenerator
 
     private int width;
     private int height;
-    private EMapPreferencePosition prefabPos;
+    private EMapPreferencePosition preferPos;
     private float lacunarity;    //频率
     private Vector2 threshold;     //阈值
     private int seed;
@@ -56,6 +56,11 @@ public class MapGenerator
 
         InitFinshi = true;
     }
+    public void ShowAllSpawn() 
+    {
+        if (!InitFinshi) return;
+        foreach(var spawn in spawnDic)spawn.Value.SetVisible(true,true);
+    }
     public void ClearMap()
     {
         InitFinshi = false;
@@ -73,7 +78,7 @@ public class MapGenerator
 
         width = generatorData.width;
         height = generatorData.height;
-        prefabPos = generatorData.position;
+        preferPos = generatorData.position;
         lacunarity = generatorData.lacunarity;
         threshold = generatorData.threshold;
         seed = generatorData.seed;
@@ -87,9 +92,9 @@ public class MapGenerator
         }
         random = new(seed);
     }
-    private Vector2 GetSpawnsThreshold() 
+    private Vector2 GetEdgeThreshold() 
     {
-        if (prefabPos == EMapPreferencePosition.Random) return threshold;
+        if (preferPos == EMapPreferencePosition.Random) return threshold;
         else 
         {
             if (targetNoise <= -1) targetNoise = SetPosTargetNosie();
@@ -110,7 +115,7 @@ public class MapGenerator
     private float SetPosTargetNosie()
     {
         int x = 0, y = 0;
-        switch (prefabPos)
+        switch (preferPos)
         {
             case EMapPreferencePosition.BottomLeft:
                 x = 0; y = 0; break;
@@ -133,22 +138,21 @@ public class MapGenerator
         }
 
         float noise = noiseValue[x, y];
-        if (noise == 0) Debug.LogError("aaaa???");
         return noise;
     }
     private void SetTileMap()
     {
         float randomOffset = random.Next(-1000, 1000);
-        float nosieMax = float.MinValue;
-        float nosieMin = float.MaxValue;
+        float noiseMax = float.MinValue;
+        float noiseMin = float.MaxValue;
 
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
                 float noise = Mathf.PerlinNoise(x * lacunarity + randomOffset, y * lacunarity + randomOffset);
-                if (noise < nosieMin) nosieMin = noise;
-                if (noise > nosieMax) nosieMax = noise;
+                if (noise < noiseMin) noiseMin = noise;
+                if (noise > noiseMax) noiseMax = noise;
                 noiseValue[x, y] = noise;
             }
         }
@@ -157,7 +161,7 @@ public class MapGenerator
             for (int y = 0; y < height; y++)
             {
                 float noise = noiseValue[x, y];
-                noiseValue[x, y] = Mathf.InverseLerp(nosieMin, nosieMax, noise);
+                noiseValue[x, y] = Mathf.InverseLerp(noiseMin, noiseMax, noise);
             }
         }
         for (int x = 0; x < width; x++)
@@ -173,7 +177,7 @@ public class MapGenerator
     }
     private void GenerateSpawn()
     {
-        Vector2 spawnsThreshold = GetSpawnsThreshold();
+        Vector2 spawnsThreshold = GetEdgeThreshold();
         spawnGenerator.SetSpawnObjRoot(spawns.root);
         spawnGenerator.SetGroundThreshold(spawnsThreshold);
         spawnGenerator.SetMapSize(width, height);
@@ -268,6 +272,14 @@ public class MapGenerator
         RectInt viewRect = new(xMin: minX, xMax: maxX, yMin: minY, yMax: maxY);
         mapQuadTree.UpdateVisibleNodes<MapSpawnObj>(viewRect, (_isVisible, _obj) => _obj.SetVisible(_isVisible));
     }
+    private Vector2 MapIndexToWorldPos(Vector2Int mapIndex)
+    {
+        // 将数组索引映射回世界坐标
+        float x = mapIndex.x - 0.5f * width;
+        float y = mapIndex.y - 0.5f * height;
+
+        return new Vector2(x, y);
+    }
     private Vector2Int WorldPosToMapIndex(Vector2 worldPos)
     {
         // 将世界坐标映射回数组索引
@@ -303,30 +315,28 @@ public class MapGenerator
     }
     private bool IsGround(Vector2Int index)
     {
+        if (generatorData.layer != EMapLayer.BaseGround) 
+        {
+            Vector2 worldPos = MapIndexToWorldPos(index);
+            var baseGround = MapManager.Instance.GetMapByLayer(EMapLayer.BaseGround);
+            if (baseGround != null && baseGround.IsEmptyTile(worldPos)) return false;
+        }
+
         int x = index.x;
         int y = index.y;
         if (x < 0 || x >= width || y < 0 || y >= height) return false;
 
-        if (prefabPos == EMapPreferencePosition.Random)
+        if (preferPos == EMapPreferencePosition.Random)
         {
             bool isGround = threshold.x < noiseValue[x, y] && noiseValue[x, y] <= threshold.y;
             return isGround;
         }
         else
         {
-            if (targetNoise <= -1) targetNoise = SetPosTargetNosie();
-            float maxOffset = Mathf.Abs(threshold.y - threshold.x);
-            float half = maxOffset * 0.5f;
-            float min = targetNoise - half;
-            float max = targetNoise + half;
-            // 如果超出边界，就整体平移回来
-            if (min < 0) { max -= min; min = 0; }
-            if (max > 1) { min -= (max - 1); max = 1; }
+            var edge = GetEdgeThreshold();
+            float min = edge.x;
+            float max = edge.y;
 
-            min = Mathf.Clamp01(min);
-            max = Mathf.Clamp01(max);
-
-            if(x ==0 && y == 0) Debug.Log($" {min} < {targetNoise} <= {max}");
             bool isGround = min < noiseValue[x, y] && noiseValue[x, y] <= max;
             return isGround;
         }
@@ -343,7 +353,13 @@ public class MapGenerator
     }
     private bool IsEdgeTileOrEmpty(Vector2Int index)
     {
-        bool isGround = IsGround(index);
+        int x = index.x;
+        int y = index.y;
+
+        var edge = GetEdgeThreshold();
+        float min = edge.x;
+        float max = edge.y;
+        bool isGround = min < noiseValue[x, y] && noiseValue[x, y] <= max;
         if (!isGround) return true;
 
         // 判断是否是边缘格子（周围有空格）
@@ -355,7 +371,7 @@ public class MapGenerator
                 int nx = index.x + dx;
                 int ny = index.y + dy;
                 if (nx < 0 || nx >= width || ny < 0 || ny >= height) return true; // 边缘
-                if (noiseValue[nx, ny] > threshold.y || noiseValue[nx, ny] < threshold.x) return true; // 周围是空格，说明是边缘
+                if (noiseValue[nx, ny] > max || noiseValue[nx, ny] < min) return true; // 周围是空格，说明是边缘
             }
         }
 

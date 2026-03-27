@@ -16,4 +16,4 @@ MonoBehaviour:
   prefab: {fileID: 3351245266862065335, guid: 2334da0cba9d1334aae426505982ac6d, type: 3}
   min: 0
   max: 0.1
-  probability: {x: 0.1, y: 0.2}
+  probability: {x: 0.7, y: 1}

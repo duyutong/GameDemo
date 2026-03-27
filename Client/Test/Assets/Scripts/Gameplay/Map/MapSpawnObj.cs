@@ -6,8 +6,9 @@ public class MapSpawnObj : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public BoxCollider2D boxCollider;
    
-    private int X;
-    private int Y;
+    public int indexX;
+    public int indexY;
+    public float spawntNoise;
     private GameObject main;
     private bool currVisible;
     public void SetVisible(bool isVisible,bool isInit = false) 
@@ -19,15 +20,18 @@ public class MapSpawnObj : MonoBehaviour
 
         if (!isInit && isVisible != currVisible) 
         {
+            currVisible = isVisible;
             // 开始变化
         }
     }
-    public void SetIndexOnMap(Vector2Int index) 
+    public void SetIndexOnMap(Vector2Int index,float noise) 
     {
-        X = index.x; Y = index.y;
+        indexX = index.x; 
+        indexY = index.y;
+        spawntNoise = noise;
     }
     public (int x,int y) GetIndexOnMap() 
     {
-        return (X, Y);
+        return (indexX, indexY);
     }
 }

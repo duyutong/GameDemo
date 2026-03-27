@@ -39,15 +39,22 @@ public class MapManager : MonoBehaviour
             mapGenerators.AddOrReplace(map.layer, generator);
         }
     }
+    public void ShowAllSpawn(EMapLayer eMapLayer) 
+    {
+        if (!mapGenerators.ContainsKey(eMapLayer)) IniMapGenerators();
+        MapGenerator generator = GetMapByLayer(eMapLayer);
+        generator?.ShowAllSpawn();
+    }
     public void ClearMap(EMapLayer eMapLayer)
     {
-        MapGenerator generator = GetMapByNameByLayer(eMapLayer);
+        if (!mapGenerators.ContainsKey(eMapLayer)) IniMapGenerators();
+        MapGenerator generator = GetMapByLayer(eMapLayer);
         generator?.ClearMap();
     }
     public void GenerateMap(MapGeneratorData generatorData)
     {
         EMapLayer layer = generatorData.layer;
-        MapGenerator generator = GetMapByNameByLayer(layer);
+        MapGenerator generator = GetMapByLayer(layer);
         if (generator == null)
         {
             generator = new(generatorData);
@@ -55,7 +62,7 @@ public class MapManager : MonoBehaviour
         }
         generator.GenerateMap();
     }
-    private MapGenerator GetMapByNameByLayer(EMapLayer eMapLayer)
+    public MapGenerator GetMapByLayer(EMapLayer eMapLayer)
     {
         mapGenerators.TryGetValue(eMapLayer, out MapGenerator generator);
         if (generator != null) return generator;
@@ -99,5 +106,6 @@ public class MapManager : MonoBehaviour
 }
 public enum EMapLayer
 {
-    BaseDround
+    BaseGround,
+    Forest
 }

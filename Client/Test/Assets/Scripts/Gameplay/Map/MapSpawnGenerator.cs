@@ -17,11 +17,10 @@ public class MapSpawnGenerator
         Vector2 pos = new(posX, posY);
 
         float spawntNoise = DistanceToCenter01(threshold.x, threshold.y, groundNoise);
-
         int layout = height - Mathf.RoundToInt(Mathf.InverseLerp(-0.5f * height, 0.5f * height, pos.y) * height);
         layout *= 10; pos += offset;
 
-        if (config.min < spawntNoise && spawntNoise <= config.max)
+        if (config.min <= spawntNoise && spawntNoise <= config.max)
         {
             if (config.probability.x <= chance && chance < config.probability.y)
             {
@@ -31,11 +30,17 @@ public class MapSpawnGenerator
                 plant.transform.localPosition = pos;
 
                 MapSpawnObj mapObstacleObj = plant.GetComponent<MapSpawnObj>();
-                mapObstacleObj.SetIndexOnMap(index);
+                mapObstacleObj.SetIndexOnMap(index, spawntNoise);
                 mapObstacleObj.SetVisible(false, true);
 
+                int siblingIndex = plant.transform.GetSiblingIndex();
+                int remainder = siblingIndex % 4;
+                float ratio = 1;
+                if (remainder < 2) ratio = 0.9f; else ratio = 1.2f;
+                plant.transform.localScale = Vector3.one * ratio;
+
                 SpriteRenderer sr = mapObstacleObj.spriteRenderer;
-                sr.flipX = plant.transform.GetSiblingIndex() % 3 == 1;
+                sr.flipX = siblingIndex % 3 == 1;
                 sr.sortingOrder = layout;
 
                 return (true, mapObstacleObj);
@@ -53,10 +58,10 @@ public class MapSpawnGenerator
 
         float t = Mathf.Abs(n - center) / half;
         t = Mathf.Clamp01(t);
-
-        // 幂次曲线调整
-        t = Mathf.Pow(t, 2);
-
         return t;
+
+        //// 幂次曲线调整
+        //t = Mathf.Pow(t, 2);
+        //return t;
     }
 }

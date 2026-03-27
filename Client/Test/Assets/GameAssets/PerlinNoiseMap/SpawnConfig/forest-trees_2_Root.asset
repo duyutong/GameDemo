@@ -15,5 +15,5 @@ MonoBehaviour:
   spawnName: 
   prefab: {fileID: 1620334130176999077, guid: 7447a508275ccec4f92ac04325b61e6f, type: 3}
   min: 0
-  max: 0.1
+  max: 0.5
   probability: {x: 0.4, y: 0.5}
