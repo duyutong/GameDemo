@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 333ae64d0cd297347aa3d4d9cdfcd45e, type: 3}
-  m_Name: forest-plants_0_Root
+  m_Name: forest-trees_1_Root
   m_EditorClassIdentifier: Assembly-CSharp::PlantConfig
-  plantName: forest-plants_0_Root
-  prefab: {fileID: 7887015306015811814, guid: 02a7be6f001beb04b81b27062baa1602, type: 3}
+  spawnName: 
+  prefab: {fileID: 6768596672057435140, guid: 2fef096ed61abe64483015eef37904a3, type: 3}
   min: 0
-  max: 0.4
-  probability: {x: 0, y: 0.1}
+  max: 0.1
+  probability: {x: 0.3, y: 0.4}

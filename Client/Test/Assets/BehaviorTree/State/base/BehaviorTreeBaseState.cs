@@ -126,7 +126,7 @@ public class BehaviorTreeBaseState
     /// </returns>
     protected virtual ESetFieldValueResult SetFieldValue(string fieldName = default, object value = default)
     {
-        // 默认实现：不处理任何字段，返回 None
+        // 默认实现：不处理任何字段，返回 Random
         return ESetFieldValueResult.None;
     }
     /// <summary>

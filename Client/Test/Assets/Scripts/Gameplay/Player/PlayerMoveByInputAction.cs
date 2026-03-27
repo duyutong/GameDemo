@@ -61,13 +61,9 @@ public class PlayerMoveByInputAction : MonoBehaviour
     private bool CheckMove(Vector2 checkPos)
     {
         if (MapManager.Instance == null) return true;
-        
-        // 暂时不对障碍物做响应
-        //bool IsObstacle = MapGenerator.Instance.IsObstacle(checkPos);
-        //if (IsObstacle) return false;
 
         bool IsEdgeTileOrEmpty = MapManager.Instance.IsEmptyTile(checkPos);
-        if(IsEdgeTileOrEmpty)return false;
+        if (IsEdgeTileOrEmpty) return false;
 
         return true;
     }

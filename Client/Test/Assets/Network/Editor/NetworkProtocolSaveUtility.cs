@@ -345,7 +345,7 @@ public class NetworkProtocolSaveUtility
     /// <summary>
     /// 将以 '/' 分隔的字符串转换为大驼峰（PascalCase）。
     /// </summary>
-    /// <param name="pattern">输入的字符串，使用 '/' 分隔。</param>
+    /// <param layer="pattern">输入的字符串，使用 '/' 分隔。</param>
     public static string GetFuncNameFromPattern(string pattern)
     {
         if (string.IsNullOrWhiteSpace(pattern))

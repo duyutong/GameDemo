@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 333ae64d0cd297347aa3d4d9cdfcd45e, type: 3}
   m_Name: forest-trees_3_Root
   m_EditorClassIdentifier: Assembly-CSharp::PlantConfig
-  plantName: forest-trees_3_Root
+  spawnName: 
   prefab: {fileID: 5862323130448951338, guid: 45da6ad20d7e0f34490e960b0c3b99f7, type: 3}
-  min: 0.4
-  max: 0.5
+  min: 0.3
+  max: 0.6
   probability: {x: 0, y: 0.1}

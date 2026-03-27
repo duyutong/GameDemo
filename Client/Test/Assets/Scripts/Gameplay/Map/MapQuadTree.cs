@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 public class MapQuadTree
@@ -10,14 +10,14 @@ public class MapQuadTree
 
     private int width;
     private int height;
-    private BitArray obstacleBitMap;
+    private BitArray spawnBitMap;
     private HashSet<QuadTreeNode> activeNodes = new HashSet<QuadTreeNode>();
     public void SetMapSize(int width, int height) { this.width = width; this.height = height; }
-    public void SetObstacleBitMap(BitArray obstacleBitMap) => this.obstacleBitMap = obstacleBitMap;
+    public void SetSpawnBitMap(BitArray spawnBitMap) => this.spawnBitMap = spawnBitMap;
     public void ClearTree() 
     {
         root = null;
-        obstacleBitMap = null;
+        spawnBitMap = null;
         activeNodes.Clear();
     }
     public QuadTreeNode BuildQuadTree(int startX, int startY, int size, int minLeafSize)
@@ -30,9 +30,9 @@ public class MapQuadTree
             {
                 for (int y = startY; y < startY + size && y < height; y++)
                 {
-                    if (obstacleBitMap[y * width + x])
+                    if (spawnBitMap[y * width + x])
                     {
-                        MapObstacleObj obj = MapManager.Instance.GetObstacleAt(x, y);
+                        var obj = MapManager.Instance.GetSpawnObjAt(new Vector2Int(x, y));
                         if (obj != null) node.obstacles.Add(obj);
                     }
                 }
@@ -62,12 +62,10 @@ public class MapQuadTree
             return;
         }
 
-        foreach (var child in node.children)
-            QueryNodes(child, range, result);
+        foreach (var child in node.children) QueryNodes(child, range, result);
     }
-    
 
-    public void UpdateVisibleNodes(RectInt viewRect)
+    public void UpdateVisibleNodes<T>(RectInt viewRect,Action<bool,T> setVisibleAction) 
     {
         List<QuadTreeNode> currentNodes = new();
         QueryNodes(TreeRoot, viewRect, currentNodes);
@@ -78,17 +76,16 @@ public class MapQuadTree
         {
             if (!activeNodes.Contains(node))
             {
-                foreach (var obj in node.obstacles) obj.SetVisible(true);
+                foreach (var obj in node.obstacles)
+                    if (obj is T target) setVisibleAction?.Invoke(true, target);
             }
         }
 
-        // ��Ĭ�뿪�Ľڵ�
         foreach (var node in activeNodes)
         {
             if (!newSet.Contains(node))
-            {
-                foreach (var obj in node.obstacles) obj.SetVisible(false);
-            }
+                foreach (var obj in node.obstacles)
+                    if (obj is T target) setVisibleAction?.Invoke(false, target);
         }
 
         activeNodes = newSet;
@@ -99,7 +96,7 @@ public class QuadTreeNode
     public int startX, startY;      
     public int size;             
     public QuadTreeNode[] children; 
-    public List<MapObstacleObj> obstacles; 
+    public List<object> obstacles; 
 
     public bool isLeaf => children == null;
 
@@ -109,7 +106,7 @@ public class QuadTreeNode
         this.startY = startY;
         this.size = size;
         this.children = null;
-        this.obstacles = new List<MapObstacleObj>();
+        this.obstacles = new List<object>();
     }
 }
 public struct RectInt

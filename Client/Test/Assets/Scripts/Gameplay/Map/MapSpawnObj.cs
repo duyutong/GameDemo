@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using UnityEngine;
 
-public class MapObstacleObj : MonoBehaviour
+public class MapSpawnObj : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer;
     public BoxCollider2D boxCollider;
@@ -17,10 +17,9 @@ public class MapObstacleObj : MonoBehaviour
         if (isInit) currVisible = isVisible;
         main.SetActive(isVisible);
 
-        // �仯
         if (!isInit && isVisible != currVisible) 
         {
-            //�����仯
+            // 开始变化
         }
     }
     public void SetIndexOnMap(Vector2Int index) 
