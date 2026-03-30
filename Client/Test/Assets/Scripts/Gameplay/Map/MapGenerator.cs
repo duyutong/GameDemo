@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
@@ -18,10 +18,11 @@ public class MapGenerator
     private int width;
     private int height;
     private EMapPreferencePosition preferPos;
-    private float lacunarity;    //ÆµÂÊ
-    private Vector2 threshold;     //ãĞÖµ
+    private float lacunarity;    //é¢‘ç‡
+    private Vector2 threshold;     //é˜ˆå€¼
     private int seed;
     private MapSpawnGenData spawns;
+    private MapShapeParams shapeParams;
 
     private MapQuadTree mapQuadTree;
     private System.Random random;
@@ -30,7 +31,6 @@ public class MapGenerator
     private Dictionary<Vector2Int, MapSpawnObj> spawnDic = new();
     private CinemachineCamera cmCam;
     private CinemachinePositionComposer cmPosComposer;
-    private float targetNoise = -1;
     private Vector3 lastUpdatePos;
 
     public bool InitFinshi { get; private set; }
@@ -56,16 +56,15 @@ public class MapGenerator
 
         InitFinshi = true;
     }
-    public void ShowAllSpawn() 
+    public void ShowAllSpawn()
     {
         if (!InitFinshi) return;
-        foreach(var spawn in spawnDic)spawn.Value.SetVisible(true,true);
+        foreach (var spawn in spawnDic) spawn.Value.SetVisible(true, true);
     }
     public void ClearMap()
     {
         InitFinshi = false;
 
-        targetNoise = -1;
         mapQuadTree?.ClearTree();
         spawnDic.Clear();
         tilemap.ClearAllTiles();
@@ -78,7 +77,7 @@ public class MapGenerator
 
         width = generatorData.width;
         height = generatorData.height;
-        preferPos = generatorData.position;
+        preferPos = generatorData.preferPos;
         lacunarity = generatorData.lacunarity;
         threshold = generatorData.threshold;
         seed = generatorData.seed;
@@ -91,58 +90,72 @@ public class MapGenerator
             generatorData.seed = seed;
         }
         random = new(seed);
+        shapeParams = new(seed);
     }
-    private Vector2 GetEdgeThreshold() 
+    private List<Vector2> GetAllPreferPositions()
     {
-        if (preferPos == EMapPreferencePosition.Random) return threshold;
-        else 
-        {
-            if (targetNoise <= -1) targetNoise = SetPosTargetNosie();
-            float maxOffset = Mathf.Abs(threshold.y - threshold.x);
-            float half = maxOffset * 0.5f;
-            float min = targetNoise - half;
-            float max = targetNoise + half;
-            // Èç¹û³¬³ö±ß½ç£¬¾ÍÕûÌåÆ½ÒÆ»ØÀ´
-            if (min < 0) { max -= min; min = 0; }
-            if (max > 1) { min -= (max - 1); max = 1; }
+        List<Vector2> result = new List<Vector2>();
 
-            min = Mathf.Clamp01(min);
-            max = Mathf.Clamp01(max);
-
-            return new Vector2(min, max);
-        }
-    }
-    private float SetPosTargetNosie()
-    {
-        int x = 0, y = 0;
-        switch (preferPos)
+        foreach (EMapPreferencePosition pos in System.Enum.GetValues(typeof(EMapPreferencePosition)))
         {
-            case EMapPreferencePosition.BottomLeft:
-                x = 0; y = 0; break;
-            case EMapPreferencePosition.BottomCenter:
-                x = (width - 1) / 2; y = 0; break;
-            case EMapPreferencePosition.BottomRight:
-                x = width - 1; y = 0; break;
-            case EMapPreferencePosition.MiddleLeft:
-                x = 0; y = (height - 1) / 2; break;
-            case EMapPreferencePosition.Center:
-                x = (width - 1) / 2; y = (height - 1) / 2; break;
-            case EMapPreferencePosition.MiddleRight:
-                x = width - 1; y = (height - 1) / 2; break;
-            case EMapPreferencePosition.TopLeft:
-                x = 0; y = height - 1; break;
-            case EMapPreferencePosition.TopCenter:
-                x = (width - 1) / 2; y = height - 1; break;
-            case EMapPreferencePosition.TopRight:
-                x = width - 1; y = height - 1; break;
+            if (pos == EMapPreferencePosition.Random) continue;
+            if ((preferPos & pos) != 0) result.Add(GetPreferPosNormalized(pos));
         }
 
-        float noise = noiseValue[x, y];
-        return noise;
+        return result;
+    }
+    private Vector2 GetPreferPosNormalized(EMapPreferencePosition pos)
+    {
+        switch (pos)
+        {
+            case EMapPreferencePosition.TopLeft: return new Vector2(0f, 1f);
+            case EMapPreferencePosition.TopCenter: return new Vector2(0.5f, 1f);
+            case EMapPreferencePosition.TopRight: return new Vector2(1f, 1f);
+
+            case EMapPreferencePosition.MiddleLeft: return new Vector2(0f, 0.5f);
+            case EMapPreferencePosition.Center: return new Vector2(0.5f, 0.5f);
+            case EMapPreferencePosition.MiddleRight: return new Vector2(1f, 0.5f);
+
+            case EMapPreferencePosition.BottomLeft: return new Vector2(0f, 0f);
+            case EMapPreferencePosition.BottomCenter: return new Vector2(0.5f, 0f);
+            case EMapPreferencePosition.BottomRight: return new Vector2(1f, 0f);
+
+            default: return Vector2.zero;
+        }
+    }
+    private float GetEllipseMask(int x, int y)
+    {
+        // ä¸­å¿ƒåæ ‡ï¼ˆåƒç´ ï¼‰
+        float cx = shapeParams.centerX * width;
+        float cy = shapeParams.centerY * height;
+
+        // æ¤­åœ† dx/dy
+        float dx = x - cx;
+        float dy = y - cy;
+
+        // æ‰­æ›²
+        float nx = x / width; // ç”¨å½’ä¸€åŒ–å»åš Perlin
+        float ny = y / height;
+        float offsetX = (Mathf.PerlinNoise(nx * shapeParams.warpScale + shapeParams.seedX, ny * shapeParams.warpScale + shapeParams.seedY)) * shapeParams.warp;
+        float offsetY = (Mathf.PerlinNoise(nx * shapeParams.warpScale + shapeParams.seedX + 100, ny * shapeParams.warpScale + shapeParams.seedY + 100) - 0.5f) * shapeParams.warp;
+
+        dx += offsetX * width; // Perlin åç§»ä¹Ÿè¦æ”¾å›åƒç´ å°ºåº¦
+        dy += offsetY * height;
+
+        dx /= width;
+        dy /= height;
+
+        // æ¤­åœ†å…¬å¼ï¼ˆåƒç´ å•ä½ï¼‰
+        float value = (dx * dx) / (shapeParams.a * shapeParams.a) + (dy * dy) / (shapeParams.b * shapeParams.b);
+
+        // mask
+        float mask = 1f - Mathf.Clamp01(value);
+        mask = Mathf.Pow(mask, 2f); // å¯ä»¥è°ƒèŠ‚è¾¹ç¼˜å¹³æ»‘åº¦
+        return mask;
     }
     private void SetTileMap()
     {
-        float randomOffset = random.Next(-1000, 1000);
+        float randomOffset = (float)(random.NextDouble() * 2000 - 1000);
         float noiseMax = float.MinValue;
         float noiseMin = float.MaxValue;
 
@@ -150,7 +163,10 @@ public class MapGenerator
         {
             for (int y = 0; y < height; y++)
             {
-                float noise = Mathf.PerlinNoise(x * lacunarity + randomOffset, y * lacunarity + randomOffset);
+                float perlinNoise = Mathf.PerlinNoise(x * lacunarity + randomOffset, y * lacunarity + randomOffset);
+                float mask = GetEllipseMask(x, y);
+                float noise = perlinNoise * mask;
+
                 if (noise < noiseMin) noiseMin = noise;
                 if (noise > noiseMax) noiseMax = noise;
                 noiseValue[x, y] = noise;
@@ -169,17 +185,18 @@ public class MapGenerator
             for (int y = 0; y < height; y++)
             {
                 bool isGround = IsGround(new Vector2Int(x, y));
+                if (!isGround) continue;
+
                 int posX = Mathf.CeilToInt(x - 0.5f * width);
                 int posY = Mathf.CeilToInt(y - 0.5f * height);
-                if (isGround) tilemap.SetTile(new Vector3Int(posX, posY), tileGround);
+                tilemap.SetTile(new Vector3Int(posX, posY), tileGround);
             }
         }
     }
     private void GenerateSpawn()
     {
-        Vector2 spawnsThreshold = GetEdgeThreshold();
+        spawnGenerator.SetGroundThreshold(threshold.x, threshold.y);
         spawnGenerator.SetSpawnObjRoot(spawns.root);
-        spawnGenerator.SetGroundThreshold(spawnsThreshold);
         spawnGenerator.SetMapSize(width, height);
 
         spawns.Clear();
@@ -201,7 +218,7 @@ public class MapGenerator
 
                 foreach (var spawnConf in spawns.confs)
                 {
-                    (bool isGenPlant, var mapSpawnObj) = spawnGenerator.GenSpawnObj(noise, index, chance,spawnConf);
+                    (bool isGenPlant, var mapSpawnObj) = spawnGenerator.GenSpawnObj(noise, index, chance, spawnConf);
                     spawnBitMap[y * width + x] = isGenPlant;
                     if (mapSpawnObj != null) spawnDic.Add(index, mapSpawnObj);
                     if (isGenPlant) break;
@@ -221,12 +238,12 @@ public class MapGenerator
         int minLeafSize = 8;
         mapQuadTree.BuildQuadTree(0, 0, mapSize, minLeafSize);
     }
-   
+
     public void Update()
     {
         if (!InitFinshi) return;
 
-        if (generatorData.spawns.confs != null && generatorData.spawns.confs.Count > 0) 
+        if (generatorData.spawns.confs != null && generatorData.spawns.confs.Count > 0)
         {
             cmCam = cmCam != null ? cmCam : MapManager.Instance.cmCam;
             Vector3 camPos = cmCam.transform.position;
@@ -250,12 +267,12 @@ public class MapGenerator
 
         cmPosComposer = cmPosComposer != null ? cmPosComposer : cmCam.GetComponent<CinemachinePositionComposer>();
         Vector2 damping = cmPosComposer.Damping;
-        float cellSize = 1f; // Ã¿¸ö¸ñ×ÓÊÀ½ç´óĞ¡
+        float cellSize = 1f; // æ¯ä¸ªæ ¼å­ä¸–ç•Œå¤§å°
         float marginX = damping.x * 2f * cellSize;
         float marginY = damping.y * 2f * cellSize;
         float margin = Mathf.Max(marginX, marginY);
 
-        // ÊÀ½ç×ø±ê¾ØĞÎ ¡ú ×ª³ÉÊı×é×ø±ê£¨¼ÓÉÏÆ«ÒÆ£©
+        // ä¸–ç•Œåæ ‡çŸ©å½¢ â†’ è½¬æˆæ•°ç»„åæ ‡ï¼ˆåŠ ä¸Šåç§»ï¼‰
         float offsetX = 0.5f * width;
         float offsetY = 0.5f * height;
 
@@ -274,7 +291,7 @@ public class MapGenerator
     }
     private Vector2 MapIndexToWorldPos(Vector2Int mapIndex)
     {
-        // ½«Êı×éË÷ÒıÓ³Éä»ØÊÀ½ç×ø±ê
+        // å°†æ•°ç»„ç´¢å¼•æ˜ å°„å›ä¸–ç•Œåæ ‡
         float x = mapIndex.x - 0.5f * width;
         float y = mapIndex.y - 0.5f * height;
 
@@ -282,7 +299,7 @@ public class MapGenerator
     }
     private Vector2Int WorldPosToMapIndex(Vector2 worldPos)
     {
-        // ½«ÊÀ½ç×ø±êÓ³Éä»ØÊı×éË÷Òı
+        // å°†ä¸–ç•Œåæ ‡æ˜ å°„å›æ•°ç»„ç´¢å¼•
         int x = Mathf.RoundToInt(worldPos.x + 0.5f * width);
         int y = Mathf.RoundToInt(worldPos.y + 0.5f * height);
 
@@ -315,7 +332,7 @@ public class MapGenerator
     }
     private bool IsGround(Vector2Int index)
     {
-        if (generatorData.layer != EMapLayer.BaseGround) 
+        if (generatorData.layer != EMapLayer.BaseGround)
         {
             Vector2 worldPos = MapIndexToWorldPos(index);
             var baseGround = MapManager.Instance.GetMapByLayer(EMapLayer.BaseGround);
@@ -326,56 +343,39 @@ public class MapGenerator
         int y = index.y;
         if (x < 0 || x >= width || y < 0 || y >= height) return false;
 
-        if (preferPos == EMapPreferencePosition.Random)
-        {
-            bool isGround = threshold.x < noiseValue[x, y] && noiseValue[x, y] <= threshold.y;
-            return isGround;
-        }
-        else
-        {
-            var edge = GetEdgeThreshold();
-            float min = edge.x;
-            float max = edge.y;
-
-            bool isGround = min < noiseValue[x, y] && noiseValue[x, y] <= max;
-            return isGround;
-        }
-    }
-    private bool IsObstacle(Vector2Int index)
-    {
-        if (tileGround == null || spawnBitMap == null) return true;
-
-        int x = index.x;
-        int y = index.y;
-
-        int obstacleIndex = y * width + x;
-        return spawnBitMap[obstacleIndex];
+        bool isGround = threshold.x < noiseValue[x, y] && noiseValue[x, y] <= threshold.y;
+        return isGround;
     }
     private bool IsEdgeTileOrEmpty(Vector2Int index)
     {
         int x = index.x;
         int y = index.y;
 
-        var edge = GetEdgeThreshold();
-        float min = edge.x;
-        float max = edge.y;
-        bool isGround = min < noiseValue[x, y] && noiseValue[x, y] <= max;
+        // å½“å‰æ ¼å­ä¸æ˜¯åœ°é¢ â†’ ç©ºæ ¼
+        bool isGround = IsGround(index);
         if (!isGround) return true;
 
-        // ÅĞ¶ÏÊÇ·ñÊÇ±ßÔµ¸ñ×Ó£¨ÖÜÎ§ÓĞ¿Õ¸ñ£©
+        // éå†å‘¨å›´ 8 ä¸ªæ ¼å­
         for (int dx = -1; dx <= 1; dx++)
         {
             for (int dy = -1; dy <= 1; dy++)
             {
+                // è·³è¿‡è‡ªå·±
                 if (dx == 0 && dy == 0) continue;
-                int nx = index.x + dx;
-                int ny = index.y + dy;
-                if (nx < 0 || nx >= width || ny < 0 || ny >= height) return true; // ±ßÔµ
-                if (noiseValue[nx, ny] > max || noiseValue[nx, ny] < min) return true; // ÖÜÎ§ÊÇ¿Õ¸ñ£¬ËµÃ÷ÊÇ±ßÔµ
+
+                int nx = x + dx;
+                int ny = y + dy;
+
+                // è¶…å‡ºè¾¹ç•Œ â†’ å½“ä½œç©ºæ ¼å¤„ç† â†’ æ˜¯è¾¹ç¼˜
+                if (nx < 0 || nx >= width || ny < 0 || ny >= height) return true;
+
+                // å‘¨å›´æœ‰ä¸€ä¸ªæ ¼å­ä¸æ˜¯åœ°é¢ â†’ è¾¹ç¼˜
+                if (!IsGround(new Vector2Int(nx, ny))) return true;
             }
         }
 
-        return false; // ²»ÊÇ¿Õ¸ñ£¬Ò²²»ÊÇ±ßÔµ
+        // å‘¨å›´éƒ½æ˜¯åœ°é¢ â†’ ä¸æ˜¯è¾¹ç¼˜ï¼Œä¹Ÿä¸æ˜¯ç©ºæ ¼
+        return false;
     }
 }
 [Serializable]

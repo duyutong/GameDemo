@@ -290,7 +290,7 @@ public static class ExpandMethod
     /// <param name="value"></param>
     public static void Reset(this Transform value)
     {
-        //value.position = Vector3.zero;
+        //value.preferPos = Vector3.zero;
         value.localPosition = Vector3.zero;
         value.localRotation = Quaternion.identity;
         value.localScale = Vector3.one;
