@@ -22,7 +22,6 @@ public class MapGenerator
     private Vector2 threshold;     //阈值
     private int seed;
     private MapSpawnGenData spawns;
-    private MapShapeParams shapeParams;
 
     private MapQuadTree mapQuadTree;
     private System.Random random;
@@ -90,7 +89,6 @@ public class MapGenerator
             generatorData.seed = seed;
         }
         random = new(seed);
-        shapeParams = new(seed);
     }
     private List<Vector2> GetAllPreferPositions()
     {
@@ -108,76 +106,91 @@ public class MapGenerator
     {
         switch (pos)
         {
-            case EMapPreferencePosition.TopLeft: return new Vector2(0f, 1f);
-            case EMapPreferencePosition.TopCenter: return new Vector2(0.5f, 1f);
-            case EMapPreferencePosition.TopRight: return new Vector2(1f, 1f);
+            case EMapPreferencePosition.TopLeft: return new Vector2(-0.5f, 0.5f);
+            case EMapPreferencePosition.TopCenter: return new Vector2(0f, 0.5f);
+            case EMapPreferencePosition.TopRight: return new Vector2(0.5f, 0.5f);
 
-            case EMapPreferencePosition.MiddleLeft: return new Vector2(0f, 0.5f);
-            case EMapPreferencePosition.Center: return new Vector2(0.5f, 0.5f);
-            case EMapPreferencePosition.MiddleRight: return new Vector2(1f, 0.5f);
+            case EMapPreferencePosition.MiddleLeft: return new Vector2(-0.5f, 0f);
+            case EMapPreferencePosition.Center: return new Vector2(0f, 0f);
+            case EMapPreferencePosition.MiddleRight: return new Vector2(0.5f, 0f);
 
-            case EMapPreferencePosition.BottomLeft: return new Vector2(0f, 0f);
-            case EMapPreferencePosition.BottomCenter: return new Vector2(0.5f, 0f);
-            case EMapPreferencePosition.BottomRight: return new Vector2(1f, 0f);
+            case EMapPreferencePosition.BottomLeft: return new Vector2(-0.5f, -0.5f);
+            case EMapPreferencePosition.BottomCenter: return new Vector2(0f, -0.5f);
+            case EMapPreferencePosition.BottomRight: return new Vector2(0.5f, -0.5f);
 
             default: return Vector2.zero;
         }
     }
     private float GetEllipseMask(int x, int y)
     {
-        // 中心坐标（像素）
-        float cx = shapeParams.centerX * width;
-        float cy = shapeParams.centerY * height;
+        if (preferPos == EMapPreferencePosition.Random) return 1;
 
-        // 椭圆 dx/dy
-        float dx = x - cx;
-        float dy = y - cy;
+        List<Vector2> pPos = GetAllPreferPositions();
+        float finalMask = 0;
+        foreach (Vector2 p in pPos)
+        {
+            MapShapeParams shapeParams = new(seed);
+            // 中心坐标（像素）
+            float cx = (p.x + shapeParams.centerX) * width;
+            float cy = (p.y + shapeParams.centerY) * height;
 
-        // 扭曲
-        float nx = x / width; // 用归一化去做 Perlin
-        float ny = y / height;
-        float offsetX = (Mathf.PerlinNoise(nx * shapeParams.warpScale + shapeParams.seedX, ny * shapeParams.warpScale + shapeParams.seedY)) * shapeParams.warp;
-        float offsetY = (Mathf.PerlinNoise(nx * shapeParams.warpScale + shapeParams.seedX + 100, ny * shapeParams.warpScale + shapeParams.seedY + 100) - 0.5f) * shapeParams.warp;
+            // 椭圆 dx/dy
+            float dx = x - cx;
+            float dy = y - cy;
 
-        dx += offsetX * width; // Perlin 偏移也要放回像素尺度
-        dy += offsetY * height;
+            // 扭曲
+            float nx = x / (float)width; // 用归一化去做 Perlin
+            float ny = y / (float)height;
+            float offsetX = (Mathf.PerlinNoise(nx * shapeParams.warpScale + shapeParams.seedX, ny * shapeParams.warpScale + shapeParams.seedY)) * shapeParams.warp;
+            float offsetY = (Mathf.PerlinNoise(nx * shapeParams.warpScale + shapeParams.seedX + 100, ny * shapeParams.warpScale + shapeParams.seedY + 100) - 0.5f) * shapeParams.warp;
 
-        dx /= width;
-        dy /= height;
+            dx += offsetX * width;
+            dy += offsetY * height;
 
-        // 椭圆公式（像素单位）
-        float value = (dx * dx) / (shapeParams.a * shapeParams.a) + (dy * dy) / (shapeParams.b * shapeParams.b);
+            float a = shapeParams.a * width * 0.5f;
+            float b = shapeParams.b * height * 0.5f;
+            // 椭圆公式（像素单位）
+            float value = (dx * dx) / (a * a) + (dy * dy) / (b * b);
+            // mask
+            var mask = 1f - Mathf.Clamp01(value);
+            mask = Mathf.Pow(mask, 2f); // 可以调节边缘平滑度
 
-        // mask
-        float mask = 1f - Mathf.Clamp01(value);
-        mask = Mathf.Pow(mask, 2f); // 可以调节边缘平滑度
-        return mask;
+            finalMask += mask;
+        }
+        finalMask = Mathf.Clamp01(finalMask);
+        return finalMask;
     }
     private void SetTileMap()
     {
         float randomOffset = (float)(random.NextDouble() * 2000 - 1000);
         float noiseMax = float.MinValue;
         float noiseMin = float.MaxValue;
+        bool isRandom = preferPos == EMapPreferencePosition.Random;
 
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                float perlinNoise = Mathf.PerlinNoise(x * lacunarity + randomOffset, y * lacunarity + randomOffset);
+                float nx = isRandom ? x : x / (float)width;
+                float ny = isRandom ? y : y / (float)height;
+
+                float perlinNoise = Mathf.PerlinNoise(nx * lacunarity + randomOffset, ny * lacunarity + randomOffset);
                 float mask = GetEllipseMask(x, y);
                 float noise = perlinNoise * mask;
 
                 if (noise < noiseMin) noiseMin = noise;
                 if (noise > noiseMax) noiseMax = noise;
+
                 noiseValue[x, y] = noise;
             }
         }
+        float range = noiseMax - noiseMin;
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
                 float noise = noiseValue[x, y];
-                noiseValue[x, y] = Mathf.InverseLerp(noiseMin, noiseMax, noise);
+                noiseValue[x, y] = (noise - noiseMin) / range;
             }
         }
         for (int x = 0; x < width; x++)

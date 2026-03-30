@@ -1,6 +1,7 @@
-using Unity.Cinemachine;
+ï»¿using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public class MapGeneratorData : MonoBehaviour
 {
@@ -8,8 +9,8 @@ public class MapGeneratorData : MonoBehaviour
     public MapSpawnGenData spawns;
 
     public EMapPreferencePosition preferPos;
-    [Range(0, 0.1f)] public float lacunarity;          //ÆµÂÊ
-    [MinMaxRangeSlider(0, 1)] public Vector2 threshold; //ãĞÖµ
+    [Range(0, 0.1f)] public float lacunarity;          //é¢‘ç‡
+    [MinMaxRangeSlider(0, 1)] public Vector2 threshold; //é˜ˆå€¼
 
     [HideInInspector] public Tilemap tilemap;
     [HideInInspector] public TileBase tileGround;
@@ -22,17 +23,18 @@ public class MapGeneratorData : MonoBehaviour
 
     private void ValidatePreferPos()
     {
-        // Èç¹ûÑ¡ÁË Random£¬¾ÍÇåµôÆäËû
+        // å¦‚æœåŒ…å« Random
         if ((preferPos & EMapPreferencePosition.Random) != 0)
         {
-            preferPos = EMapPreferencePosition.Random;
-            return;
-        }
+            // å»æ‰ Random åæ˜¯å¦è¿˜æœ‰å…¶ä»–ä½
+            EMapPreferencePosition other = preferPos & ~EMapPreferencePosition.Random;
 
-        // Èç¹ûÃ»Ñ¡ÈÎºÎ£¬¾Í¸ø¸öÄ¬ÈÏ
-        if (preferPos == EMapPreferencePosition.None)
-        {
-            preferPos = EMapPreferencePosition.Center;
+            //å¦‚æœè¿˜æœ‰å…¶ä»–é€‰é¡¹ï¼Œè¯´æ˜æ˜¯â€œé Randomâ€
+            if (other != 0)
+            {
+                // æ¸…æ‰ Random
+                preferPos = other;
+            }
         }
     }
     private void OnValidate()
@@ -45,13 +47,13 @@ public class MapShapeParams
     public float centerX;
     public float centerY;
 
-    public float a; // xÖá°ë¾¶
-    public float b; // yÖá°ë¾¶
+    public float a; // xè½´åŠå¾„
+    public float b; // yè½´åŠå¾„
 
-    public float warp;       // Å¤ÇúÇ¿¶È
-    public float warpScale;  // Å¤ÇúÆµÂÊ
+    public float warp;       // æ‰­æ›²å¼ºåº¦
+    public float warpScale;  // æ‰­æ›²é¢‘ç‡
 
-    public float seedX;      // ÔëÉùÆ«ÒÆ
+    public float seedX;      // å™ªå£°åç§»
     public float seedY;
 
 
@@ -60,19 +62,19 @@ public class MapShapeParams
     {
         random = new System.Random(seend);
 
-        // ÖĞĞÄÆ«ÒÆ
+        // ä¸­å¿ƒåç§»
         centerX = 0.5f + (float)(random.NextDouble() * 0.2 - 0.1);
         centerY = 0.5f + (float)(random.NextDouble() * 0.2 - 0.1);
 
-        // ÍÖÔ²ĞÎ×´
-        a = (float)(0.6 + random.NextDouble() * 0.4); // 0.6 ~ 1
-        b = (float)(0.5 + random.NextDouble() * 0.3); // 0.5 ~ 0.8
+        // æ¤­åœ†å½¢çŠ¶
+        a = (float)(0.8 + random.NextDouble() * 0.4); // 0.8 ~ 1.2
+        b = (float)(0.8 + random.NextDouble() * 0.4); // 0.8 ~ 1.2
 
-        // Å¤Çú
+        // æ‰­æ›²
         warp = (float)(0.15 + random.NextDouble() * 0.25);     // 0.15 ~ 0.4
         warpScale = (float)(1.5 + random.NextDouble() * 2.5);  // 1.5 ~ 4
 
-        // ÔëÉùÆ«ÒÆ£¨¹Ø¼ü£©
+        // å™ªå£°åç§»ï¼ˆå…³é”®ï¼‰
         seedX = (float)(random.NextDouble() * 2000 - 1000);
         seedY = (float)(random.NextDouble() * 2000 - 1000);
     }
@@ -80,10 +82,7 @@ public class MapShapeParams
 [System.Flags]
 public enum EMapPreferencePosition
 {
-    None = 0,
-
-    // µ¥¶ÀÊ¹ÓÃ£¨²»ÄÜÓëÆäËû×éºÏ£©
-    Random = 1 << 0,
+    Random = 0,
 
     TopLeft = 1 << 1,
     TopCenter = 1 << 2,
