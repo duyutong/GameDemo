@@ -10,7 +10,7 @@ public class LocalPlayerController : MonoBehaviour
     private EOperationState lastState = EOperationState.None;
     public void OnPlayerMove(EOperationState state, Vector2 linearVelocity)
     {
-        int height = MapManager.Instance.GetMapDataByNameByLayer(EMapLayer.Forest).height;
+        int height = MapManager.Instance.GetMapDataByNameByLayer(EMapLayer.BaseGround).height;
         int layoutOrder = height - Mathf.RoundToInt(Mathf.InverseLerp(-0.5f * height, 0.5f * height, transform.position.y) * height);
         layoutOrder *= 10;
         layoutOrder += 1;

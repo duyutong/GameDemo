@@ -33,7 +33,9 @@ public class MapGenerator
     private Vector3 lastUpdatePos;
 
     public bool InitFinshi { get; private set; }
-    public MapGeneratorData GeneratorData { get { return generatorData; } }
+    public float[,] NoiseValue { get { return (float[,])noiseValue.Clone(); } }
+    public MapGeneratorData GeneratorData{get { return generatorData; }}
+
     public MapGenerator(MapGeneratorData data)
     {
         generatorData = data;
@@ -89,15 +91,58 @@ public class MapGenerator
             generatorData.seed = seed;
         }
         random = new(seed);
+
+        allPreferPos = GetAllPreferPositions();
+    }
+    public Vector2 FindFarthestTile(Vector2 dirNormalized)
+    {
+        Vector2 center = new(width / 2f, height / 2f);
+        Vector2 farthestTile = center; // 默认返回中心
+        float maxDistance = 0f;
+        float step = 1f;
+        for (float t = 0; ; t += step) 
+        {
+            Vector2 samplePoint = center + dirNormalized * t;
+            if (samplePoint.x < 0 || samplePoint.x >= width || samplePoint.y < 0 || samplePoint.y >= height) break;
+            
+            int x = Mathf.RoundToInt(samplePoint.x);
+            int y = Mathf.RoundToInt(samplePoint.y);
+            if (noiseValue[x, y] <= 0f) continue; // 没有瓦片
+
+            Vector2 toTile = new Vector2(x, y) - center;
+            // 方向投影，判断是否在指定方向上
+            float projection = Vector2.Dot(toTile.normalized, dirNormalized);
+            if (projection < 0.99f) continue; // 方向偏差太大，忽略
+
+            float distance = toTile.magnitude;
+            if (distance > maxDistance)
+            {
+                maxDistance = distance;
+                farthestTile = new Vector2(x, y);
+            }
+        }
+
+        Vector2 farthest = (farthestTile - center) / center;// 归一化
+        Debug.Log($"farthest:{farthest}");
+        return farthest;
     }
     private List<Vector2> GetAllPreferPositions()
     {
         List<Vector2> result = new List<Vector2>();
 
-        foreach (EMapPreferencePosition pos in System.Enum.GetValues(typeof(EMapPreferencePosition)))
+        foreach (EMapPreferencePosition pos in Enum.GetValues(typeof(EMapPreferencePosition)))
         {
             if (pos == EMapPreferencePosition.Random) continue;
-            if ((preferPos & pos) != 0) result.Add(GetPreferPosNormalized(pos));
+            if ((preferPos & pos) != 0)
+            {
+                // 除了基础地面，其余地皮层都以(0,0)到偏好点的中间为中心，来生成椭圆形状的地面分布
+                if (preferPos == EMapPreferencePosition.Random) return result;
+                else
+                {
+                    Vector2 groundCenter = GetGroundCenter(pos);
+                    result.Add(groundCenter);
+                }
+            }
         }
 
         return result;
@@ -106,31 +151,40 @@ public class MapGenerator
     {
         switch (pos)
         {
-            case EMapPreferencePosition.TopLeft: return new Vector2(-0.5f, 0.5f);
-            case EMapPreferencePosition.TopCenter: return new Vector2(0f, 0.5f);
-            case EMapPreferencePosition.TopRight: return new Vector2(0.5f, 0.5f);
+            case EMapPreferencePosition.TopLeft: return new Vector2(-1f, 1f);
+            case EMapPreferencePosition.TopCenter: return new Vector2(0f, 1f);
+            case EMapPreferencePosition.TopRight: return new Vector2(1f, 1f);
 
-            case EMapPreferencePosition.MiddleLeft: return new Vector2(-0.5f, 0f);
+            case EMapPreferencePosition.MiddleLeft: return new Vector2(-1f, 0f);
             case EMapPreferencePosition.Center: return new Vector2(0f, 0f);
-            case EMapPreferencePosition.MiddleRight: return new Vector2(0.5f, 0f);
+            case EMapPreferencePosition.MiddleRight: return new Vector2(1f, 0f);
 
-            case EMapPreferencePosition.BottomLeft: return new Vector2(-0.5f, -0.5f);
-            case EMapPreferencePosition.BottomCenter: return new Vector2(0f, -0.5f);
-            case EMapPreferencePosition.BottomRight: return new Vector2(0.5f, -0.5f);
+            case EMapPreferencePosition.BottomLeft: return new Vector2(-1f, -1f);
+            case EMapPreferencePosition.BottomCenter: return new Vector2(0f, -1f);
+            case EMapPreferencePosition.BottomRight: return new Vector2(1f, -1f);
 
             default: return Vector2.zero;
         }
     }
+    private Vector2 GetGroundCenter(EMapPreferencePosition position)
+    {
+        Vector2 p = GetPreferPosNormalized(position);
+        bool isBaseGround = generatorData.layer == EMapLayer.BaseGround;
+        MapGenerator baseGround = isBaseGround ? this : MapManager.Instance.GetMapByLayer(EMapLayer.BaseGround);
+
+        if (position == EMapPreferencePosition.Center) return p;
+        else return 0.5f * baseGround.FindFarthestTile(p);
+    }
+    private List<Vector2> allPreferPos = new();
     private float GetEllipseMask(int x, int y)
     {
         if (preferPos == EMapPreferencePosition.Random) return 1;
 
-        List<Vector2> pPos = GetAllPreferPositions();
         float finalMask = 0;
-        foreach (Vector2 p in pPos)
+        foreach (Vector2 p in allPreferPos)
         {
             MapShapeParams shapeParams = new(seed);
-            // 中心坐标（像素）
+            // 中心坐标
             float cx = (p.x + shapeParams.centerX) * width;
             float cy = (p.y + shapeParams.centerY) * height;
 
@@ -166,7 +220,7 @@ public class MapGenerator
         float noiseMax = float.MinValue;
         float noiseMin = float.MaxValue;
         bool isRandom = preferPos == EMapPreferencePosition.Random;
-
+        
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)

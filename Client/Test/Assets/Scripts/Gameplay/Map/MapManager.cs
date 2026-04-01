@@ -12,6 +12,7 @@ public class MapManager : MonoBehaviour
     public List<MapGeneratorData> maps;
 
     private Dictionary<EMapLayer, MapGenerator> mapGenerators = new();
+    private Dictionary<EMapLayer, MapGeneratorData> mapGeneratorDatas = new();
 
     public MapManager()
     {
@@ -70,8 +71,17 @@ public class MapManager : MonoBehaviour
     }
     public MapGeneratorData GetMapDataByNameByLayer(EMapLayer eMapLayer)
     {
-        mapGenerators.TryGetValue(eMapLayer, out MapGenerator generator);
-        if (generator != null) return generator.GeneratorData;
+        mapGeneratorDatas.TryGetValue(eMapLayer, out MapGeneratorData data);
+        if (data != null) return data;
+
+        MapGenerator generator = GetMapByLayer(eMapLayer);
+        if (generator != null)
+        {
+            MapGeneratorData generatorData = generator.GeneratorData;
+            mapGeneratorDatas.AddOrReplace(eMapLayer, generatorData);
+            return generatorData;
+        }
+
         return null;
     }
     public object GetSpawnObjAt(Vector2Int mapIndex)
