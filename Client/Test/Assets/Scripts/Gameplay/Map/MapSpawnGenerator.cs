@@ -2,14 +2,42 @@
 
 public class MapSpawnGenerator
 {
+    private MapSpawnGenData spawnGenData;
+    private int seed;
+    private System.Random random;
+
     private Vector2 offset = 0.5f * Vector2.one;
-    private Transform spawnRoot;
     private int width;
     private int height;
     private Vector2 grpundThreshold;
+    private bool[,] noiseValue;
     public void SetGroundThreshold(float min, float max) => grpundThreshold = new Vector2(min, max);
-    public void SetSpawnObjRoot(Transform root) => spawnRoot = root;
+    public void SetSeed(int seed) { this.seed = seed; GenerateNoise(); }
+    public void SetSpawnData(MapSpawnGenData data) => spawnGenData = data;
     public void SetMapSize(int width, int height) { this.width = width; this.height = height; }
+    private void GenerateNoise()
+    {
+        noiseValue = new bool[width, height];
+        random = new(seed);
+
+        Vector2 threshold = spawnGenData.threshold;
+        float randomOffset = (float)(random.NextDouble() * 2000 - 1000);
+        float lacunarity = 0.1f;
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                float noise = Mathf.PerlinNoise(x * lacunarity + randomOffset, y * lacunarity + randomOffset);
+                bool isGround = threshold.x < noise && noise <= threshold.y;
+                noiseValue[x, y] = isGround;
+            }
+        }
+    }
+    public bool IsGround(int x, int y)
+    {
+        if (x < 0 || x >= width || y < 0 || y >= height) return false;
+        return noiseValue[x, y];
+    }
     public (bool, MapSpawnObj) GenSpawnObj(float groundNoise, Vector2Int index, float chance, MapSpawnConfig config)
     {
         float posX = index.x - 0.5f * width;
@@ -20,6 +48,7 @@ public class MapSpawnGenerator
         int layout = height - Mathf.RoundToInt(Mathf.InverseLerp(-0.5f * height, 0.5f * height, pos.y) * height);
         layout *= 10; pos += offset;
 
+        Transform spawnRoot = spawnGenData.root;
         if (config.min < spawntNoise && spawntNoise <= config.max)
         {
             if (config.probability.x <= chance && chance < config.probability.y)

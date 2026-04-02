@@ -5,32 +5,40 @@ public class MapSpawnObj : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer;
     public BoxCollider2D boxCollider;
-   
-    public int indexX;
-    public int indexY;
-    public float spawntNoise;
+    public BTRuntimeComponent bTRuntimeComp;
+
+    private int indexX;
+    private int indexY;
+    private float spawntNoise;
     private GameObject main;
     private bool currVisible;
-    public void SetVisible(bool isVisible,bool isInit = false) 
+    private const string onPlayerEnterStr = "TreeBT_Enter";
+    private const string onPlayerExitStr = "TreeBT_Exit";
+    public void SetVisible(bool isVisible, bool isInit = false)
     {
         if (main == null) main = transform.GetChild(0).gameObject;
-        
+
         if (isInit) currVisible = isVisible;
         main.SetActive(isVisible);
 
-        if (!isInit && isVisible != currVisible) 
+        if (!isInit && isVisible != currVisible)
         {
             currVisible = isVisible;
-            // 开始变化
+            bTRuntimeComp?.SetEnable(currVisible);
         }
     }
-    public void SetIndexOnMap(Vector2Int index,float noise) 
+    public void SetCameraOcclusionHit(bool isHit)
     {
-        indexX = index.x; 
+        bTRuntimeComp.SendMsgToBTRuntime(isHit ? onPlayerExitStr : onPlayerEnterStr, EBTState.中断);
+        bTRuntimeComp.SendMsgToBTRuntime(isHit ? onPlayerEnterStr : onPlayerExitStr, EBTState.进入);
+    }
+    public void SetIndexOnMap(Vector2Int index, float noise)
+    {
+        indexX = index.x;
         indexY = index.y;
         spawntNoise = noise;
     }
-    public (int x,int y) GetIndexOnMap() 
+    public (int x, int y) GetIndexOnMap()
     {
         return (indexX, indexY);
     }

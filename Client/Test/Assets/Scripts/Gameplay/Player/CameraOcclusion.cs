@@ -19,9 +19,9 @@ public class CameraOcclusion : MonoBehaviour
     private Camera cam;
 
     // 当前帧命中的
-    private HashSet<SpriteRenderer> currentHits = new HashSet<SpriteRenderer>();
+    private HashSet<MapSpawnObj> currentHits = new HashSet<MapSpawnObj>();
     // 上一帧命中的
-    private HashSet<SpriteRenderer> lastHits = new HashSet<SpriteRenderer>();
+    private HashSet<MapSpawnObj> lastHits = new HashSet<MapSpawnObj>();
 
     void Start()
     {
@@ -53,24 +53,29 @@ public class CameraOcclusion : MonoBehaviour
                 var col = h.collider;
 
                 if (!col) continue;
-                if (!col.TryGetComponent<SpriteRenderer>(out var sr)) continue;
+                if (!col.transform.parent.TryGetComponent<MapSpawnObj>(out var spawn)) continue;
+
+                SpriteRenderer sr = spawn.spriteRenderer;
                 if (sr.sortingOrder < playerRenderer.sortingOrder) continue;
 
-                currentHits.Add(sr);
+                currentHits.Add(spawn);
             }
         }
 
         // ⭐ 恢复不再命中的
-        foreach (var r in lastHits)
+        foreach (var spawn in lastHits)
         {
-            if (r != null && !currentHits.Contains(r)) SetAlpha(r, 1f);
+            if (spawn != null && !currentHits.Contains(spawn)) 
+            {
+                spawn.SetCameraOcclusionHit(false);
+            } 
         }
 
         // ⭐ 设置当前命中的透明
-        foreach (var r in currentHits)
+        foreach (var spawn in currentHits)
         {
-            if (r == null) continue;
-            SetAlpha(r, fadeAlpha);
+            if (spawn == null) continue;
+            spawn.SetCameraOcclusionHit(true);
         }
 
         // ⭐ 交换缓存

@@ -118,7 +118,7 @@ public class BTRuntime
 
         return sortedList;
     }
-    public static void FindMissingElements(List<string> listA, List<string> listB)
+    private void FindMissingElements(List<string> listA, List<string> listB)
     {
         if (listA == null || listB == null)
             throw new ArgumentNullException("输入列表不能为 null");

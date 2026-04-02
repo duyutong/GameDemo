@@ -1,21 +1,23 @@
-ï»¿using System;
+
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 [Serializable]
-public class ColorAnimaState : BehaviorTreeBaseState
+public class ScaleAxisLockState : BehaviorTreeBaseState
 {
     #region AutoContext
 
     public System.Boolean exit;
     public System.Boolean enter;
-    public UnityEngine.Color color;
     public BTTargetAnimaCurve animaCurve;
     public BTTargetObject target;
+    public UnityEngine.Vector3 lockAxis;
 
     public override BTStateObject stateObj
     {
@@ -23,7 +25,7 @@ public class ColorAnimaState : BehaviorTreeBaseState
         {
             if (_stateObj == null)
             {
-                _stateObj = ScriptableObject.CreateInstance<ColorAnimaStateObj>();
+                _stateObj = ScriptableObject.CreateInstance<ScaleAxisLockStateObj>();
                 _stateObj.state = state;
                 _stateObj.output = output;
                 _stateObj.interruptible = interruptible;
@@ -31,21 +33,21 @@ public class ColorAnimaState : BehaviorTreeBaseState
 
                 _stateObj.exit = exit;
                 _stateObj.enter = enter;
-                _stateObj.color = color;
                 _stateObj.animaCurve = animaCurve;
                 _stateObj.target = target;
+                _stateObj.lockAxis = lockAxis;
             }
             return _stateObj;
         }
     }
-    private ColorAnimaStateObj _stateObj;
+    private ScaleAxisLockStateObj _stateObj;
     public override void InitParam(string param)
     {
         base.InitParam(param);
-        DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(ColorAnimaStateObj));
+        DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(ScaleAxisLockStateObj));
         using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(param)))
         {
-            _stateObj = ScriptableObject.CreateInstance<ColorAnimaStateObj>();
+            _stateObj = ScriptableObject.CreateInstance<ScaleAxisLockStateObj>();
             var json = new StreamReader(stream).ReadToEnd();
             JsonUtility.FromJsonOverwrite(json, _stateObj);
 
@@ -55,9 +57,9 @@ public class ColorAnimaState : BehaviorTreeBaseState
 
             exit = _stateObj.exit;
             enter = _stateObj.enter;
-            color = _stateObj.color;
             animaCurve = _stateObj.animaCurve;
             target = _stateObj.target;
+            lockAxis = _stateObj.lockAxis;
         }
     }
     protected override ESetFieldValueResult SetFieldValue(string fieldName, object value)
@@ -66,9 +68,10 @@ public class ColorAnimaState : BehaviorTreeBaseState
 
         else if (StringComparer.Ordinal.Equals(fieldName, "exit") && value is System.Boolean exitValue) exit = exitValue;
         else if (StringComparer.Ordinal.Equals(fieldName, "enter") && value is System.Boolean enterValue) enter = enterValue;
-        else if (StringComparer.Ordinal.Equals(fieldName, "color") && value is UnityEngine.Color colorValue) color = colorValue;
         else if (StringComparer.Ordinal.Equals(fieldName, "animaCurve") && value is BTTargetAnimaCurve animaCurveValue) animaCurve = animaCurveValue;
         else if (StringComparer.Ordinal.Equals(fieldName, "target") && value is BTTargetObject targetValue) target = targetValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "lockAxis") && value is UnityEngine.Vector3 lockAxisValue) lockAxis = lockAxisValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "pointerEventData") && value is PointerEventData PointerEventDataValue) pointerEventData = PointerEventDataValue;
         else return ESetFieldValueResult.Fail;
 
         return ESetFieldValueResult.Succ;
@@ -82,25 +85,28 @@ public class ColorAnimaState : BehaviorTreeBaseState
 
         exit = _stateObj.exit;
         enter = _stateObj.enter;
-        color = _stateObj.color;
         animaCurve = _stateObj.animaCurve;
         target = _stateObj.target;
+        lockAxis = _stateObj.lockAxis;
     }
     #endregion
 
-    private RectTransform targetRect;
-    private Graphic graphic;
-    private Color startColor;
     private float startTime;
     private float endTime;
     private float timeCount;
+    private Transform targetTrans;
     public override void OnEnter()
     {
         base.OnEnter();
-        if (targetRect == null) targetRect = target.target.GetComponent<RectTransform>();
-        if (graphic == null) graphic = targetRect.GetComponent<Graphic>();
+
+        if (targetTrans == null)
+        {
+            Transform transform = target.target as Transform;
+            if (transform != null) targetTrans = transform;
+            else { OnRefresh(); return; }
+        }
+
         (startTime, endTime) = GetCurveTimeRange(animaCurve.curve);
-        startColor = graphic.color;
 
         bool isCanExecute = enter && runtime != null;
         if (isCanExecute) OnExecute();
@@ -113,29 +119,37 @@ public class ColorAnimaState : BehaviorTreeBaseState
     }
     public override void OnUpdate()
     {
-        if (targetRect == null) return;
-        if (state != EBTState.æ‰§è¡Œä¸­) return;
+        if (runtime == null) return;
+        if (state != EBTState.Ö´ÐÐÖÐ) return;
 
         timeCount += Time.deltaTime;
-        if (timeCount > endTime) { timeCount = 0; OnExit(); return; }
-
-        if (startTime <= timeCount && timeCount <= endTime) 
+        if (timeCount > endTime)
         {
-            float t = animaCurve.curve.Evaluate(timeCount);
-            graphic.color = Color.Lerp(startColor, color, t);
+            OnExit();
+            return;
         }
-            
+
+        if (startTime <= timeCount && timeCount <= endTime)
+        {
+            float scaleRatio = animaCurve.curve.Evaluate(timeCount);
+            Vector3 result = lockAxis * scaleRatio;
+            if (lockAxis.x == 0) result.x = 1;
+            if (lockAxis.y == 0) result.y = 1;
+            if (lockAxis.z == 0) result.z = 1;
+            targetTrans.localScale = result;
+        }
     }
 }
+
 #region AutoContext_BTStateObject
-public class ColorAnimaStateObj : BTStateObject
+public class ScaleAxisLockStateObj : BTStateObject
 {
     public EBTState state;
 
     public System.Boolean exit;
     public System.Boolean enter;
-    public UnityEngine.Color color;
     public BTTargetAnimaCurve animaCurve;
     public BTTargetObject target;
+    public UnityEngine.Vector3 lockAxis;
 }
 #endregion

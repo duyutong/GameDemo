@@ -1,21 +1,22 @@
-ï»¿using System;
+
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 [Serializable]
-public class ColorAnimaState : BehaviorTreeBaseState
+public class SpriteRendererAlphaState : BehaviorTreeBaseState
 {
     #region AutoContext
 
     public System.Boolean exit;
     public System.Boolean enter;
-    public UnityEngine.Color color;
-    public BTTargetAnimaCurve animaCurve;
     public BTTargetObject target;
+    public BTTargetAnimaCurve animaCurve;
 
     public override BTStateObject stateObj
     {
@@ -23,7 +24,7 @@ public class ColorAnimaState : BehaviorTreeBaseState
         {
             if (_stateObj == null)
             {
-                _stateObj = ScriptableObject.CreateInstance<ColorAnimaStateObj>();
+                _stateObj = ScriptableObject.CreateInstance<SpriteRendererAlphaStateObj>();
                 _stateObj.state = state;
                 _stateObj.output = output;
                 _stateObj.interruptible = interruptible;
@@ -31,21 +32,20 @@ public class ColorAnimaState : BehaviorTreeBaseState
 
                 _stateObj.exit = exit;
                 _stateObj.enter = enter;
-                _stateObj.color = color;
-                _stateObj.animaCurve = animaCurve;
                 _stateObj.target = target;
+                _stateObj.animaCurve = animaCurve;
             }
             return _stateObj;
         }
     }
-    private ColorAnimaStateObj _stateObj;
+    private SpriteRendererAlphaStateObj _stateObj;
     public override void InitParam(string param)
     {
         base.InitParam(param);
-        DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(ColorAnimaStateObj));
+        DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(SpriteRendererAlphaStateObj));
         using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(param)))
         {
-            _stateObj = ScriptableObject.CreateInstance<ColorAnimaStateObj>();
+            _stateObj = ScriptableObject.CreateInstance<SpriteRendererAlphaStateObj>();
             var json = new StreamReader(stream).ReadToEnd();
             JsonUtility.FromJsonOverwrite(json, _stateObj);
 
@@ -55,9 +55,8 @@ public class ColorAnimaState : BehaviorTreeBaseState
 
             exit = _stateObj.exit;
             enter = _stateObj.enter;
-            color = _stateObj.color;
-            animaCurve = _stateObj.animaCurve;
             target = _stateObj.target;
+            animaCurve = _stateObj.animaCurve;
         }
     }
     protected override ESetFieldValueResult SetFieldValue(string fieldName, object value)
@@ -66,9 +65,9 @@ public class ColorAnimaState : BehaviorTreeBaseState
 
         else if (StringComparer.Ordinal.Equals(fieldName, "exit") && value is System.Boolean exitValue) exit = exitValue;
         else if (StringComparer.Ordinal.Equals(fieldName, "enter") && value is System.Boolean enterValue) enter = enterValue;
-        else if (StringComparer.Ordinal.Equals(fieldName, "color") && value is UnityEngine.Color colorValue) color = colorValue;
-        else if (StringComparer.Ordinal.Equals(fieldName, "animaCurve") && value is BTTargetAnimaCurve animaCurveValue) animaCurve = animaCurveValue;
         else if (StringComparer.Ordinal.Equals(fieldName, "target") && value is BTTargetObject targetValue) target = targetValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "animaCurve") && value is BTTargetAnimaCurve animaCurveValue) animaCurve = animaCurveValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "pointerEventData") && value is PointerEventData PointerEventDataValue) pointerEventData = PointerEventDataValue;
         else return ESetFieldValueResult.Fail;
 
         return ESetFieldValueResult.Succ;
@@ -82,29 +81,29 @@ public class ColorAnimaState : BehaviorTreeBaseState
 
         exit = _stateObj.exit;
         enter = _stateObj.enter;
-        color = _stateObj.color;
-        animaCurve = _stateObj.animaCurve;
         target = _stateObj.target;
+        animaCurve = _stateObj.animaCurve;
     }
     #endregion
 
-    private RectTransform targetRect;
-    private Graphic graphic;
-    private Color startColor;
+    private SpriteRenderer sr;
     private float startTime;
     private float endTime;
     private float timeCount;
     public override void OnEnter()
     {
         base.OnEnter();
-        if (targetRect == null) targetRect = target.target.GetComponent<RectTransform>();
-        if (graphic == null) graphic = targetRect.GetComponent<Graphic>();
+        if (sr == null) sr = target.target.GetComponent<SpriteRenderer>();
         (startTime, endTime) = GetCurveTimeRange(animaCurve.curve);
-        startColor = graphic.color;
 
-        bool isCanExecute = enter && runtime != null;
+        bool isCanExecute = enter && runtime != null && sr != null;
         if (isCanExecute) OnExecute();
         else OnRefresh();
+    }
+    public override void OnExecute()
+    {
+        base.OnExecute();
+        timeCount = 0;
     }
     public override void OnRefresh()
     {
@@ -113,29 +112,37 @@ public class ColorAnimaState : BehaviorTreeBaseState
     }
     public override void OnUpdate()
     {
-        if (targetRect == null) return;
-        if (state != EBTState.æ‰§è¡Œä¸­) return;
+        if (sr == null) return;
+        if (state != EBTState.Ö´ÐÐÖÐ) return;
 
         timeCount += Time.deltaTime;
-        if (timeCount > endTime) { timeCount = 0; OnExit(); return; }
-
-        if (startTime <= timeCount && timeCount <= endTime) 
+        if (timeCount > endTime)
         {
-            float t = animaCurve.curve.Evaluate(timeCount);
-            graphic.color = Color.Lerp(startColor, color, t);
+            timeCount = 0;
+            SetAlph(endTime);
+            OnExit();
+            return;
         }
-            
+
+        if (startTime <= timeCount && timeCount <= endTime) SetAlph(timeCount);
+    }
+
+    private void SetAlph(float time)
+    {
+        float t = animaCurve.curve.Evaluate(time);
+        Color c = sr.color;
+        c.a = t;
     }
 }
+
 #region AutoContext_BTStateObject
-public class ColorAnimaStateObj : BTStateObject
+public class SpriteRendererAlphaStateObj : BTStateObject
 {
     public EBTState state;
 
     public System.Boolean exit;
     public System.Boolean enter;
-    public UnityEngine.Color color;
-    public BTTargetAnimaCurve animaCurve;
     public BTTargetObject target;
+    public BTTargetAnimaCurve animaCurve;
 }
 #endregion

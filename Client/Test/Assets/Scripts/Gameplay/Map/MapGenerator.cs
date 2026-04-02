@@ -22,6 +22,8 @@ public class MapGenerator
     private Vector2 threshold;     //阈值
     private int seed;
     private MapSpawnGenData spawns;
+    private MapShapeParams shapeParams;
+    private List<Vector2> allPreferPos = new();
 
     private MapQuadTree mapQuadTree;
     private System.Random random;
@@ -34,7 +36,7 @@ public class MapGenerator
 
     public bool InitFinshi { get; private set; }
     public float[,] NoiseValue { get { return (float[,])noiseValue.Clone(); } }
-    public MapGeneratorData GeneratorData{get { return generatorData; }}
+    public MapGeneratorData GeneratorData { get { return generatorData; } }
 
     public MapGenerator(MapGeneratorData data)
     {
@@ -93,6 +95,12 @@ public class MapGenerator
         random = new(seed);
 
         allPreferPos = GetAllPreferPositions();
+        shapeParams = new(seed);
+
+        spawnGenerator.SetMapSize(width, height);
+        spawnGenerator.SetGroundThreshold(threshold.x, threshold.y);
+        spawnGenerator.SetSpawnData(spawns);
+        spawnGenerator.SetSeed(seed);
     }
     public Vector2 FindFarthestTile(Vector2 dirNormalized)
     {
@@ -100,11 +108,11 @@ public class MapGenerator
         Vector2 farthestTile = center; // 默认返回中心
         float maxDistance = 0f;
         float step = 1f;
-        for (float t = 0; ; t += step) 
+        for (float t = 0; ; t += step)
         {
             Vector2 samplePoint = center + dirNormalized * t;
             if (samplePoint.x < 0 || samplePoint.x >= width || samplePoint.y < 0 || samplePoint.y >= height) break;
-            
+
             int x = Mathf.RoundToInt(samplePoint.x);
             int y = Mathf.RoundToInt(samplePoint.y);
             if (noiseValue[x, y] <= 0f) continue; // 没有瓦片
@@ -123,7 +131,6 @@ public class MapGenerator
         }
 
         Vector2 farthest = (farthestTile - center) / center;// 归一化
-        Debug.Log($"farthest:{farthest}");
         return farthest;
     }
     private List<Vector2> GetAllPreferPositions()
@@ -175,7 +182,6 @@ public class MapGenerator
         if (position == EMapPreferencePosition.Center) return p;
         else return 0.5f * baseGround.FindFarthestTile(p);
     }
-    private List<Vector2> allPreferPos = new();
     private float GetEllipseMask(int x, int y)
     {
         if (preferPos == EMapPreferencePosition.Random) return 1;
@@ -183,7 +189,6 @@ public class MapGenerator
         float finalMask = 0;
         foreach (Vector2 p in allPreferPos)
         {
-            MapShapeParams shapeParams = new(seed);
             // 中心坐标
             float cx = (p.x + shapeParams.centerX) * width;
             float cy = (p.y + shapeParams.centerY) * height;
@@ -220,7 +225,7 @@ public class MapGenerator
         float noiseMax = float.MinValue;
         float noiseMin = float.MaxValue;
         bool isRandom = preferPos == EMapPreferencePosition.Random;
-        
+
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
@@ -262,10 +267,6 @@ public class MapGenerator
     }
     private void GenerateSpawn()
     {
-        spawnGenerator.SetGroundThreshold(threshold.x, threshold.y);
-        spawnGenerator.SetSpawnObjRoot(spawns.root);
-        spawnGenerator.SetMapSize(width, height);
-
         spawns.Clear();
         spawnBitMap = new BitArray(width * height);
 
@@ -273,16 +274,19 @@ public class MapGenerator
         {
             for (int x = 0; x < width; x++)
             {
+                Vector2Int index = new Vector2Int(x, y);
+
                 float noise = noiseValue[x, y];
                 bool isGround = IsGround(new Vector2Int(x, y));
                 if (!isGround) continue;
 
-                float chance = random.Next(0, 1000) * 0.001f;
-                Vector2Int index = new Vector2Int(x, y);
+                bool isSpawnIsGround = spawnGenerator.IsGround(x,y);
+                if (!isSpawnIsGround) continue;
 
                 bool isEdge = IsEdgeTileOrEmpty(index);
                 if (isEdge) continue;
 
+                float chance = random.Next(0, 1000) * 0.001f;
                 foreach (var spawnConf in spawns.confs)
                 {
                     (bool isGenPlant, var mapSpawnObj) = spawnGenerator.GenSpawnObj(noise, index, chance, spawnConf);
@@ -449,6 +453,7 @@ public class MapGenerator
 public class MapSpawnGenData
 {
     public Transform root;
+    [MinMaxRangeSlider(0, 1)] public Vector2 threshold; //阈值
     public List<MapSpawnConfig> confs = new();
     public void Clear()
     {

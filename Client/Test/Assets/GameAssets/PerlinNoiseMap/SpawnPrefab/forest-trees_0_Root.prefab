@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3368388783846193795}
   - component: {fileID: 5844355185987608842}
   m_Layer: 6
-  m_Name: forest-trees_0
+  m_Name: child_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,7 +59,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: fddf54321c762b44e801c417e60a19f8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -148,6 +148,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1035222994496795717}
   - component: {fileID: 247134243244793149}
+  - component: {fileID: 3680751056430008276}
   m_Layer: 6
   m_Name: forest-trees_0_Root
   m_TagString: Untagged
@@ -185,3 +186,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapObstacleObj
   spriteRenderer: {fileID: 3368388783846193795}
   boxCollider: {fileID: 5844355185987608842}
+  bTRuntimeComp: {fileID: 3680751056430008276}
+  indexX: 0
+  indexY: 0
+  spawntNoise: 0
+--- !u!114 &3680751056430008276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4811062436529432022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b34bf415b772db43b0423e9570dd8fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BTRuntimeComponent
+  container: {fileID: 11400000, guid: 9709795cfa728f1489e4a25e2b77aab9, type: 2}
