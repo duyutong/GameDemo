@@ -20,6 +20,8 @@ public class PlayerMoveByInputAction : MonoBehaviour
     private Rigidbody2D rb;
     private PlayerControls controls;
     private InputAction moveAction;
+
+    private MapGenerator baseGround;
     private void Awake()
     {
         controls = new PlayerControls();  // 生成类实例
@@ -61,6 +63,9 @@ public class PlayerMoveByInputAction : MonoBehaviour
     private bool CheckMove(Vector2 checkPos)
     {
         if (MapManager.Instance == null) return true;
+
+        baseGround ??= MapManager.Instance.GetMapByLayer(EMapLayer.BaseGround);
+        if (baseGround == null) return true;
 
         bool IsEdgeTileOrEmpty = MapManager.Instance.IsEmptyTile(checkPos);
         if (IsEdgeTileOrEmpty) return false;

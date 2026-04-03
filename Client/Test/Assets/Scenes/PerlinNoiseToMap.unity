@@ -253,7 +253,7 @@ MonoBehaviour:
   tileGround: {fileID: 11400000, guid: be8c8f5b1b00bd140baf10eb8e715cca, type: 2}
   width: 64
   height: 64
-  seed: 1775118808
+  seed: 1775195509
   useNewSeed: 1
 --- !u!1 &748625675
 GameObject:
@@ -296,7 +296,7 @@ MonoBehaviour:
   tileGround: {fileID: 11400000, guid: be8c8f5b1b00bd140baf10eb8e715cca, type: 2}
   width: 64
   height: 64
-  seed: 1775118751
+  seed: 1775195506
   useNewSeed: 1
 --- !u!4 &748625677
 Transform:
@@ -400,7 +400,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -257299883
   m_SortingLayer: 3
-  m_SortingOrder: 1000
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -5567955949000922819, guid: 50c0092d40f71d74a8daa46c5b93eecd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -470,7 +470,7 @@ MonoBehaviour:
     CustomLookAtTarget: 0
   Lens:
     FieldOfView: 60
-    OrthographicSize: 5
+    OrthographicSize: 3
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -497,7 +497,7 @@ Transform:
   m_GameObject: {fileID: 1656220013}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.00000023841858, y: 2, z: -10}
+  m_LocalPosition: {x: -0.00000023841858, y: 1.2, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -664,7 +664,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 3
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -689,7 +689,7 @@ Transform:
   m_GameObject: {fileID: 1758011476}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.00000023841858, y: 2, z: -10}
+  m_LocalPosition: {x: -0.00000023841858, y: 1.2, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1241,6 +1241,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 1758011479}
   - {fileID: 1656220015}
+  - {fileID: 226554233}
   - {fileID: 1747408072}
   - {fileID: 1819300692}
-  - {fileID: 226554233}

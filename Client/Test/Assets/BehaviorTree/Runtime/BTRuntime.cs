@@ -145,6 +145,7 @@ public class BTRuntime
         foreach (KeyValuePair<string, BTState> keyValuePair in stateDic)
         {
             BTState state = keyValuePair.Value;
+            state.OnRecycle();
             BTObjectPool.ReturnObject(state);
         }
         lastStateDic.Clear();

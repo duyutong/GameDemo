@@ -60,7 +60,8 @@ public class MapSpawnGenerator
 
                 MapSpawnObj mapObstacleObj = plant.GetComponent<MapSpawnObj>();
                 mapObstacleObj.SetIndexOnMap(index, spawntNoise);
-                mapObstacleObj.SetVisible(false, true);
+                mapObstacleObj.SetVisible(false);
+                mapObstacleObj.SetCameraOcclusionHit(false, true);
 
                 int siblingIndex = plant.transform.GetSiblingIndex();
                 int remainder = siblingIndex % 4;

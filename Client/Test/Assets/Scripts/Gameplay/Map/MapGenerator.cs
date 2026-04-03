@@ -62,7 +62,7 @@ public class MapGenerator
     public void ShowAllSpawn()
     {
         if (!InitFinshi) return;
-        foreach (var spawn in spawnDic) spawn.Value.SetVisible(true, true);
+        foreach (var spawn in spawnDic) spawn.Value.SetVisible(true);
     }
     public void ClearMap()
     {
@@ -358,7 +358,10 @@ public class MapGenerator
         int maxY = Mathf.FloorToInt(top);
 
         RectInt viewRect = new(xMin: minX, xMax: maxX, yMin: minY, yMax: maxY);
-        mapQuadTree.UpdateVisibleNodes<MapSpawnObj>(viewRect, (_isVisible, _obj) => _obj.SetVisible(_isVisible));
+        mapQuadTree.UpdateVisibleNodes<MapSpawnObj>(viewRect, (_isVisible, _obj) => 
+        {
+            _obj.SetVisible(_isVisible);
+        });
     }
     private Vector2 MapIndexToWorldPos(Vector2Int mapIndex)
     {

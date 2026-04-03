@@ -296,6 +296,11 @@ public class BehaviorTreeBaseState
         if (state != EBTState.执行中) goto wait;
         wait:;
     }
+
+    public virtual void OnRecycle()
+    {
+        
+    }
 }
 
 public enum ESetFieldValueResult

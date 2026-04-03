@@ -1,10 +1,8 @@
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -114,8 +112,15 @@ public class ScaleAxisLockState : BehaviorTreeBaseState
     }
     public override void OnRefresh()
     {
-        base.OnRefresh();
         timeCount = 0;
+       
+        base.OnRefresh();
+    }
+    public override void OnRecycle()
+    {
+        timeCount = 0;
+        targetTrans = null;
+        base.OnRecycle();
     }
     public override void OnUpdate()
     {
@@ -123,20 +128,16 @@ public class ScaleAxisLockState : BehaviorTreeBaseState
         if (state != EBTState.Ö´ÐÐÖÐ) return;
 
         timeCount += Time.deltaTime;
-        if (timeCount > endTime)
+        if (startTime <= timeCount)
         {
-            OnExit();
-            return;
-        }
-
-        if (startTime <= timeCount && timeCount <= endTime)
-        {
-            float scaleRatio = animaCurve.curve.Evaluate(timeCount);
+            float scaleRatio = animaCurve.curve.Evaluate(Mathf.Clamp(timeCount,startTime, endTime));
             Vector3 result = lockAxis * scaleRatio;
             if (lockAxis.x == 0) result.x = 1;
             if (lockAxis.y == 0) result.y = 1;
             if (lockAxis.z == 0) result.z = 1;
             targetTrans.localScale = result;
+
+            if (timeCount > endTime) { OnExit(); return; }
         }
     }
 }

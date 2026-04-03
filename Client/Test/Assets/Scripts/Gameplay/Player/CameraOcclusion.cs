@@ -98,11 +98,4 @@ public class CameraOcclusion : MonoBehaviour
             center + new Vector3( halfW, 0, 0),
         };
     }
-
-   private void SetAlpha(SpriteRenderer sr, float alpha)
-    {
-        Color c = sr.color;
-        c.a = alpha;
-        sr.color = c;
-    }
 }

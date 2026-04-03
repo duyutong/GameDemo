@@ -100,15 +100,16 @@ public class SpriteRendererAlphaState : BehaviorTreeBaseState
         if (isCanExecute) OnExecute();
         else OnRefresh();
     }
-    public override void OnExecute()
-    {
-        base.OnExecute();
-        timeCount = 0;
-    }
     public override void OnRefresh()
     {
         base.OnRefresh();
         timeCount = 0;
+    }
+    public override void OnRecycle() 
+    {
+        timeCount = 0;
+        sr = null;
+        base.OnRecycle();
     }
     public override void OnUpdate()
     {
@@ -116,22 +117,14 @@ public class SpriteRendererAlphaState : BehaviorTreeBaseState
         if (state != EBTState.Ö´ÐÐÖÐ) return;
 
         timeCount += Time.deltaTime;
-        if (timeCount > endTime)
+        if (startTime <= timeCount)
         {
-            timeCount = 0;
-            SetAlph(endTime);
-            OnExit();
-            return;
+            float t = animaCurve.curve.Evaluate(timeCount);
+            Color c = sr.color;
+            c.a = t;
+            sr.color = c;
+            if (timeCount > endTime) { OnExit(); return; }
         }
-
-        if (startTime <= timeCount && timeCount <= endTime) SetAlph(timeCount);
-    }
-
-    private void SetAlph(float time)
-    {
-        float t = animaCurve.curve.Evaluate(time);
-        Color c = sr.color;
-        c.a = t;
     }
 }
 

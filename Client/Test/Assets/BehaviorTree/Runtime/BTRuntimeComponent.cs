@@ -4,7 +4,9 @@ public class BTRuntimeComponent : MonoBehaviour
 {
     public BTContainer container;
     public BTRuntime runtime;
-    public bool IsEnable { get; private set; }
+
+    private bool isEnable = false;
+    public bool IsEnable { get { return isEnable; }private set { isEnable = value; } }
     public void OnEnable()
     {
         InitRuntime();
@@ -13,9 +15,9 @@ public class BTRuntimeComponent : MonoBehaviour
    
     public void SetEnable(bool value)
     {
-        if (IsEnable == value) return;
-        IsEnable = value;
-        if (IsEnable) runtime?.OnEnable();
+        if (isEnable == value) return;
+        isEnable = value;
+        if (isEnable) runtime?.OnEnable();
         else runtime?.OnDisable();
     }
     public void InitRuntime()

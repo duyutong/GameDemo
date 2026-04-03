@@ -83,18 +83,6 @@ MonoBehaviour:
     typeName: Behav_SpriteRendererAlpha
     stateName: SpriteRendererAlphaState
     stateParams: '{"hideFlags":0,"name":"","interruptTag":"TreeBT_Enter","interruptible":true,"output":[{"fromPortName":"exit","nodeId":"8eeaa698-4b9d-4335-b935-a29fca3bee40","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[{"inTangent":2.33333325,"inWeight":0,"leftTangentMode":1,"outTangent":2.33333325,"outWeight":0.333333343,"rightTangentMode":1,"time":0,"value":0.3,"weightedMode":0},{"inTangent":2.33333325,"inWeight":0.333333343,"leftTangentMode":1,"outTangent":2.33333325,"outWeight":0,"rightTangentMode":1,"time":0.3,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[{"inTangent":2.33333325,"inWeight":0,"outTangent":2.33333325,"outWeight":0.333333343,"tangentMode":35,"time":0,"value":0.3,"weightedMode":0},{"inTangent":2.33333325,"inWeight":0.333333343,"outTangent":2.33333325,"outWeight":0,"tangentMode":35,"time":0.3,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8}},"enter":false,"exit":false,"state":0,"target":{"localPath":"child_0","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
-  - nodeName: ScaleAxisLock
-    guid: aff0db3f-0857-49ce-b77f-6b70f8616bc5
-    lastNodes:
-    - 77877739-ccbc-41b5-a4c1-b08579beb817
-    output:
-    - fromPortName: exit
-      toPortName: enter
-      nodeId: 8eeaa698-4b9d-4335-b935-a29fca3bee40
-    nodePos: {x: 314, y: 289}
-    typeName: Behav_ScaleAxisLock
-    stateName: ScaleAxisLockState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"TreeBT_Enter","interruptible":true,"output":[{"fromPortName":"exit","nodeId":"8eeaa698-4b9d-4335-b935-a29fca3bee40","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[{"inTangent":-0.6666668,"inWeight":0,"leftTangentMode":1,"outTangent":-0.6666668,"outWeight":0.333333343,"rightTangentMode":1,"time":0,"value":1.2,"weightedMode":0},{"inTangent":0.945225,"inWeight":0.2920256,"leftTangentMode":0,"outTangent":0.945225,"outWeight":0,"rightTangentMode":0,"time":0.3,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[{"inTangent":-0.6666668,"inWeight":0,"outTangent":-0.6666668,"outWeight":0.333333343,"tangentMode":35,"time":0,"value":1.2,"weightedMode":0},{"inTangent":0.945225,"inWeight":0.2920256,"outTangent":0.945225,"outWeight":0,"tangentMode":0,"time":0.3,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8}},"enter":false,"exit":false,"lockAxis":{"x":1,"y":1,"z":0},"state":0,"target":{"localPath":"child_0","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
   - nodeName: BTTagEventTrigger
     guid: 77877739-ccbc-41b5-a4c1-b08579beb817
     lastNodes: []
@@ -109,18 +97,6 @@ MonoBehaviour:
     typeName: Trigger_BTTagEventTrigger
     stateName: BTTagEventTriggerState
     stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"aff0db3f-0857-49ce-b77f-6b70f8616bc5","toPortName":"enter","value":null},{"fromPortName":"exit","nodeId":"bd2be331-61e2-4039-8daa-e33e512bf0a6","toPortName":"enter","value":null}],"triggerTag":"TreeBT_Exit","exit":false,"state":1}'
-  - nodeName: ScaleAxisLock
-    guid: 561b2639-1214-4f81-9b70-8e874baa9f42
-    lastNodes:
-    - fe20fc2a-a158-4c44-84a5-5b127047d455
-    output:
-    - fromPortName: exit
-      toPortName: enter
-      nodeId: 347f5f16-e4c8-4865-8c35-8a559a1f63eb
-    nodePos: {x: 314, y: 70}
-    typeName: Behav_ScaleAxisLock
-    stateName: ScaleAxisLockState
-    stateParams: '{"hideFlags":0,"name":"","interruptTag":"TreeBT_Exit","interruptible":true,"output":[{"fromPortName":"exit","nodeId":"347f5f16-e4c8-4865-8c35-8a559a1f63eb","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[{"inTangent":0.6666668,"inWeight":0,"leftTangentMode":1,"outTangent":0.6666668,"outWeight":0.333333343,"rightTangentMode":1,"time":0,"value":1,"weightedMode":0},{"inTangent":-2.1454,"inWeight":0.333790421,"leftTangentMode":0,"outTangent":-2.1454,"outWeight":0,"rightTangentMode":0,"time":0.3,"value":1.2,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[{"inTangent":0.6666668,"inWeight":0,"outTangent":0.6666668,"outWeight":0.333333343,"tangentMode":35,"time":0,"value":1,"weightedMode":0},{"inTangent":-2.1454,"inWeight":0.333790421,"outTangent":-2.1454,"outWeight":0,"tangentMode":0,"time":0.3,"value":1.2,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8}},"enter":false,"exit":false,"lockAxis":{"x":1,"y":1,"z":0},"state":0,"target":{"localPath":"child_0","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
   - nodeName: SpriteRendererAlpha
     guid: 29788b8e-4b88-472c-943a-a73338a50620
     lastNodes:
@@ -133,6 +109,30 @@ MonoBehaviour:
     typeName: Behav_SpriteRendererAlpha
     stateName: SpriteRendererAlphaState
     stateParams: '{"hideFlags":0,"name":"","interruptTag":"TreeBT_Exit","interruptible":true,"output":[{"fromPortName":"exit","nodeId":"347f5f16-e4c8-4865-8c35-8a559a1f63eb","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[{"inTangent":-2.33333325,"inWeight":0,"leftTangentMode":1,"outTangent":-2.33333325,"outWeight":0.333333343,"rightTangentMode":1,"time":0,"value":1,"weightedMode":0},{"inTangent":-2.33333325,"inWeight":0.333333343,"leftTangentMode":1,"outTangent":-2.33333325,"outWeight":0,"rightTangentMode":1,"time":0.3,"value":0.3,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[{"inTangent":-2.33333325,"inWeight":0,"outTangent":-2.33333325,"outWeight":0.333333343,"tangentMode":35,"time":0,"value":1,"weightedMode":0},{"inTangent":-2.33333325,"inWeight":0.333333343,"outTangent":-2.33333325,"outWeight":0,"tangentMode":35,"time":0.3,"value":0.3,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8}},"enter":false,"exit":false,"state":0,"target":{"localPath":"child_0","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
+  - nodeName: ScaleAxisLock
+    guid: 561b2639-1214-4f81-9b70-8e874baa9f42
+    lastNodes:
+    - fe20fc2a-a158-4c44-84a5-5b127047d455
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: 347f5f16-e4c8-4865-8c35-8a559a1f63eb
+    nodePos: {x: 314, y: 70}
+    typeName: Behav_ScaleAxisLock
+    stateName: ScaleAxisLockState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"TreeBT_Exit","interruptible":true,"output":[{"fromPortName":"exit","nodeId":"347f5f16-e4c8-4865-8c35-8a559a1f63eb","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[{"inTangent":-0.2956783,"inWeight":0,"leftTangentMode":1,"outTangent":-0.2956783,"outWeight":0.333333343,"rightTangentMode":1,"time":0,"value":1,"weightedMode":0},{"inTangent":-3.36999869,"inWeight":0.05478796,"leftTangentMode":0,"outTangent":3.25239635,"outWeight":0.107866742,"rightTangentMode":0,"time":0.201256141,"value":0.9404929,"weightedMode":0},{"inTangent":-2.1454,"inWeight":0.333790421,"leftTangentMode":0,"outTangent":-2.1454,"outWeight":0,"rightTangentMode":0,"time":0.3,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[{"inTangent":-0.2956783,"inWeight":0,"outTangent":-0.2956783,"outWeight":0.333333343,"tangentMode":35,"time":0,"value":1,"weightedMode":0},{"inTangent":-3.36999869,"inWeight":0.05478796,"outTangent":3.25239635,"outWeight":0.107866742,"tangentMode":1,"time":0.201256141,"value":0.9404929,"weightedMode":0},{"inTangent":-2.1454,"inWeight":0.333790421,"outTangent":-2.1454,"outWeight":0,"tangentMode":0,"time":0.3,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8}},"enter":false,"exit":false,"lockAxis":{"x":1,"y":1,"z":0},"state":0,"target":{"localPath":"child_0","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
+  - nodeName: ScaleAxisLock
+    guid: aff0db3f-0857-49ce-b77f-6b70f8616bc5
+    lastNodes:
+    - 77877739-ccbc-41b5-a4c1-b08579beb817
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: 8eeaa698-4b9d-4335-b935-a29fca3bee40
+    nodePos: {x: 314, y: 289}
+    typeName: Behav_ScaleAxisLock
+    stateName: ScaleAxisLockState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"TreeBT_Enter","interruptible":true,"output":[{"fromPortName":"exit","nodeId":"8eeaa698-4b9d-4335-b935-a29fca3bee40","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[{"inTangent":0.170134589,"inWeight":0,"leftTangentMode":1,"outTangent":0.170134589,"outWeight":0.333333343,"rightTangentMode":1,"time":0,"value":1,"weightedMode":0},{"inTangent":-0.141172409,"inWeight":0.333333343,"leftTangentMode":0,"outTangent":-0.141172409,"outWeight":0.333333343,"rightTangentMode":0,"time":0.177582219,"value":1.03021288,"weightedMode":0},{"inTangent":0.945225,"inWeight":0.2920256,"leftTangentMode":0,"outTangent":0.945225,"outWeight":0,"rightTangentMode":0,"time":0.3,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[{"inTangent":0.170134589,"inWeight":0,"outTangent":0.170134589,"outWeight":0.333333343,"tangentMode":35,"time":0,"value":1,"weightedMode":0},{"inTangent":-0.141172409,"inWeight":0.333333343,"outTangent":-0.141172409,"outWeight":0.333333343,"tangentMode":1,"time":0.177582219,"value":1.03021288,"weightedMode":0},{"inTangent":0.945225,"inWeight":0.2920256,"outTangent":0.945225,"outWeight":0,"tangentMode":0,"time":0.3,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8}},"enter":false,"exit":false,"lockAxis":{"x":1,"y":1,"z":0},"state":0,"target":{"localPath":"child_0","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
   edgeDatas:
   - outPortNode: fe20fc2a-a158-4c44-84a5-5b127047d455
     intputPortNode: 561b2639-1214-4f81-9b70-8e874baa9f42

@@ -12,23 +12,23 @@ public class MapSpawnObj : MonoBehaviour
     private float spawntNoise;
     private GameObject main;
     private bool currVisible;
+    public bool currCameraOcclusionHit;
     private const string onPlayerEnterStr = "TreeBT_Enter";
     private const string onPlayerExitStr = "TreeBT_Exit";
-    public void SetVisible(bool isVisible, bool isInit = false)
+    public void SetVisible(bool isVisible)
     {
         if (main == null) main = transform.GetChild(0).gameObject;
 
-        if (isInit) currVisible = isVisible;
-        main.SetActive(isVisible);
-
-        if (!isInit && isVisible != currVisible)
-        {
-            currVisible = isVisible;
-            bTRuntimeComp?.SetEnable(currVisible);
-        }
+        currVisible = isVisible;
+        main.SetActive(currVisible);
+        bTRuntimeComp?.SetEnable(currVisible);
     }
-    public void SetCameraOcclusionHit(bool isHit)
+    public void SetCameraOcclusionHit(bool isHit, bool isInit = false)
     {
+        if(isInit) currCameraOcclusionHit = isHit;
+        if (currCameraOcclusionHit == isHit) return;
+
+        currCameraOcclusionHit = isHit;
         bTRuntimeComp.SendMsgToBTRuntime(isHit ? onPlayerExitStr : onPlayerEnterStr, EBTState.中断);
         bTRuntimeComp.SendMsgToBTRuntime(isHit ? onPlayerEnterStr : onPlayerExitStr, EBTState.进入);
     }
