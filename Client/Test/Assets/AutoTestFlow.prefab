@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3135235238048772830}
   - component: {fileID: 8754113401695749853}
   - component: {fileID: 5768197279562838464}
+  - component: {fileID: 681144290774501203}
   m_Layer: 0
   m_Name: AutoTestFlow
   m_TagString: Untagged
@@ -58,6 +59,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e68626b2465558941b68800cb9166403, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AutoTestFlow
-  network: {fileID: 0}
+  network: {fileID: 681144290774501203}
   isAutoLogin: 1
   bTRuntimeComp: {fileID: 8754113401695749853}
+--- !u!114 &681144290774501203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6353276487090259924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d76bf322fc342a446a8198f0d928e3b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Network.NetworkManager
+  host: 127.0.0.1
+  port: 7000
+  isDebug: 1

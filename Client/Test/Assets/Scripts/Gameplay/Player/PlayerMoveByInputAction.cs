@@ -64,7 +64,7 @@ public class PlayerMoveByInputAction : MonoBehaviour
     {
         if (MapManager.Instance == null) return true;
 
-        baseGround ??= MapManager.Instance.GetMapByLayer(EMapLayer.BaseGround);
+        baseGround ??= MapManager.Instance.GetMapByLayer(EMapLayerType.BaseGround);
         if (baseGround == null) return true;
 
         bool IsEdgeTileOrEmpty = MapManager.Instance.IsEmptyTile(checkPos);

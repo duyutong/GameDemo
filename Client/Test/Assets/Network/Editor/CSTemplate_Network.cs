@@ -102,10 +102,10 @@ namespace FlexiServer.Services
     public const string HttpFuncStr = @"
         public async Task<#Func#Response> #Func#(HttpMessage msg)
         {
-            if (msg == null || msg.Data == null) throw new ServerException(ErrorCode.Random, ""Data is Null"");
+            if (msg == null || msg.Data == null) throw new ServerException(ErrorCode.None, ""Data is Null"");
 
             #Func#Request? req = msg.Data.ConvertData<#Func#Request>();
-            if (req == null) throw new ServerException(ErrorCode.Random, ""#Func#Request is Null"");
+            if (req == null) throw new ServerException(ErrorCode.None, ""#Func#Request is Null"");
             
             #Func#Response res = new();
             return res;
@@ -114,6 +114,7 @@ namespace FlexiServer.Services
 @"using System;
 using UnityEngine;
 using Network.Models;
+using Assets.Network.Transport;
 namespace Network.API
 {
     public class #ProtocolName_UC#Api : HttpMessageApi

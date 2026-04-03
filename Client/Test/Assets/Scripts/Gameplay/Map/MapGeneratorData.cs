@@ -2,10 +2,11 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
+using static EnumDefinitions;
 
 public class MapGeneratorData : MonoBehaviour
 {
-    public EMapLayer layer;
+    public EMapLayerType layer;
     public MapSpawnGenData spawns;
 
     public EMapPreferencePosition preferPos;

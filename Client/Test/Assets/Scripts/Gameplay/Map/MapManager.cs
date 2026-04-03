@@ -1,9 +1,15 @@
-﻿using System;
+﻿using Network;
+using Network.API;
+using Network.Models;
+using Network.Transport.WebSocket;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static EnumDefinitions;
 
 public class MapManager : MonoBehaviour
 {
@@ -11,24 +17,56 @@ public class MapManager : MonoBehaviour
     public CinemachineCamera cmCam;
     public List<MapGeneratorData> maps;
 
-    private Dictionary<EMapLayer, MapGenerator> mapGenerators = new();
-    private Dictionary<EMapLayer, MapGeneratorData> mapGeneratorDatas = new();
+    private Dictionary<EMapLayerType, MapGenerator> mapGenerators = new();
+    private Dictionary<EMapLayerType, MapGeneratorData> mapGeneratorDatas = new();
 
+    private MapApi mapApi=>ApiManager.GetHttpApi<MapApi>();
+    private GamePlayApi gamePlayApi => ApiManager.GetWebSoketApi<GamePlayApi>();
     public MapManager()
     {
         Instance = this;
     }
-    private void Start()
+    public void Start()
+    {
+        gamePlayApi.AddListener(NetworkEventPaths.GamePlay_StartGame, OnStartGame);
+    }
+    private void OnDestroy() 
+    {
+        gamePlayApi.RemoveListener(NetworkEventPaths.GamePlay_StartGame, OnStartGame);
+    }
+    private void OnStartGame(WebSocketResult result)
+    {
+        if (result.Code != 200) return;
+        if (result.Data == null) return;
+
+        GenerateMaps();
+    }
+
+    private void GenerateMaps() 
     {
         mapGenerators.Clear();
         IniMapGenerators();
-        GenerateMaps();
+
+        MapGenerateRequest req = new();
+        req.MapLayer = mapGenerators.Keys.ToList();
+        mapApi.MapGenerate(req, OnMapGenerate);
     }
-    private void GenerateMaps() 
+
+    private void OnMapGenerate(bool succ, MapGenerateResponse response)
     {
-        foreach (var generator in mapGenerators) 
-            generator.Value.GenerateMap();
+        if (!succ) return;
+
+        foreach (var mapGenInfo in response.MapGenInfos) 
+        {
+            EMapLayerType eMapLayerType = mapGenInfo.MapLayer;
+            mapGenerators.TryGetValue(eMapLayerType, out var generator);
+            if (generator == null) return;
+
+            int seed = mapGenInfo.Seed;
+            generator.GenerateMap(seed);
+        }
     }
+
     public void IniMapGenerators()
     {
         foreach (var generator in mapGenerators) generator.Value.ClearMap();
@@ -40,13 +78,13 @@ public class MapManager : MonoBehaviour
             mapGenerators.AddOrReplace(map.layer, generator);
         }
     }
-    public void ShowAllSpawn(EMapLayer eMapLayer) 
+    public void ShowAllSpawn(EMapLayerType eMapLayer) 
     {
         if (!mapGenerators.ContainsKey(eMapLayer)) IniMapGenerators();
         MapGenerator generator = GetMapByLayer(eMapLayer);
         generator?.ShowAllSpawn();
     }
-    public void ClearMap(EMapLayer eMapLayer)
+    public void ClearMap(EMapLayerType eMapLayer)
     {
         if (!mapGenerators.ContainsKey(eMapLayer)) IniMapGenerators();
         MapGenerator generator = GetMapByLayer(eMapLayer);
@@ -54,7 +92,7 @@ public class MapManager : MonoBehaviour
     }
     public void GenerateMap(MapGeneratorData generatorData)
     {
-        EMapLayer layer = generatorData.layer;
+        EMapLayerType layer = generatorData.layer;
         MapGenerator generator = GetMapByLayer(layer);
         if (generator == null)
         {
@@ -63,13 +101,13 @@ public class MapManager : MonoBehaviour
         }
         generator.GenerateMap();
     }
-    public MapGenerator GetMapByLayer(EMapLayer eMapLayer)
+    public MapGenerator GetMapByLayer(EMapLayerType eMapLayer)
     {
         mapGenerators.TryGetValue(eMapLayer, out MapGenerator generator);
         if (generator != null) return generator;
         return null;
     }
-    public MapGeneratorData GetMapDataByNameByLayer(EMapLayer eMapLayer)
+    public MapGeneratorData GetMapDataByNameByLayer(EMapLayerType eMapLayer)
     {
         mapGeneratorDatas.TryGetValue(eMapLayer, out MapGeneratorData data);
         if (data != null) return data;
@@ -113,9 +151,4 @@ public class MapManager : MonoBehaviour
         }
             
     }
-}
-public enum EMapLayer
-{
-    BaseGround,
-    Forest
 }

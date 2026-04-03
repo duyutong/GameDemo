@@ -56,8 +56,15 @@ namespace FlexiServer.Services
         private void JoinGameHandle(string clientId, string account, string path, byte[] buffer)
         {
             //测试代码，不筛选沙盒
+            sandboxManager.GetOrCreateSandbox<GamePlayItemSandbox>();
+            sandboxManager.GetOrCreateSandbox<GamePlayMapSandbox>();
+            sandboxManager.GetOrCreateSandbox<GamePlayMovementSandbox>();
+
             GamePlayItemSandbox? sandbox_item = sandboxManager.GetSandbox<GamePlayItemSandbox>();
             sandbox_item?.AddPlayer(clientId, account);
+
+            GamePlayMapSandbox? sandbox_map = sandboxManager.GetSandbox<GamePlayMapSandbox>();
+            sandbox_map?.AddPlayer(clientId, account);
 
             GamePlayMovementSandbox? sandbox_movement = sandboxManager.GetSandbox<GamePlayMovementSandbox>();
             sandbox_movement?.AddPlayer(clientId, account);
@@ -65,8 +72,8 @@ namespace FlexiServer.Services
 
         private void StartGameHandle(string clientId, string account, string path, byte[] buffer)
         {
-            sandboxManager.GetOrCreateSandbox<GamePlayItemSandbox>();
-            sandboxManager.GetOrCreateSandbox<GamePlayMovementSandbox>();
+            var sandbox = sandboxManager.GetOrCreateSandbox<GamePlayMapSandbox>();
+            TransportManager.SendMessageToClient<WebSocketTransport, object>(sandbox.GetPlayerClients(), Pattern, path, null);
         }
 
         private void SetMovementStateHandle(string clientId, string account, string path, byte[] buffer)

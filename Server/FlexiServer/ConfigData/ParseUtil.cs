@@ -101,7 +101,7 @@ public static class ParseUtil
     }
     public static bool CheckIsEnum(string enumName)
     {
-        // 规则：E + 首字母大写的若干字符 + Type
-        return Regex.IsMatch(enumName, @"^E[A-Z].*Type$");
+        // E + 至少一个字符 + (State 或 Type)
+        return Regex.IsMatch(enumName, @"^E[A-Za-z]+(State|Type)$");
     }
 }

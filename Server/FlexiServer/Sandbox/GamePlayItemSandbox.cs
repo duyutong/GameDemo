@@ -76,10 +76,10 @@ namespace FlexiServer.Sandbox
         }
         public void AddPlayer(string clientId, string account)
         {
-            bool setC2A = ClientIdToAccountMap.TryAdd(clientId, account);
             bool setA2C = AccountToClientIdMap.TryAdd(account, clientId);
+            ClientIdToAccountMap.AddOrUpdate(clientId, key => account, (key, oldValue) => account);
 
-            if (setA2C && setC2A)
+            if (setA2C)
             {
                 PlayerInfo playerInfo = new PlayerInfo();
                 playerInfo.clientId = clientId;

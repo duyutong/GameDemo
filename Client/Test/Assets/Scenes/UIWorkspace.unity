@@ -163,53 +163,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &145130625
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 145130627}
-  - component: {fileID: 145130626}
-  m_Layer: 0
-  m_Name: Network
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &145130626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 145130625}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d76bf322fc342a446a8198f0d928e3b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Network.NetworkManager
-  host: 127.0.0.1
-  port: 7000
-  isDebug: 1
---- !u!4 &145130627
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 145130625}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2249.6567, y: 2713.7993, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &658070995
 GameObject:
   m_ObjectHideFlags: 0
@@ -385,7 +338,7 @@ PrefabInstance:
     - target: {fileID: 5768197279562838464, guid: 82d5f3125e9413a48977a0254ab93442, type: 3}
       propertyPath: network
       value: 
-      objectReference: {fileID: 145130626}
+      objectReference: {fileID: 0}
     - target: {fileID: 5768197279562838464, guid: 82d5f3125e9413a48977a0254ab93442, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -414,5 +367,4 @@ SceneRoots:
   - {fileID: 1000875738}
   - {fileID: 52147229}
   - {fileID: 658070996}
-  - {fileID: 145130627}
   - {fileID: 1224244702}

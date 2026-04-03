@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static EnumDefinitions;
 
 [Serializable]
 public class MapGenerator
@@ -45,7 +46,11 @@ public class MapGenerator
         spawns = generatorData.spawns;
         spawnGenerator ??= new MapSpawnGenerator();
     }
-
+    public void GenerateMap(int seed) 
+    {
+        generatorData.seed = seed;
+        GenerateMap();
+    }
     public void GenerateMap()
     {
         ClearMap();
@@ -176,8 +181,8 @@ public class MapGenerator
     private Vector2 GetGroundCenter(EMapPreferencePosition position)
     {
         Vector2 p = GetPreferPosNormalized(position);
-        bool isBaseGround = generatorData.layer == EMapLayer.BaseGround;
-        MapGenerator baseGround = isBaseGround ? this : MapManager.Instance.GetMapByLayer(EMapLayer.BaseGround);
+        bool isBaseGround = generatorData.layer == EMapLayerType.BaseGround;
+        MapGenerator baseGround = isBaseGround ? this : MapManager.Instance.GetMapByLayer(EMapLayerType.BaseGround);
 
         if (position == EMapPreferencePosition.Center) return p;
         else return 0.5f * baseGround.FindFarthestTile(p);
@@ -406,10 +411,10 @@ public class MapGenerator
     }
     private bool IsGround(Vector2Int index)
     {
-        if (generatorData.layer != EMapLayer.BaseGround)
+        if (generatorData.layer != EMapLayerType.BaseGround)
         {
             Vector2 worldPos = MapIndexToWorldPos(index);
-            var baseGround = MapManager.Instance.GetMapByLayer(EMapLayer.BaseGround);
+            var baseGround = MapManager.Instance.GetMapByLayer(EMapLayerType.BaseGround);
             if (baseGround != null && baseGround.IsEmptyTile(worldPos)) return false;
         }
 

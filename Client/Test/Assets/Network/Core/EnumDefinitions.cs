@@ -34,6 +34,11 @@ public class EnumDefinitions
         True = 1,
         False = 2
     }
+    public enum EMapLayerType
+    {
+        BaseGround,
+        Forest
+    }
     public static List<string> GetEnumNames()
     {
         // 获取 EnumDefinitions 类的 Type

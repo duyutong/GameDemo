@@ -30,7 +30,7 @@ public class LocalPlayerController : MonoBehaviour
     {
         if (MapManager.Instance != null)
         {
-            var mapGenerator = MapManager.Instance.GetMapDataByNameByLayer(EMapLayer.BaseGround);
+            var mapGenerator = MapManager.Instance.GetMapDataByNameByLayer(EMapLayerType.BaseGround);
             if (mapGenerator == null) return;
             int height = mapGenerator.height;
             int layoutOrder = height - Mathf.RoundToInt(Mathf.InverseLerp(-0.5f * height, 0.5f * height, transform.position.y) * height);
