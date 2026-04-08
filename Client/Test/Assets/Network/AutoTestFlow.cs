@@ -1,4 +1,5 @@
-﻿using Network;
+﻿using ConfigData;
+using Network;
 using Network.API;
 using Network.Models.Common;
 using Network.Transport.WebSocket;
@@ -8,7 +9,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.U2D;
 
-public class AutoTestFlow:MonoBehaviour
+public class AutoTestFlow : MonoBehaviour
 {
     public NetworkManager network;
     public bool isAutoLogin;
@@ -17,12 +18,11 @@ public class AutoTestFlow:MonoBehaviour
     private AccountInfo defaultAccount { get; } = new AccountInfo() { Account = "DEF", Password = "123" };
     public void Start()
     {
-        //PrintAtlasSprites("Assets/AddressableAssets/Art/Atlas/Food.spriteatlasv2");
         LoadGlobalSetting();
     }
-    public void LoadGlobalSetting() 
+    public void LoadGlobalSetting()
     {
-        GlobalSetting.LoadSetting(() => 
+        GlobalSetting.LoadSetting(() =>
         {
             if (isAutoLogin) bTRuntimeComp.SendMsgToBTRuntime("AutoLogin_Start");
         });
@@ -32,11 +32,11 @@ public class AutoTestFlow:MonoBehaviour
         network.SetLoginInfo(defaultAccount.Account, defaultAccount.Password);
         network.HttpLogin();
     }
-    public void WebSocketConnect() 
+    public void WebSocketConnect()
     {
         network.WebSocketConnect("Debug");
     }
-    public void TestAction1() 
+    public void TestAction1()
     {
         network.UpdConnect("Debug");
     }

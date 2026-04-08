@@ -1,5 +1,5 @@
-﻿using Excel;
-using Unity.Plastic.Newtonsoft.Json;
+﻿using ExcelDataReader;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -66,6 +66,14 @@ public class ExcelToCSharp
             }
         }
     }
+    private static DataSet GetExcelDataFromeReader(IExcelDataReader reader)
+    {
+        return reader.AsDataSet(new ExcelDataSetConfiguration
+        {
+            UseColumnDataType = false,
+            ConfigureDataTable = _ => new ExcelDataTableConfiguration { UseHeaderRow = false }
+        });
+    }
     private static void ToCSharp_Json()
     {
         if (File.Exists(csharpPath)) File.Delete(csharpPath);
@@ -81,8 +89,9 @@ public class ExcelToCSharp
             foreach (KeyValuePair<string, string> keyValuePair1 in proKeyPair)
             {
                 string pro = keyValuePair1.Value;
-                string proName = keyValuePair1.Key;
-                string proDes = proDicPair[proName];
+                string proKey = keyValuePair1.Key;
+                string proName = keyValuePair1.Key.Replace(" ", "");
+                string proDes = proDicPair[proKey];
 
                 string tempStr = CSTemplate_Config.proStr_Json;
                 tempStr = tempStr.Replace("#ProType#", pro);
@@ -91,6 +100,7 @@ public class ExcelToCSharp
                 _context += tempStr;
 
                 string initTemp = CSTemplate_Config.classInitStr;
+                initTemp = initTemp.Replace("#ProKey#", proKey);
                 initTemp = initTemp.Replace("#ProName#", proName);
                 initTemp = initTemp.Replace("#MethodName#", pro.GetMethodName());
                 _initContent += initTemp;
@@ -143,8 +153,9 @@ public class ExcelToCSharp
                 string pro = keyValuePair1.Value;
                 if (!CheckListAndDictionaryCount(pro)) continue;
 
-                string proName = keyValuePair1.Key;
-                string proDes = proDicPair[proName];
+                string proKey = keyValuePair1.Key;
+                string proName = keyValuePair1.Key.Replace(" ", "");
+                string proDes = proDicPair[proKey];
                 string tempStr = CSTemplate_Config.proStr_PB;
                 pos += 1;
                 tempStr = tempStr.Replace("#Pos#", pos.ToString());
@@ -154,6 +165,7 @@ public class ExcelToCSharp
                 _context += tempStr;
 
                 string initTemp = CSTemplate_Config.classInitStr;
+                initTemp = initTemp.Replace("#ProKey#", proKey);
                 initTemp = initTemp.Replace("#ProName#", proName);
                 initTemp = initTemp.Replace("#MethodName#", pro.GetMethodName());
                 _initContent += initTemp;
@@ -200,9 +212,9 @@ public class ExcelToCSharp
         foreach (FileInfo fileInfo in files)
         {
             if (!fileInfo.Name.EndsWith(".xlsx")) continue;
-            FileStream stream = File.Open(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
-            IExcelDataReader reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
-            DataSet excelData = reader.AsDataSet();
+            using FileStream stream = File.Open(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
+            using IExcelDataReader reader = ExcelReaderFactory.CreateReader(stream);
+            DataSet excelData = GetExcelDataFromeReader(reader);
 
             //读取数据
             string className = fileInfo.Name.Replace(".xlsx", "");
@@ -268,6 +280,7 @@ public class ExcelToCSharp
                 tempStream.CopyTo(fileStream); // 将MemoryStream的内容复制到文件流中
             }
         }
+        AssetDatabase.Refresh();
     }
     [MenuItem("Tools/Excel/Binary/RefreshAll")]
     private static void RefreshAllByPB()
@@ -361,7 +374,7 @@ public class ExcelToCSharp
                     table.Add(row);
                 }
                 //生成Json字符串
-                string json = JsonConvert.SerializeObject(table);
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(table);
                 //写入文件
                 string jsonSavePath = jsonPath + "/" + fileInfo.Name.Replace(".xlsx", ".json");
                 FileInfo saveInfo = new FileInfo(jsonSavePath);
@@ -384,7 +397,7 @@ public class ExcelToCSharp
         if (string.IsNullOrEmpty(libraryPath)) InitLibraryPath();
 
         string json = File.ReadAllText(libraryPath);
-        pathLibrary = JsonConvert.DeserializeObject<PathLibrary_Config>(json);
+        pathLibrary = Newtonsoft.Json.JsonConvert.DeserializeObject<PathLibrary_Config>(json);
         DirectoryInfo dir = new DirectoryInfo(libraryPath);
         string projectRoot = dir.Parent.Parent.FullName;
         string configRoot = Path.Combine(projectRoot, "Config");

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-/// <summary>
+﻿/// <summary>
 /// 自动生成cs文件时使用的预制文字
 /// </summary>
 public class CSTemplate_Config
@@ -23,11 +17,16 @@ using static EnumDefinitions;
 public class #ClassName# : BaseConfig
 {
 	#ProContext#
-
+    
+    public #ClassName#(Dictionary<string, object> dataDic)
+    {
+        Initialize(dataDic);
+    }
     public #ClassName#() { }
     public override void Initialize(Dictionary<string, object> _dataDic)
     {#InitContext#
-        id = ID;
+        
+        id = ConfigLoaderUtil.ConvertToId(ID);
     }
 } ";
     /// <summary>
@@ -52,11 +51,12 @@ using static EnumDefinitions;
 public class #ClassName# : BaseConfig
 {
 	#ProContext#
-
+    
     public #ClassName#() { }
     public override void Initialize(Dictionary<string, object> _dataDic)
     {#InitContext#
-        id = ID;
+        
+        id = ConfigLoaderUtil.ConvertToId(ID);
     }
 } ";
     /// <summary>
@@ -74,7 +74,7 @@ public class #ClassName# : BaseConfig
     /// </summary>
     public const string classInitStr =
         @"
-        #ProName# = _dataDic[""#ProName#""].#MethodName#();";
+        #ProName# = _dataDic[""#ProKey#""]#MethodName#;";
 
     /// <summary>
     /// 配置表加载类
@@ -90,8 +90,13 @@ namespace ConfigData
 {
     public class ConfigLoader
     {
-        private string binaryPath =""ConfigData/Config/Binary"";
+        private static string binaryPath =""ConfigData/Config/Binary"";
         private static ConcurrentDictionary<Type, IConfigDataHandler>? configDic;
+        public static T GetConfigData<T>(string id) where T : BaseConfig 
+        {
+            int idKey = ConfigLoaderUtil.ConvertToId(id);
+            return GetConfigData<T>(idKey);
+        }
         public static T GetConfigData<T>(int id) where T : BaseConfig 
         {
             if (configDic == null) InitConfigHandler();
@@ -116,7 +121,7 @@ namespace ConfigData
         }
         private static void InitConfigHandler()
         {
-            configDic = new Dictionary<Type, IConfigDataHandler>();
+            configDic = new();
 
             List<Type> types = GetClassList<BaseConfig>();
 
@@ -153,7 +158,11 @@ namespace ConfigData
     /// 配置表加载类
     /// </summary>
     public const string loaderClassStr_Json =
-@"using System.Collections.Concurrent;
+@"using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace ConfigData
 {
@@ -161,7 +170,12 @@ namespace ConfigData
     {
         private static string jsonPath = ""ConfigData/Config/Json"";
         private static ConcurrentDictionary<Type, IConfigDataHandler>? configDic;
-        public static T? GetConfigData<T>(int id) where T : BaseConfig 
+        public static T GetConfigData<T>(string id) where T : BaseConfig 
+        {
+            int idKey = ConfigLoaderUtil.ConvertToId(id);
+            return GetConfigData<T>(idKey);
+        }
+        public static T GetConfigData<T>(int id) where T : BaseConfig 
         {
             if (configDic == null) InitConfigHandler();
 

@@ -27,7 +27,7 @@ public class ItemConfig : BaseConfig
     /// 物品描述
     /// </summary>
     public int ItemDesc { get; protected set; }
-
+    
     public ItemConfig() { }
     public override void Initialize(Dictionary<string, object> _dataDic)
     {
@@ -36,6 +36,7 @@ public class ItemConfig : BaseConfig
         EItemType = _dataDic["EItemType"].ToInt();
         ItemName = _dataDic["ItemName"].ToInt();
         ItemDesc = _dataDic["ItemDesc"].ToInt();
-        id = ID;
+        
+        id = ConfigLoaderUtil.ConvertToId(ID);
     }
 } 

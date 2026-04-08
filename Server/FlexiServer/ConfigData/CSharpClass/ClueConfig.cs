@@ -35,7 +35,7 @@ public class ClueConfig : BaseConfig
     /// 线索展示图
     /// </summary>
     public string ClueTex { get; protected set; }
-
+    
     public ClueConfig() { }
     public override void Initialize(Dictionary<string, object> _dataDic)
     {
@@ -46,6 +46,7 @@ public class ClueConfig : BaseConfig
         ScoreMin = _dataDic["ScoreMin"].ToInt();
         ClueDes = _dataDic["ClueDes"].ToInt();
         ClueTex = _dataDic["ClueTex"].ToString();
-        id = ID;
+        
+        id = ConfigLoaderUtil.ConvertToId(ID);
     }
 } 

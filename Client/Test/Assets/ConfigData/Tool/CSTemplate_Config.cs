@@ -17,11 +17,16 @@ using static EnumDefinitions;
 public class #ClassName# : BaseConfig
 {
 	#ProContext#
-
+    
+    public #ClassName#(Dictionary<string, object> dataDic)
+    {
+        Initialize(dataDic);
+    }
     public #ClassName#() { }
     public override void Initialize(Dictionary<string, object> _dataDic)
     {#InitContext#
-        id = ID;
+        
+        id = ConfigLoaderUtil.ConvertToId(ID);
     }
 } ";
     /// <summary>
@@ -46,11 +51,12 @@ using static EnumDefinitions;
 public class #ClassName# : BaseConfig
 {
 	#ProContext#
-
+    
     public #ClassName#() { }
     public override void Initialize(Dictionary<string, object> _dataDic)
     {#InitContext#
-        id = ID;
+        
+        id = ConfigLoaderUtil.ConvertToId(ID);
     }
 } ";
     /// <summary>
@@ -68,24 +74,29 @@ public class #ClassName# : BaseConfig
     /// </summary>
     public const string classInitStr =
         @"
-        #ProName# = _dataDic[""#ProName#""].#MethodName#();";
+        #ProName# = _dataDic[""#ProKey#""]#MethodName#;";
 
     /// <summary>
     /// 配置表加载类
     /// </summary>
     public const string loaderClassStr_PB =
-@"using LitJson;
-using System;
+@"using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEngine;
+
 namespace ConfigData
 {
     public class ConfigLoader
     {
-        private string binaryPath =""Assets/AddressableAssets/Config/Binary"";
-        private static Dictionary<Type, IConfigDataHandler> configDic;
+        private static string binaryPath =""Assets/AddressableAssets/Config/Binary"";
+        private static ConcurrentDictionary<Type, IConfigDataHandler>? configDic;
+        public static T GetConfigData<T>(string id) where T : BaseConfig 
+        {
+            int idKey = ConfigLoaderUtil.ConvertToId(id);
+            return GetConfigData<T>(idKey);
+        }
         public static T GetConfigData<T>(int id) where T : BaseConfig 
         {
             if (configDic == null) InitConfigHandler();
@@ -97,9 +108,20 @@ namespace ConfigData
 
             return null;
         }
+        public static List<T> GetConfigDatas<T>(int count) where T : BaseConfig
+        {
+            if (configDic == null) InitConfigHandler();
+
+            if (!configDic.TryGetValue(typeof(T), out var handler)) return null;
+
+            if (handler is IConfigDataHandler<T> typedHandler)
+                return typedHandler.GetConfigData((_conf) => true, count);
+            
+            return null;
+        }
         private static void InitConfigHandler()
         {
-            configDic = new Dictionary<Type, IConfigDataHandler>();
+            configDic = new();
 
             List<Type> types = GetClassList<BaseConfig>();
 
@@ -109,13 +131,14 @@ namespace ConfigData
                     continue;
 
                 string className = configType.Name;
+                string exeDir = AppDomain.CurrentDomain.BaseDirectory;
                 string tablePath = Path.Combine(binaryPath, $""{className}.bytes"");
 
                 Type handlerType = typeof(ConfigDataBinary<>).MakeGenericType(configType);
                 var handler = (IConfigDataHandler)Activator.CreateInstance(handlerType);
                 handler.SetTablePath(tablePath);
 
-                configDic.Add(configType, handler);
+                configDic.TryAdd(configType, handler);
             }
         }
 
@@ -135,18 +158,23 @@ namespace ConfigData
     /// 配置表加载类
     /// </summary>
     public const string loaderClassStr_Json =
-@"using LitJson;
-using System;
+@"using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEngine;
+
 namespace ConfigData
 {
     public class ConfigLoader
     {
         private static string jsonPath = ""Assets/AddressableAssets/Config/Json"";
-        private static Dictionary<Type, IConfigDataHandler> configDic;
+        private static ConcurrentDictionary<Type, IConfigDataHandler>? configDic;
+        public static T GetConfigData<T>(string id) where T : BaseConfig 
+        {
+            int idKey = ConfigLoaderUtil.ConvertToId(id);
+            return GetConfigData<T>(idKey);
+        }
         public static T GetConfigData<T>(int id) where T : BaseConfig 
         {
             if (configDic == null) InitConfigHandler();
@@ -158,10 +186,19 @@ namespace ConfigData
             
             return null;
         }
+        public static List<T> GetConfigDatas<T>(int count) where T : BaseConfig
+        {
+            if (configDic == null) InitConfigHandler();
+            if (!configDic.TryGetValue(typeof(T), out var handler)) return null;
+            if (handler is IConfigDataHandler<T> typedHandler)
+                return typedHandler.GetConfigData((_conf) => true, count);
+            
+            return null;
+        }
 
         private static void InitConfigHandler()
         {
-            configDic = new Dictionary<Type, IConfigDataHandler>();
+            configDic = new();
 
             List<Type> types = GetClassList<BaseConfig>();
 
@@ -174,13 +211,14 @@ namespace ConfigData
                 string tablePath = Path.Combine(jsonPath, $""{className}.json"");
 
                 Type handlerType = typeof(ConfigDataJson<>).MakeGenericType(configType);
+                
                 var handler = (IConfigDataHandler)Activator.CreateInstance(handlerType);
                 handler.SetTablePath(tablePath);
 
-                configDic.Add(configType, handler);
+                configDic.TryAdd(configType, handler);
             }
         }
-
+        
         private static List<Type> GetClassList<T>()
         {
             Type type = typeof (T);

@@ -22,7 +22,7 @@ public class ConfigDataBinary<T> : IConfigDataHandler<T> where T : BaseConfig
     }
     public Dictionary<int, T> LoadConfigTable()
     {
-        Dictionary<int, T> result = new Dictionary<int, T>();
+        Dictionary<int, T> result = new();
         string filePath = tablePath;
         tempStream = LoadFileAsMemoryStream(filePath);
 
@@ -46,29 +46,32 @@ public class ConfigDataBinary<T> : IConfigDataHandler<T> where T : BaseConfig
     }
     private int GetIdOrDefault(object obj)
     {
-        if (obj == null)
-            return -1;
+        if (obj == null) return -1;
 
         Type type = obj.GetType();
 
+        // 先找属性
         var prop =
             type.GetProperty("Id") ??
             type.GetProperty("ID") ??
             type.GetProperty("id");
 
-        if (prop != null && prop.PropertyType == typeof(int))
+        if (prop != null)
         {
-            return (int)prop.GetValue(obj);
+            var value = prop.GetValue(obj);
+            return ConfigLoaderUtil.ConvertToId(value);
         }
 
+        // 再找字段
         var field =
             type.GetField("Id") ??
             type.GetField("ID") ??
             type.GetField("id");
 
-        if (field != null && field.FieldType == typeof(int))
+        if (field != null)
         {
-            return (int)field.GetValue(obj);
+            var value = field.GetValue(obj);
+            return ConfigLoaderUtil.ConvertToId(value);
         }
 
         return -1;

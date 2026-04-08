@@ -29,18 +29,29 @@ public static class ParseUtil
         return int.Parse(temp);
     }
     /// <summary>
+    /// 将配置内容转换为浮点数
+    /// </summary>
+    /// <param name="self"></param>
+    /// <returns></returns>
+    public static float ToFloat(this object self)
+    {
+        return float.Parse(self.ToString());
+    }
+    /// <summary>
     /// 将配置内容转换为整型列表
     /// </summary>
     /// <param name="self"></param>
     /// <returns></returns>
-    public static List<int> ToIntArray(this object self)
+    public static List<T> ToArray<T>(this object self)
     {
-        List<int> array = new List<int>();
+        List<T> array = new List<T>();
         string[] temp = self.ToString().Split(',');
         for (int i = 0; i < temp.Length; i++)
         {
-            if (string.IsNullOrEmpty(temp[i])) continue;
-            array.Add(int.Parse(temp[i]));
+            if (string.IsNullOrWhiteSpace(temp[i])) continue;
+
+            T value = (T)Convert.ChangeType(temp[i], typeof(T));
+            array.Add(value);
         }
         return array;
     }
@@ -49,18 +60,17 @@ public static class ParseUtil
     /// </summary>
     /// <param name="self"></param>
     /// <returns></returns>
-    public static List<List<int>> ToIntArrays(this object self)
+    public static List<List<T>> ToArrays<T>(this object self)
     {
-        List<List<int>> arrays = new List<List<int>>();
+        List<List<T>> arrays = new List<List<T>>();
         string[] temp1 = self.ToString().Split(';');
         for (int i = 0; i < temp1.Length; i++)
         {
             string[] temp2 = temp1[i].Split(',');
-            arrays.Add(new List<int>());
+            arrays.Add(new List<T>());
             for (int j = 0; j < temp2.Length; j++)
             {
-                int value = 0;
-                if (string.IsNullOrEmpty(temp2[j])) value = 0;
+                T value = (T)Convert.ChangeType(temp2[j], typeof(T));
                 arrays[i].Add(value);
             }
         }
@@ -71,15 +81,15 @@ public static class ParseUtil
     /// </summary>
     /// <param name="self"></param>
     /// <returns></returns>
-    public static Dictionary<int, int> ToDictionary(this object self)
+    public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this object self)
     {
-        Dictionary<int, int> dic = new Dictionary<int, int>();
+        Dictionary<TKey, TValue> dic = new Dictionary<TKey, TValue>();
         string[] temp1 = self.ToString().Split(',');
         for (int i = 0; i < temp1.Length; i++)
         {
             string[] temp2 = temp1[i].Split('=');
-            int key = int.Parse(temp2[0]);
-            int value = int.Parse(temp2[1]);
+            TKey key = (TKey)Convert.ChangeType(temp2[0], typeof(TKey));
+            TValue value = (TValue)Convert.ChangeType(temp2[1], typeof(TValue));
             dic[key] = value;
         }
         return dic;
@@ -91,17 +101,54 @@ public static class ParseUtil
     /// <returns></returns>
     public static string GetMethodName(this string type)
     {
-        if (type == "List<int>") return "ToIntArray";
-        if (type == "List<List<int>>") return "ToIntArrays";
-        if (type == "int") return "ToInt";
-        if (type == "Dictionary<int,int>") return "ToDictionary";
-        if (CheckIsEnum(type)) return $"ToEnum<{type}>";
+        if (TryParseList(type, out string elementType)) return $".ToArray<{elementType}>()";
+        if (TryParseNestedList(type, out string elementType1)) return $".ToArrays<{elementType1}>()";
+        if (TryParseDictionary(type, out string keyType, out string valueType)) return $".ToDictionary<{keyType}, {valueType}>()";
 
-        return "ToString";
+        if (type == "string") return ".ToString()";
+        if (type == "int") return ".ToInt()";
+        if (type == "float") return ".ToFloat()";
+        if (CheckIsEnum(type)) return $".ToEnum<{type}>()";
+
+        return $" as {type}";
+    }
+    public static bool TryParseDictionary(string input, out string keyType, out string valueType)
+    {
+        keyType = null;
+        valueType = null;
+
+        var match = Regex.Match(input, @"^Dictionary<\s*(\w+)\s*,\s*(\w+)\s*>$");
+        if (!match.Success) return false;
+
+        keyType = match.Groups[1].Value;
+        valueType = match.Groups[2].Value;
+        return true;
+    }
+    public static bool TryParseList(string input, out string elementType)
+    {
+        elementType = null;
+
+        var match = Regex.Match(input, @"^List<\s*(\w+)\s*>$");
+        if (!match.Success) return false;
+
+        elementType = match.Groups[1].Value;
+        return true;
+    }
+    public static bool TryParseNestedList(string input, out string elementType)
+    {
+        elementType = null;
+
+        var match = Regex.Match(input, @"^List<\s*List<\s*(\w+)\s*>\s*>$");
+        if (!match.Success) return false;
+
+        elementType = match.Groups[1].Value;
+        return true;
     }
     public static bool CheckIsEnum(string enumName)
     {
         // 规则：E + 首字母大写的若干字符 + Type
-        return Regex.IsMatch(enumName, @"^E[A-Z].*Type$");
+        bool isType = Regex.IsMatch(enumName, @"^E[A-Z].*Type$");
+        bool isState = Regex.IsMatch(enumName, @"^E[A-Z].*State$");
+        return isType || isState;
     }
 }

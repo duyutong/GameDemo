@@ -1,4 +1,8 @@
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace ConfigData
 {
@@ -6,7 +10,12 @@ namespace ConfigData
     {
         private static string jsonPath = "ConfigData/Config/Json";
         private static ConcurrentDictionary<Type, IConfigDataHandler>? configDic;
-        public static T? GetConfigData<T>(int id) where T : BaseConfig 
+        public static T GetConfigData<T>(string id) where T : BaseConfig 
+        {
+            int idKey = ConfigLoaderUtil.ConvertToId(id);
+            return GetConfigData<T>(idKey);
+        }
+        public static T GetConfigData<T>(int id) where T : BaseConfig 
         {
             if (configDic == null) InitConfigHandler();
 

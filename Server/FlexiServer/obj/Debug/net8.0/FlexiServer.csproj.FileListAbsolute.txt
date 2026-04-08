@@ -212,3 +212,5 @@ E:\Unity\GameDemo\Server\FlexiServer\obj\Debug\net8.0\refint\FlexiServer.dll
 E:\Unity\GameDemo\Server\FlexiServer\obj\Debug\net8.0\FlexiServer.pdb
 E:\Unity\GameDemo\Server\FlexiServer\obj\Debug\net8.0\FlexiServer.genruntimeconfig.cache
 E:\Unity\GameDemo\Server\FlexiServer\obj\Debug\net8.0\ref\FlexiServer.dll
+F:\GameDemo\Server\FlexiServer\bin\Debug\net8.0\ConfigData\Config\Json\RaceInGameConfig.json
+F:\GameDemo\Server\FlexiServer\bin\Debug\net8.0\ConfigData\Config\Json\RaceSelectionConfig.json

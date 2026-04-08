@@ -1,15 +1,20 @@
-﻿using LitJson;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEngine;
+
 namespace ConfigData
 {
     public class ConfigLoader
     {
         private static string jsonPath = "Assets/AddressableAssets/Config/Json";
-        private static Dictionary<Type, IConfigDataHandler> configDic;
+        private static ConcurrentDictionary<Type, IConfigDataHandler>? configDic;
+        public static T GetConfigData<T>(string id) where T : BaseConfig 
+        {
+            int idKey = ConfigLoaderUtil.ConvertToId(id);
+            return GetConfigData<T>(idKey);
+        }
         public static T GetConfigData<T>(int id) where T : BaseConfig 
         {
             if (configDic == null) InitConfigHandler();
@@ -21,10 +26,19 @@ namespace ConfigData
             
             return null;
         }
+        public static List<T> GetConfigDatas<T>(int count) where T : BaseConfig
+        {
+            if (configDic == null) InitConfigHandler();
+            if (!configDic.TryGetValue(typeof(T), out var handler)) return null;
+            if (handler is IConfigDataHandler<T> typedHandler)
+                return typedHandler.GetConfigData((_conf) => true, count);
+            
+            return null;
+        }
 
         private static void InitConfigHandler()
         {
-            configDic = new Dictionary<Type, IConfigDataHandler>();
+            configDic = new();
 
             List<Type> types = GetClassList<BaseConfig>();
 
@@ -37,13 +51,14 @@ namespace ConfigData
                 string tablePath = Path.Combine(jsonPath, $"{className}.json");
 
                 Type handlerType = typeof(ConfigDataJson<>).MakeGenericType(configType);
+                
                 var handler = (IConfigDataHandler)Activator.CreateInstance(handlerType);
                 handler.SetTablePath(tablePath);
 
-                configDic.Add(configType, handler);
+                configDic.TryAdd(configType, handler);
             }
         }
-
+        
         private static List<Type> GetClassList<T>()
         {
             Type type = typeof (T);

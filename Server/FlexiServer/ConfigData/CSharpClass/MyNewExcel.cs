@@ -27,15 +27,16 @@ public class MyNewExcel : BaseConfig
     /// 字符串
     /// </summary>
     public string String { get; protected set; }
-
+    
     public MyNewExcel() { }
     public override void Initialize(Dictionary<string, object> _dataDic)
     {
         ID = _dataDic["ID"].ToInt();
-        Array = _dataDic["Array"].ToIntArray();
-        Arrays = _dataDic["Arrays"].ToIntArrays();
-        Pair = _dataDic["Pair"].ToDictionary();
+        Array = _dataDic["Array"].ToArray<int>();
+        Arrays = _dataDic["Arrays"].ToArrays<int>();
+        Pair = _dataDic["Pair"].ToDictionary<int, int>();
         String = _dataDic["String"].ToString();
-        id = ID;
+        
+        id = ConfigLoaderUtil.ConvertToId(ID);
     }
 } 

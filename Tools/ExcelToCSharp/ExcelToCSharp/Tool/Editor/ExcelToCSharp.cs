@@ -1,9 +1,6 @@
 ﻿using ExcelDataReader;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -89,8 +86,9 @@ public class ExcelToCSharp
             foreach (KeyValuePair<string, string> keyValuePair1 in proKeyPair)
             {
                 string pro = keyValuePair1.Value;
-                string proName = keyValuePair1.Key;
-                string proDes = proDicPair[proName];
+                string proKey = keyValuePair1.Key;
+                string proName = keyValuePair1.Key.Replace(" ", "");
+                string proDes = proDicPair[proKey];
 
                 string tempStr = CSTemplate_Config.proStr_Json;
                 tempStr = tempStr.Replace("#ProType#", pro);
@@ -99,6 +97,7 @@ public class ExcelToCSharp
                 _context += tempStr;
 
                 string initTemp = CSTemplate_Config.classInitStr;
+                initTemp = initTemp.Replace("#ProKey#", proKey);
                 initTemp = initTemp.Replace("#ProName#", proName);
                 initTemp = initTemp.Replace("#MethodName#", pro.GetMethodName());
                 _initContent += initTemp;
@@ -120,7 +119,7 @@ public class ExcelToCSharp
             fileStream.Flush();
             fileStream.Close();
 
-            Console.WriteLine("配置表类生成完毕 " + className);
+            Console.WriteLine("配置表类生成完毕 " + csSavePath);
         }
     }
 
@@ -150,8 +149,9 @@ public class ExcelToCSharp
                 string pro = keyValuePair1.Value;
                 if (!CheckListAndDictionaryCount(pro)) continue;
 
-                string proName = keyValuePair1.Key;
-                string proDes = proDicPair[proName];
+                string proKey = keyValuePair1.Key;
+                string proName = keyValuePair1.Key.Replace(" ", "");
+                string proDes = proDicPair[proKey];
                 string tempStr = CSTemplate_Config.proStr_PB;
                 pos += 1;
                 tempStr = tempStr.Replace("#Pos#", pos.ToString());
@@ -161,6 +161,7 @@ public class ExcelToCSharp
                 _context += tempStr;
 
                 string initTemp = CSTemplate_Config.classInitStr;
+                initTemp = initTemp.Replace("#ProKey#", proKey);
                 initTemp = initTemp.Replace("#ProName#", proName);
                 initTemp = initTemp.Replace("#MethodName#", pro.GetMethodName());
                 _initContent += initTemp;

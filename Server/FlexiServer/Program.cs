@@ -1,3 +1,4 @@
+using ConfigData;
 using FlexiServer.Core;
 using FlexiServer.Core.Frame;
 using FlexiServer.Core.Tick;
