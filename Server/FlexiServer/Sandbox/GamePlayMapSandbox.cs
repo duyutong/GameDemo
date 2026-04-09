@@ -67,7 +67,7 @@ namespace FlexiServer.Sandbox
             {
                 if (!mapDic.ContainsKey(layer))
                 {
-                    int seed = new Random().Next();
+                    int seed = RandomGenerator.GetRandomInt(int.MaxValue);
                     mapDic.TryAdd(layer, seed);
                     result.Add(new MapGeneratorInfo() { MapLayer = layer, Seed = seed });
                 }
