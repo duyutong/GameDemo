@@ -417,6 +417,7 @@ public class ExcelToCSharp
         string configRoot = Path.Combine(projectRoot, "Client");
 
         libraryPath = Path.Combine(dir.Parent.FullName, "PathLibrary_Config.json");
+        Debug.Log($"[InitLibraryPath]:{libraryPath}");
     }
 
     [MenuItem("Tools/Excel/Json/RefreshAll")]

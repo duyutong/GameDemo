@@ -10,10 +10,19 @@ ExcelToCSharp.SetLibraryPath(libraryPath);
 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-Console.WriteLine(Environment.NewLine);
-Console.WriteLine($"=====目标数据类型=====");
-Console.ForegroundColor = ConsoleColor.Green;
+Console.WriteLine($"=====DataType=====");
+Console.ForegroundColor = ConsoleColor.DarkCyan;
 Console.WriteLine($"<<<<< {dataType} >>>>>");
+Console.ResetColor();
+
+Console.WriteLine($"=====ToolPath=====");
+Console.ForegroundColor = ConsoleColor.DarkCyan;
+Console.WriteLine($"<<<<< {Directory.GetCurrentDirectory()} >>>>>");
+Console.ResetColor();
+
+Console.WriteLine($"=====LibraryPath=====");
+Console.ForegroundColor = ConsoleColor.DarkCyan;
+Console.WriteLine($"<<<<< {libraryPath} >>>>>");
 Console.ResetColor();
 
 Console.WriteLine(Environment.NewLine);

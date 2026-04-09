@@ -8,7 +8,7 @@ namespace ConfigData
 {
     public class ConfigLoader
     {
-        private static string jsonPath = "Assets/AddressableAssets/Config/Json";
+        private static string binaryPath ="Assets/AddressableAssets/Config/Binary";
         private static ConcurrentDictionary<Type, IConfigDataHandler>? configDic;
         public static T GetConfigData<T>(string id) where T : BaseConfig 
         {
@@ -23,19 +23,20 @@ namespace ConfigData
 
             if (handler is IConfigDataHandler<T> typedHandler)
                 return typedHandler.GetConfigData(id);
-            
+
             return null;
         }
         public static List<T> GetConfigDatas<T>(int count) where T : BaseConfig
         {
             if (configDic == null) InitConfigHandler();
+
             if (!configDic.TryGetValue(typeof(T), out var handler)) return null;
+
             if (handler is IConfigDataHandler<T> typedHandler)
                 return typedHandler.GetConfigData((_conf) => true, count);
             
             return null;
         }
-
         private static void InitConfigHandler()
         {
             configDic = new();
@@ -48,17 +49,17 @@ namespace ConfigData
                     continue;
 
                 string className = configType.Name;
-                string tablePath = Path.Combine(jsonPath, $"{className}.json");
+                string exeDir = AppDomain.CurrentDomain.BaseDirectory;
+                string tablePath = Path.Combine(binaryPath, $"{className}.bytes");
 
-                Type handlerType = typeof(ConfigDataJson<>).MakeGenericType(configType);
-                
+                Type handlerType = typeof(ConfigDataBinary<>).MakeGenericType(configType);
                 var handler = (IConfigDataHandler)Activator.CreateInstance(handlerType);
                 handler.SetTablePath(tablePath);
 
                 configDic.TryAdd(configType, handler);
             }
         }
-        
+
         private static List<Type> GetClassList<T>()
         {
             Type type = typeof (T);
