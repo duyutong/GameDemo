@@ -47,7 +47,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Amplitude: 0.3
-    - _DetailAmplitude: 0.2
+    - _DetailAmplitude: 0.5
     - _EnableExternalAlpha: 0
     - _Frequency: 1
     - _HeightMask: 1
