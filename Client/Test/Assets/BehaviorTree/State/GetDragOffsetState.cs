@@ -85,7 +85,6 @@ public class GetDragOffsetState : BehaviorTreeBaseState
     }
     #endregion
 
-    private PointerEventData pointerEventData;
     private RectTransform targetRect;
     private RectTransform parentRect;
     private Vector2 currOffset;

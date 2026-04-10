@@ -58,7 +58,7 @@ public partial class CustomNodeView : GraphView
     /// </summary>
     /// <param name="nodeName">节点名称</param>
     /// <param name="nodeType">节点类型</param>
-    public DefaultNode CreatNode(string nodeName, string nodeType)
+    public DefaultNode CreateNode(string nodeName, string nodeType)
     {
         DefaultNode node = new DefaultNode();
         node.title = nodeName;

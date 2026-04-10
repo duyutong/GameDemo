@@ -9,7 +9,7 @@ namespace ConfigData
     public class ConfigLoader
     {
         private static string binaryPath ="Assets/AddressableAssets/Config/Binary";
-        private static ConcurrentDictionary<Type, IConfigDataHandler>? configDic;
+        private static ConcurrentDictionary<Type, IConfigDataHandler> configDic;
         public static T GetConfigData<T>(string id) where T : BaseConfig 
         {
             int idKey = ConfigLoaderUtil.ConvertToId(id);

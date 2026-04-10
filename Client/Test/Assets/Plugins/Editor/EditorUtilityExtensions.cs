@@ -22,11 +22,42 @@ public static class EditorUtilityExtensions
             Folder.Close();
             StringBuilder stringBuilder = new StringBuilder();
             foreach (byte b in bytes) stringBuilder.Append(b.ToString("x2"));
-            
+
             return stringBuilder.ToString();
         }
     }
-   
+    public static Dictionary<Type, List<string>> GetPublicMembers(this Type type)
+    {
+        var dict = new Dictionary<Type, List<string>>();
+
+        // 1. 公有字段
+        var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly);
+        foreach (var field in fields)
+        {
+            AddToDict(dict, field.FieldType, field.Name);
+        }
+
+        // 2. 公有属性
+        var props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly);
+        foreach (var prop in props)
+        {
+            // 排除没有getter的属性
+            if (!prop.CanRead) continue;
+            AddToDict(dict, prop.PropertyType, prop.Name);
+        }
+
+        return dict;
+    }
+
+    private static void AddToDict(Dictionary<Type, List<string>> dict, Type type, string name)
+    {
+        if (!dict.TryGetValue(type, out var list))
+        {
+            list = new List<string>();
+            dict[type] = list;
+        }
+        list.Add(name);
+    }
     public static bool SetMemberValue(this object target, string memberName, object value)
     {
         if (target == null || string.IsNullOrEmpty(memberName))
@@ -67,7 +98,7 @@ public static class EditorUtilityExtensions
             foreach (string file in files) action?.Invoke(file);
         }
     }
-    public static string ToShortPath(this string fullPath) 
+    public static string ToShortPath(this string fullPath)
     {
 #if UNITY_IOS
         string pattern = @"Assets/(.+)";
@@ -164,7 +195,7 @@ public static class EditorUtilityExtensions
 
         // 移动文件到目标文件夹
         string destinationPath = Path.Combine(folderPath, Path.GetFileName(filePath));
-        
+
         Debug.Log($"移动文件: {destinationPath} 结果：{AssetDatabase.MoveAsset(filePath.ToShortPath(), destinationPath)}");
     }
     // 删除指定路径的文件
@@ -207,7 +238,7 @@ public static class EditorUtilityExtensions
             Debug.Log($"已删除空文件夹: {rootDirectory}");
         }
     }
-    public static string GetFileName(string path,bool withExtension = false) 
+    public static string GetFileName(string path, bool withExtension = false)
     {
         // 使用Path类的GetFileName方法来获取文件名
         string fileName = Path.GetFileName(path);
@@ -363,7 +394,7 @@ public static class EditorUtilityExtensions
         elementType = null;
         return false;
     }
-    public static UnityEvent IntegrateEventInfo(PersistentData persistentData,int index = 0)
+    public static UnityEvent IntegrateEventInfo(PersistentData persistentData, int index = 0)
     {
         UnityEvent targetEvent = new UnityEvent();
 

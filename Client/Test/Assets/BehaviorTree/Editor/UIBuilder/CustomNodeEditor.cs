@@ -105,7 +105,7 @@ public class CustomNodeEditor : EditorWindow
         GraphSaveUtility.GenNodeToCSharp(currNode);
         GraphSaveUtility.GenStateToCSharp(currNode);
     }
-    private void OnClickSearchBtn(PointerUpEvent evt) 
+    private void OnClickSearchBtn(PointerUpEvent evt)
     {
         SearchMenuWindowProvider menu = ScriptableObject.CreateInstance<SearchMenuWindowProvider>();
         menu.OnCreateSearchTreeAction = () =>
@@ -146,22 +146,49 @@ public class CustomNodeEditor : EditorWindow
         string nodeName = nameTextField.text;
         string nodeTypeName = nodeType.BaseType.Name;
         nodeTypeField.value = nodeTypeName;
-        currNode = nodeView.CreatNode(nodeName, nodeTypeName);
+        currNode = nodeView.CreateNode(nodeName, nodeTypeName);
 
-        var ports = node.inputContainer.Query<Port>().ToList();
+        //遍历node的所有接口
+        List<Port> ports = node.inputContainer.Query<Port>().ToList();
         ports.AddRange(node.outputContainer.Query<Port>().ToList());
-        
+        //找到对应的类
+        string stateObjectName = $"{node.title}StateObj";
+        string fullName = $"{stateObjectName}, Assembly-CSharp";
+        Type stateObjectType = Type.GetType(fullName);
         List<BTNodePortSetting> settings = new();
-        foreach (var port in ports) 
+        var publicMembers = stateObjectType.GetPublicMembers();
+        foreach (var publicMember in publicMembers)
         {
-            BTNodePortSetting setting = new BTNodePortSetting();
-            setting.node = currNode;
-            setting.portName = port.portName;
-            setting.direction = port.direction;
-            setting.capacity = port.capacity;
-            setting.portType = setting.GetEPortTypeByType(port.portType);
+            string typeName = publicMember.Key.ToString();
+            Type memberType = publicMember.Key;
+            if (memberType == typeof(EBTState)) continue;
 
-            settings.Add(setting);
+            foreach (var memberName in publicMember.Value)
+            {
+                bool isShowAsPort = ports.Any(p => p.portName == memberName);
+
+                ProtSettingView settingView = new ProtSettingView();
+                BTNodePortSetting portSetting = new BTNodePortSetting();
+
+                portSetting.node = currNode;
+                portSetting.portName = memberName;
+                portSetting.portType = portSetting.GetEPortTypeByType(memberType);
+                portSetting.isShowAsPort = isShowAsPort;
+
+                if (isShowAsPort)
+                {
+                    Port port = ports.FirstOrDefault(p => p.portName == memberName);
+                    portSetting.direction = port.direction;
+                    portSetting.capacity = port.capacity;
+                }
+                else
+                {
+                    portSetting.direction = Direction.Input;
+                    portSetting.capacity = Port.Capacity.Single;
+                }
+
+                settings.Add(portSetting);
+            }
         }
         currNode.AddPortForNode(settings);
 
@@ -208,7 +235,7 @@ public class CustomNodeEditor : EditorWindow
         string nodeType = nodeTypeField.value;
         string nodeName = nameTextField.text;
         if (string.IsNullOrEmpty(nodeName)) return;
-        nodeView.CreatNode(nodeName, nodeType);
+        nodeView.CreateNode(nodeName, nodeType);
     }
     private void OnSelectAction(BehaviorTreeBaseNode _node)
     {
@@ -226,6 +253,8 @@ public class CustomNodeEditor : EditorWindow
 
         foreach (Port port in ports)
         {
+            bool isShowAsPort = port.style.display == DisplayStyle.Flex;
+
             ProtSettingView settingView = new ProtSettingView();
             BTNodePortSetting portSetting = new BTNodePortSetting();
             portSetting.node = _node;
@@ -233,6 +262,7 @@ public class CustomNodeEditor : EditorWindow
             portSetting.direction = port.direction;
             portSetting.capacity = port.capacity;
             portSetting.portType = portSetting.GetEPortTypeByType(port.portType);
+            portSetting.isShowAsPort = isShowAsPort;
 
             settingView.ShowProtSetting(portSetting);
             settingView.onDelPort = OnDeletePort;
