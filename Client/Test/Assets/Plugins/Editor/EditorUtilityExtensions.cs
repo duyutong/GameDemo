@@ -168,6 +168,16 @@ public static class EditorUtilityExtensions
             ts.RemoveAt(indexList[i]);
         }
     }
+    public static void SaveCSFile(string csSavePath, string content)
+    {
+        if (string.IsNullOrEmpty(csSavePath) || string.IsNullOrEmpty(content)) return;
+
+        byte[] contentBytes = Encoding.UTF8.GetBytes(content);
+        string directory = Path.GetDirectoryName(csSavePath);
+        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+        File.WriteAllBytes(csSavePath, contentBytes);
+        AssetDatabase.Refresh();
+    }
     public static void CopyFile(string sourceFilePath, string destinationPath, string newFileName = "")
     {
         string fileName = string.IsNullOrEmpty(newFileName) ? Path.GetFileName(sourceFilePath) : newFileName;

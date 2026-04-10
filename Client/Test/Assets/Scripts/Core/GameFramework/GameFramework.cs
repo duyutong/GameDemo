@@ -17,8 +17,8 @@ public class GameFramework : MonoBehaviour
     public void Init()
     {
         if (IsInited) return;
-        
-        if (UIMgr == null) UIMgr = gameObject.GetOrAddComponent<UIManager>();
+
+        if (UIMgr == null) UIMgr = new UIManager();
         UIMgr.Init(UIRootPrefab, transform);
 
         IsInited = true;

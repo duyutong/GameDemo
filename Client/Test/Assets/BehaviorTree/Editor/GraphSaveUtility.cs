@@ -19,15 +19,15 @@ public static class GraphSaveUtility
     private static List<BTTargetObject> bTTargetObjects = new List<BTTargetObject>();
     private static List<BTTargetEvent> bTTargetEvents = new List<BTTargetEvent>();
     private static List<BTTargetContainer> bTTargetContainers = new List<BTTargetContainer>();
+
     /// <summary>
     /// 保存节点和连线数据到ScriptableObject，并将其存储在指定文件路径
     /// </summary>
     /// <param name="fileName">要保存的文件名</param>
     /// <param name="nodes">要保存的节点</param>
     /// <param name="edges">要保存的连线</param>
-    public static void SaveData(string fileName, UQueryState<Node> nodes, UQueryState<Edge> edges)
+    public static void SaveData(string filePath, UQueryState<Node> nodes, UQueryState<Edge> edges)
     {
-        string filePath = $"Assets/BehaviorTree/BT/{fileName}.asset";
         bool isExist = File.Exists(filePath);
         BTContainer container;
         if (isExist) container = AssetDatabase.LoadAssetAtPath<BTContainer>(filePath);
@@ -95,7 +95,7 @@ public static class GraphSaveUtility
         AssetDatabase.Refresh();
 
         ResetBTTarget();
-        Debug.Log($"{fileName}保存完成");
+        Debug.Log($"{filePath}保存完成");
     }
     private static void ResetBTTarget()
     {

@@ -4,55 +4,50 @@ using static EnumDefinitions;
 /// <summary>
 /// #ClassDes#
 /// <summary>
-[global::ProtoBuf.ProtoContract (Name = @"RaceInGameConfig")]
 public class RaceInGameConfig : BaseConfig
 {
 	
     /// <summary>
     /// 种族名称
     /// </summary>
-    [global::ProtoBuf.ProtoMember(1)] public string ID;
+    public string ID { get; protected set; }
     /// <summary>
     /// （初始）生命值
     /// </summary>
-    [global::ProtoBuf.ProtoMember(2)] public int HP;
+    public int HP { get; protected set; }
     /// <summary>
     /// （初始）饱腹值
     /// </summary>
-    [global::ProtoBuf.ProtoMember(3)] public int Hunger;
+    public int Hunger { get; protected set; }
     /// <summary>
     /// （初始）含水值
     /// </summary>
-    [global::ProtoBuf.ProtoMember(4)] public int Hydration;
+    public int Hydration { get; protected set; }
     /// <summary>
     /// 生命值下降速度（每5秒）
     /// </summary>
-    [global::ProtoBuf.ProtoMember(5)] public int HealthDecayRate;
+    public int HealthDecayRate { get; protected set; }
     /// <summary>
     /// 饱腹值下降速度（每5秒）
     /// </summary>
-    [global::ProtoBuf.ProtoMember(6)] public int HungerDecayRate;
+    public int HungerDecayRate { get; protected set; }
     /// <summary>
     /// 含水值下降速度（每5秒）
     /// </summary>
-    [global::ProtoBuf.ProtoMember(7)] public int HydrationDecayRate;
+    public int HydrationDecayRate { get; protected set; }
     /// <summary>
     /// 以基础移速为基准的变化倍率
     /// </summary>
-    [global::ProtoBuf.ProtoMember(8)] public float MovementSpeed;
+    public float MovementSpeed { get; protected set; }
     /// <summary>
     /// 物资获取倍率
     /// </summary>
-    [global::ProtoBuf.ProtoMember(9)] public float ResourceMultiplier;
+    public float ResourceMultiplier { get; protected set; }
     /// <summary>
     /// 物资获取倍率触发概率（触发时获取物资倍率为“物资获取倍率，不触发时获取物资倍率为1）
     /// </summary>
-    [global::ProtoBuf.ProtoMember(10)] public float ResourceMultiplierProcChance;
+    public float ResourceMultiplierProcChance { get; protected set; }
     
-    public RaceInGameConfig(Dictionary<string, object> dataDic)
-    {
-        Initialize(dataDic);
-    }
     public RaceInGameConfig() { }
     public override void Initialize(Dictionary<string, object> _dataDic)
     {

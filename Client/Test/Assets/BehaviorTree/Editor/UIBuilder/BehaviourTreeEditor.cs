@@ -91,7 +91,10 @@ public class BehaviourTreeEditor : EditorWindow
     }
     private void OnClickSaveBtn()
     {
-        GraphSaveUtility.SaveData(nameTextField.text, behaviorTreeView.nodes, behaviorTreeView.edges);
+        string filePath = $"Assets/BehaviorTree/BT/{nameTextField.text}.asset";
+        if (treeField.value != null) filePath = AssetDatabase.GetAssetPath(treeField.value);
+       
+        GraphSaveUtility.SaveData(filePath, behaviorTreeView.nodes, behaviorTreeView.edges);
     }
     private void OnSelectAction(BehaviorTreeBaseNode node)
     {

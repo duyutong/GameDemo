@@ -4,27 +4,22 @@ using static EnumDefinitions;
 /// <summary>
 /// #ClassDes#
 /// <summary>
-[global::ProtoBuf.ProtoContract (Name = @"LanguageConfig")]
 public class LanguageConfig : BaseConfig
 {
 	
     /// <summary>
     /// 编号
     /// </summary>
-    [global::ProtoBuf.ProtoMember(1)] public int ID;
+    public int ID { get; protected set; }
     /// <summary>
     /// 中文
     /// </summary>
-    [global::ProtoBuf.ProtoMember(2)] public string Chinese;
+    public string Chinese { get; protected set; }
     /// <summary>
     /// 英文
     /// </summary>
-    [global::ProtoBuf.ProtoMember(3)] public string English;
+    public string English { get; protected set; }
     
-    public LanguageConfig(Dictionary<string, object> dataDic)
-    {
-        Initialize(dataDic);
-    }
     public LanguageConfig() { }
     public override void Initialize(Dictionary<string, object> _dataDic)
     {

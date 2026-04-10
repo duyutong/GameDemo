@@ -4,43 +4,38 @@ using static EnumDefinitions;
 /// <summary>
 /// #ClassDes#
 /// <summary>
-[global::ProtoBuf.ProtoContract (Name = @"ClueConfig")]
 public class ClueConfig : BaseConfig
 {
 	
     /// <summary>
     /// 编号
     /// </summary>
-    [global::ProtoBuf.ProtoMember(1)] public int ID;
+    public int ID { get; protected set; }
     /// <summary>
     /// 线索的对应物品id
     /// </summary>
-    [global::ProtoBuf.ProtoMember(2)] public int ItemId;
+    public int ItemId { get; protected set; }
     /// <summary>
     /// 线索类型
     /// </summary>
-    [global::ProtoBuf.ProtoMember(3)] public EClueType ClueType;
+    public EClueType ClueType { get; protected set; }
     /// <summary>
     /// 最高分值
     /// </summary>
-    [global::ProtoBuf.ProtoMember(4)] public int ScoreMax;
+    public int ScoreMax { get; protected set; }
     /// <summary>
     /// 最低分值
     /// </summary>
-    [global::ProtoBuf.ProtoMember(5)] public int ScoreMin;
+    public int ScoreMin { get; protected set; }
     /// <summary>
     /// 图鉴描述
     /// </summary>
-    [global::ProtoBuf.ProtoMember(6)] public int ClueDes;
+    public int ClueDes { get; protected set; }
     /// <summary>
     /// 线索展示图
     /// </summary>
-    [global::ProtoBuf.ProtoMember(7)] public string ClueTex;
+    public string ClueTex { get; protected set; }
     
-    public ClueConfig(Dictionary<string, object> dataDic)
-    {
-        Initialize(dataDic);
-    }
     public ClueConfig() { }
     public override void Initialize(Dictionary<string, object> _dataDic)
     {

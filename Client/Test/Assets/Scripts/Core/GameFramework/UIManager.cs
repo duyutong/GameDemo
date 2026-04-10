@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour
+public class UIManager
 {
     public Canvas UICanvas { get; private set; }
     public Camera UICamera { get; private set; }
     public Transform MainCanvas { get; private set; }
-    private static string prefabPath = "Assets/AddressableAssets/Prefabs/UI";
-    private static Dictionary<Type, GameObject> UIWinDic = new();
+    private string prefabPath = "Assets/AddressableAssets/Prefabs/UI";
+    private Dictionary<Type, GameObject> UIWinDic = new();
     public void Init(GameObject uiRootPrefab,Transform parent)
     {
-        GameObject uiRoot = Instantiate(uiRootPrefab, Vector3.zero, Quaternion.identity);
+        GameObject uiRoot = GameObject.Instantiate(uiRootPrefab, Vector3.zero, Quaternion.identity);
         uiRoot.transform.SetParent(parent, false);
         UICanvas = uiRoot.GetComponentInChildren<Canvas>();
         UICamera = uiRoot.GetComponentInChildren<Camera>();
@@ -33,7 +33,7 @@ public class UIManager : MonoBehaviour
             {
                 if (obj != null)
                 {
-                    GameObject winIns = Instantiate(obj);
+                    GameObject winIns = GameObject.Instantiate(obj);
                     winIns.transform.SetParent(MainCanvas, false);
                     winIns.transform.SetAsLastSibling();
                     T win = winIns.GetComponent<T>();
@@ -46,7 +46,7 @@ public class UIManager : MonoBehaviour
         
     }
 
-    private static string GetUIWindowPath(string windowName)
+    private string GetUIWindowPath(string windowName)
     {
         return $"{prefabPath}/{windowName}/{windowName}.prefab";
     }

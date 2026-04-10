@@ -4,43 +4,38 @@ using static EnumDefinitions;
 /// <summary>
 /// #ClassDes#
 /// <summary>
-[global::ProtoBuf.ProtoContract (Name = @"RaceSelectionConfig")]
 public class RaceSelectionConfig : BaseConfig
 {
 	
     /// <summary>
     /// 种族名称
     /// </summary>
-    [global::ProtoBuf.ProtoMember(1)] public int ID;
+    public int ID { get; protected set; }
     /// <summary>
     /// 种族全身图
     /// </summary>
-    [global::ProtoBuf.ProtoMember(2)] public string FullPic;
+    public string FullPic { get; protected set; }
     /// <summary>
     /// 种族头像
     /// </summary>
-    [global::ProtoBuf.ProtoMember(3)] public string Icon;
+    public string Icon { get; protected set; }
     /// <summary>
     /// （初始）生命值
     /// </summary>
-    [global::ProtoBuf.ProtoMember(4)] public int HP;
+    public int HP { get; protected set; }
     /// <summary>
     /// （初始）饱腹值
     /// </summary>
-    [global::ProtoBuf.ProtoMember(5)] public int Hunger;
+    public int Hunger { get; protected set; }
     /// <summary>
     /// （初始）含水值
     /// </summary>
-    [global::ProtoBuf.ProtoMember(6)] public int Hydration;
+    public int Hydration { get; protected set; }
     /// <summary>
     /// 角色简介
     /// </summary>
-    [global::ProtoBuf.ProtoMember(7)] public int Profile;
+    public int Profile { get; protected set; }
     
-    public RaceSelectionConfig(Dictionary<string, object> dataDic)
-    {
-        Initialize(dataDic);
-    }
     public RaceSelectionConfig() { }
     public override void Initialize(Dictionary<string, object> _dataDic)
     {
