@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Linq;
 using UnityEditor;
+using UnityEditor.Compilation;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -24,6 +26,22 @@ public class UIStarter : EditorWindow
     private const string CSharpPath = "Assets/Scripts/UIWindowComponent/";
     private const string PrefabPath = "Assets/AddressableAssets/Prefabs/UI/";
     private const string BTPath = "Assets/BehaviorTree/BT/";
+
+    private enum FlowState
+    {
+        None,
+        WaitingCompile,
+        WaitingDomainReload,
+        Ready
+    }
+
+    private FlowState state = FlowState.None;
+    private string csharpPath;
+    private string prefabPath;
+    private string btPath;
+    private string uiName;
+    private bool isPrefab;
+    private bool isRuntime;
 
     [MenuItem("Tools/UI/UIStarter")]
     [MenuItem("Assets/UI/UIStarter")]
@@ -63,21 +81,192 @@ public class UIStarter : EditorWindow
 
     private void OnBtnConfirmClick()
     {
-        string csharpPath = CSharpPathTextField.value;
-        string prefabPath = PrefabTextField.value;
-        string btPath = RuntimeTextField.value;
+        CreateCSharp();
+    }
+    #region Step1 Script
 
-        bool isPrefab = PrefabToggle.value;
-        bool isRuntime = RuntimToggle.value;
+    private void CreateCSharp()
+    {
+        csharpPath = CSharpPathTextField.value;
+        prefabPath = PrefabTextField.value;
+        btPath = RuntimeTextField.value;
 
-        bool isExists = File.Exists(csharpPath);
-        if (isExists) { EditorUtility.DisplayDialog("提示","文件已经存在！","确定"); return; }
+        isPrefab = PrefabToggle.value;
+        isRuntime = RuntimToggle.value;
 
-        string uiWinName = Path.GetFileNameWithoutExtension(csharpPath);
-        string scriptContent = ScriptTemplate.Replace("#SCRIPTNAME#", uiWinName).Replace("#BTRuntime#", isRuntime ? BTRuntimeTemplate : string.Empty);
+        uiName = Path.GetFileNameWithoutExtension(csharpPath);
+
+        if (File.Exists(csharpPath))
+        {
+            EditorUtility.DisplayDialog("提示", "CSharp文件已经存在！", "确定");
+            EnterNextStep();
+            return;
+        }
+
+        string scriptContent =
+            ScriptTemplate.Replace("#SCRIPTNAME#", uiName)
+                          .Replace("#BTRuntime#", isRuntime ? BTRuntimeTemplate : string.Empty);
+
         EditorUtilityExtensions.SaveCSFile(csharpPath, scriptContent);
+
+        AssetDatabase.Refresh();
+
+        state = FlowState.WaitingCompile;
+
+        EditorApplication.update -= Tick;
+        EditorApplication.update += Tick;
     }
 
+    #endregion
+
+    #region Flow Tick
+
+    private void Tick()
+    {
+        if (state == FlowState.WaitingCompile)
+        {
+            if (!EditorApplication.isCompiling) state = FlowState.WaitingDomainReload;
+        }
+        if (state == FlowState.WaitingDomainReload)
+        {
+            // 等 Unity 完全 reload 完程序集（关键修复点）
+            if (TypeCache.GetTypesDerivedFrom<MonoBehaviour>().Count > 0) state = FlowState.Ready;
+            return;
+        }
+
+        if (state == FlowState.Ready)
+        {
+            state = FlowState.None;
+            EditorApplication.update -= Tick;
+
+            CreateBTAsset();
+            CreatePrefabAndBindScript();
+        }
+    }
+
+    #endregion
+
+    #region BT Asset
+
+    private void CreateBTAsset()
+    {
+        if (!isRuntime) return;
+
+        if (File.Exists(btPath))
+        {
+            EditorUtility.DisplayDialog("提示", "行为树文件已经存在！", "确定");
+            return;
+        }
+
+        var container = ScriptableObject.CreateInstance<BTContainer>();
+        container.edgeDatas.Clear();
+        container.nodeDatas.Clear();
+
+        string dir = Path.GetDirectoryName(btPath);
+        if (!Directory.Exists(dir))
+            Directory.CreateDirectory(dir);
+
+        AssetDatabase.CreateAsset(container, btPath);
+        AssetDatabase.SaveAssets();
+    }
+
+    #endregion
+
+    #region Prefab
+
+    private void CreatePrefabAndBindScript()
+    {
+        if (!isPrefab) return;
+
+        string uiRootPath = "Assets/AddressableAssets/Prefabs/UI/UIRoot/UIRoot.prefab";
+
+        var type = GetTypeByName(uiName);
+
+        if (type == null)
+        {
+            Debug.LogError("找不到类型: " + uiName);
+            return;
+        }
+
+        if (AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath) != null)
+        {
+            EditorUtility.DisplayDialog("提示", "预制体文件已经存在！", "确定");
+            return;
+        }
+
+        GameObject uiRootPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(uiRootPath);
+        if (uiRootPrefab == null)
+        {
+            Debug.LogError("UIRoot路径错误");
+            return;
+        }
+
+        GameObject uiRootInstance = (GameObject)PrefabUtility.InstantiatePrefab(uiRootPrefab);
+
+        GameObject panel = new GameObject(uiName);
+        panel.transform.SetParent(uiRootInstance.transform, false);
+
+        RectTransform panelRt = panel.AddComponent<RectTransform>();
+        SetFullStretch(panelRt);
+
+        GameObject main = new GameObject("main");
+        main.transform.SetParent(panel.transform, false);
+
+        RectTransform mainRt = main.AddComponent<RectTransform>();
+        SetFullStretch(mainRt);
+
+        var component = panel.AddComponent(type);
+
+        if (isRuntime && File.Exists(btPath))
+        {
+            var container = AssetDatabase.LoadAssetAtPath<BTContainer>(btPath);
+
+            var btRuntime = panel.AddComponent<BTRuntimeComponent>();
+            btRuntime.container = container;
+
+            component.SetMemberValue("bTRuntimeComp", btRuntime);
+        }
+
+        string dir = Path.GetDirectoryName(prefabPath);
+        if (!Directory.Exists(dir))
+            Directory.CreateDirectory(dir);
+
+        PrefabUtility.SaveAsPrefabAsset(panel, prefabPath);
+
+        GameObject.DestroyImmediate(uiRootInstance);
+    }
+
+    #endregion
+
+    #region Utils
+
+    private static void SetFullStretch(RectTransform rt)
+    {
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.one;
+        rt.offsetMin = Vector2.zero;
+        rt.offsetMax = Vector2.zero;
+    }
+
+    private static Type GetTypeByName(string name)
+    {
+        return AppDomain.CurrentDomain
+            .GetAssemblies()
+            .SelectMany(a =>
+            {
+                try { return a.GetTypes(); }
+                catch { return Array.Empty<Type>(); }
+            })
+            .FirstOrDefault(t => t.Name == name);
+    }
+
+    private void EnterNextStep()
+    {
+        CreateBTAsset();
+        CreatePrefabAndBindScript();
+    }
+
+    #endregion
     private void OnCSharpTextFieldChanged(ChangeEvent<string> evt)
     {
         string uiWinName = $"UIWindow_{evt.newValue}";
@@ -93,7 +282,7 @@ public class UIStarter : EditorWindow
     }
     #region ScriptTemplate
     private const string BTRuntimeTemplate = @"public BTRuntimeComponent bTRuntimeComp;";
-    private const string ScriptTemplate = 
+    private const string ScriptTemplate =
 @"using System;
 using UnityEngine;
 

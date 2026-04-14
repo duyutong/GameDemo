@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 public class #Prefix#_#Title# : #NodeType#
 {
-    public override string stateName => ""#Title#State"";
+    public override string stateName => ""#Title#FlowState"";
     public #Prefix#_#Title#() : base() 
     {
         title = ""#Title#"";
@@ -41,7 +41,7 @@ using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
 [Serializable]
-public class #StateName#State : #BaseState#
+public class #StateName#FlowState : #BaseState#
 {
     #region AutoContext
     #PublicProperty#

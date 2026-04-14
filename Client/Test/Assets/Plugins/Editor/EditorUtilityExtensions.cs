@@ -58,32 +58,6 @@ public static class EditorUtilityExtensions
         }
         list.Add(name);
     }
-    public static bool SetMemberValue(this object target, string memberName, object value)
-    {
-        if (target == null || string.IsNullOrEmpty(memberName))
-            return false;
-
-        var type = target.GetType();
-
-        // 先尝试设置属性
-        PropertyInfo prop = type.GetProperty(memberName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-        if (prop != null && prop.CanWrite)
-        {
-            prop.SetValue(target, Convert.ChangeType(value, prop.PropertyType));
-            return true;
-        }
-
-        // 如果属性没找到，尝试设置字段
-        FieldInfo field = type.GetField(memberName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-        if (field != null)
-        {
-            field.SetValue(target, Convert.ChangeType(value, field.FieldType));
-            return true;
-        }
-
-        // 找不到属性或字段
-        return false;
-    }
     public static void CheckRes(string path, string extension, Action<string> action = null)
     {
         if (string.IsNullOrEmpty(path)) return;

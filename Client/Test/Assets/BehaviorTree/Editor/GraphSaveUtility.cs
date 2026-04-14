@@ -187,7 +187,7 @@ public static class GraphSaveUtility
         string stateObject = GetStateObject(node);
 
         string stateName = node.title;
-        string className = $"{stateName}State";
+        string className = $"{stateName}FlowState";
 
         tempStr = tempStr.Replace("#StateName#", stateName);
         tempStr = tempStr.Replace("#BaseState#", stateExtends);
@@ -231,7 +231,7 @@ public static class GraphSaveUtility
         tempStr = tempStr.Replace("#SetObjPropValue#", str3);
         tempStr = tempStr.Replace("#SetFieldValue#", str4);
 
-        string csSavePath = Application.dataPath.Replace("\\", "/") + "/BehaviorTree/State/" + className + ".cs";
+        string csSavePath = Application.dataPath.Replace("\\", "/") + "/BehaviorTree/FlowState/" + className + ".cs";
         string exitStr = ReadFileIfExists(csSavePath);
         string resultStr = MergeAutoContext(exitStr, tempStr);
         //写入文件
