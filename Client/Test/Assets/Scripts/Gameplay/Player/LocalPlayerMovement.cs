@@ -18,6 +18,11 @@ public class LocalPlayerMovement : MonoBehaviour
     }
     public void SyncLocalPlayerMovement(EOperationState operation, Vector3 worldPos, float moveLerpSpeed = 30)
     {
+        if (NetworkManager.Instance == null)
+    {
+        Debug.LogWarning("NetworkManager not ready, skip network sync");
+        return;
+    }
         account = NetworkManager.Instance.Account;
 
         movementInfo.Account = account;
