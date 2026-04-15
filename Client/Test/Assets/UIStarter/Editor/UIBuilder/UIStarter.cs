@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.IO;
 using System.Linq;
@@ -31,7 +31,6 @@ public class UIStarter : EditorWindow
     private string uiName;
     private bool isPrefab;
     private bool isRuntime;
-    private bool waitingForCompile = false;
 
     [MenuItem("Tools/UI/UIStarter")]
     [MenuItem("Assets/UI/UIStarter")]
@@ -80,7 +79,7 @@ public class UIStarter : EditorWindow
         CreateBTAndPrefabFirst();
     }
 
-    #region µÚÒ»²½£º´´½¨ĞĞÎªÊ÷ºÍÔ¤ÖÆÌå£¨ÎŞ½Å±¾£©
+    #region ç¬¬ä¸€æ­¥ï¼šåˆ›å»ºè¡Œä¸ºæ ‘å’Œé¢„åˆ¶ä½“ï¼ˆæ— è„šæœ¬ï¼‰
 
     private void CreateBTAndPrefabFirst()
     {
@@ -94,7 +93,7 @@ public class UIStarter : EditorWindow
         if (!isRuntime) return;
         if (File.Exists(btPath))
         {
-            EditorUtility.DisplayDialog("ÌáÊ¾", "ĞĞÎªÊ÷ÎÄ¼şÒÑ¾­´æÔÚ£¡", "È·¶¨");
+            EditorUtility.DisplayDialog("æç¤º", "è¡Œä¸ºæ ‘æ–‡ä»¶å·²ç»å­˜åœ¨ï¼", "ç¡®å®š");
             return;
         }
 
@@ -115,21 +114,23 @@ public class UIStarter : EditorWindow
 
         if (AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath) != null)
         {
-            EditorUtility.DisplayDialog("ÌáÊ¾", "Ô¤ÖÆÌåÎÄ¼şÒÑ¾­´æÔÚ£¡", "È·¶¨");
+            EditorUtility.DisplayDialog("æç¤º", "é¢„åˆ¶ä½“æ–‡ä»¶å·²ç»å­˜åœ¨ï¼", "ç¡®å®š");
             return;
         }
 
         GameObject uiRootPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(uiRootPath);
         if (uiRootPrefab == null)
         {
-            Debug.LogError("UIRootÂ·¾¶´íÎó");
+            Debug.LogError("UIRootè·¯å¾„é”™è¯¯");
             return;
         }
 
         GameObject uiRootInstance = (GameObject)PrefabUtility.InstantiatePrefab(uiRootPrefab);
 
         GameObject panel = new GameObject(uiName);
-        panel.transform.SetParent(uiRootInstance.transform, false);
+        Transform parent = uiRootInstance.transform.Find("Canvas/MainCanvas");
+        panel.transform.SetParent(parent, false);
+        panel.transform.Reset();
 
         RectTransform panelRt = panel.AddComponent<RectTransform>();
         SetFullStretch(panelRt);
@@ -155,14 +156,14 @@ public class UIStarter : EditorWindow
 
     #endregion
 
-    #region µÚ¶ş²½£ºÉú³É½Å±¾²¢µÈ´ı±àÒë¹ÒÔØ
+    #region ç¬¬äºŒæ­¥ï¼šç”Ÿæˆè„šæœ¬å¹¶ç­‰å¾…ç¼–è¯‘æŒ‚è½½
 
     private void CreateScriptAndWaitForCompile()
     {
         if (File.Exists(csharpPath))
         {
-            EditorUtility.DisplayDialog("ÌáÊ¾", "CSharpÎÄ¼şÒÑ¾­´æÔÚ£¡", "È·¶¨");
-            AttachScriptToPrefab(); // Ö±½Ó¹ÒÔØ
+            EditorUtility.DisplayDialog("æç¤º", "CSharpæ–‡ä»¶å·²ç»å­˜åœ¨ï¼", "ç¡®å®š");
+            AttachScriptToPrefab(); // ç›´æ¥æŒ‚è½½
             return;
         }
 
@@ -170,102 +171,119 @@ public class UIStarter : EditorWindow
             .Replace("#SCRIPTNAME#", uiName)
             .Replace("#BTRuntime#", isRuntime ? BTRuntimeTemplate : string.Empty);
 
-        // È·±£Ä¿Â¼´æÔÚ
+        // ç¡®ä¿ç›®å½•å­˜åœ¨
         string dir = Path.GetDirectoryName(csharpPath);
         if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
 
         File.WriteAllText(csharpPath, scriptContent);
         AssetDatabase.Refresh();
-
-        waitingForCompile = true;
-        CompilationPipeline.compilationFinished += OnCompilationFinished;
     }
-
-    private void OnCompilationFinished(object _)
+    private void OnDisable()
     {
-        if (!waitingForCompile) return;
-        CompilationPipeline.compilationFinished -= OnCompilationFinished;
-        waitingForCompile = false;
-
-        // µÈ´ıÓòÖØÔØÍê³É£¬²¢¶à´Î³¢ÊÔ»ñÈ¡ÀàĞÍ
-        EditorApplication.delayCall += () => TryAttachScriptWithRetry(0);
+        TryAttachScriptWithRetry();
     }
-
-    private void TryAttachScriptWithRetry(int attempt)
+    private void TryAttachScriptWithRetry()
     {
-        const int maxAttempts = 10;
-        Type scriptType = GetTypeByName(uiName);
-        if (scriptType == null)
+        EditorUtilityExtensions.CheckRes(PrefabPath, ".prefab", (_path) => 
         {
-            if (attempt < maxAttempts)
+            string fileName = Path.GetFileName(_path);
+            if (fileName.StartsWith("UIWindow_")) 
             {
-                // Ã¿Ö¡ÖØÊÔ£¬×î¶à10Ö¡
-                EditorApplication.delayCall += () => TryAttachScriptWithRetry(attempt + 1);
-                return;
-            }
-            else
-            {
-                Debug.LogError($"ÎŞ·¨ÕÒµ½ÀàĞÍ {uiName}£¬Çë¼ì²é½Å±¾±àÒëÊÇ·ñ³É¹¦");
-                return;
-            }
-        }
+                GameObject prefabAsset = AssetDatabase.LoadAssetAtPath<GameObject>(_path.ToShortPath());
+                if (prefabAsset == null) return;
 
-        AttachScriptToPrefab();
+                // å®ä¾‹åŒ–é¢„åˆ¶ä½“è¿›è¡Œç¼–è¾‘
+                GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(prefabAsset);
+                if (instance == null) return;
+
+                // æŸ¥æ‰¾æ ¹èŠ‚ç‚¹ï¼šé¢„åˆ¶ä½“æ ¹èŠ‚ç‚¹å¯èƒ½æ˜¯å®ä¾‹æœ¬èº«ï¼Œä¹Ÿå¯èƒ½æ˜¯åä¸º uiName çš„å­ç‰©ä½“
+                string uiName = instance.name;
+                Transform panelTransform = instance.transform;
+                GameObject panel = instance;
+
+                // è·å–è„šæœ¬ç±»å‹
+                Type scriptType = GetTypeByName(uiName);
+                if (scriptType == null)
+                {
+                    GameObject.DestroyImmediate(instance);
+                    return;
+                }
+
+                var btRuntime = panel.GetComponent<BTRuntimeComponent>();
+                var existing = panel.GetComponent(scriptType);
+                if (existing != null)
+                {
+                    if (btRuntime != null) existing.SetMemberValue("bTRuntimeComp", btRuntime);
+                }
+                else 
+                {
+                    // æ·»åŠ æ–°ç»„ä»¶
+                    var component = panel.AddComponent(scriptType);
+                    if (btRuntime != null) component.SetMemberValue("bTRuntimeComp", btRuntime);
+                }
+
+                // ä¿å­˜é¢„åˆ¶ä½“å¹¶è¦†ç›–åŸæ–‡ä»¶
+                PrefabUtility.SaveAsPrefabAssetAndConnect(instance, _path.ToShortPath(), InteractionMode.UserAction);
+                GameObject.DestroyImmediate(instance);
+
+                AssetDatabase.Refresh();
+            }
+        });
     }
 
     private void AttachScriptToPrefab()
     {
         if (!isPrefab) return;
 
-        // ÖØĞÂ¼ÓÔØÔ¤ÖÆÌå×Ê²ú
+        // é‡æ–°åŠ è½½é¢„åˆ¶ä½“èµ„äº§
         GameObject prefabAsset = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
         if (prefabAsset == null)
         {
-            Debug.LogError($"Ô¤ÖÆÌå²»´æÔÚ£º{prefabPath}");
+            Debug.LogError($"é¢„åˆ¶ä½“ä¸å­˜åœ¨ï¼š{prefabPath}");
             return;
         }
 
-        // ÊµÀı»¯Ô¤ÖÆÌå½øĞĞ±à¼­
+        // å®ä¾‹åŒ–é¢„åˆ¶ä½“è¿›è¡Œç¼–è¾‘
         GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(prefabAsset);
         if (instance == null)
         {
-            Debug.LogError($"ÊµÀı»¯Ô¤ÖÆÌåÊ§°Ü£º{prefabPath}");
+            Debug.LogError($"å®ä¾‹åŒ–é¢„åˆ¶ä½“å¤±è´¥ï¼š{prefabPath}");
             return;
         }
 
-        // ²éÕÒ¸ù½Úµã£ºÔ¤ÖÆÌå¸ù½Úµã¿ÉÄÜÊÇÊµÀı±¾Éí£¬Ò²¿ÉÄÜÊÇÃûÎª uiName µÄ×ÓÎïÌå
+        // æŸ¥æ‰¾æ ¹èŠ‚ç‚¹ï¼šé¢„åˆ¶ä½“æ ¹èŠ‚ç‚¹å¯èƒ½æ˜¯å®ä¾‹æœ¬èº«ï¼Œä¹Ÿå¯èƒ½æ˜¯åä¸º uiName çš„å­ç‰©ä½“
         Transform panelTransform = instance.transform.Find(uiName);
         if (panelTransform == null)
         {
-            // Èç¹ûÕÒ²»µ½£¬³¢ÊÔ½«ÊµÀı±¾Éí×÷Îª¸ù½Úµã
+            // å¦‚æœæ‰¾ä¸åˆ°ï¼Œå°è¯•å°†å®ä¾‹æœ¬èº«ä½œä¸ºæ ¹èŠ‚ç‚¹
             if (instance.name == uiName)
                 panelTransform = instance.transform;
             else
             {
-                Debug.LogError($"ÕÒ²»µ½ÃûÎª {uiName} µÄ¸ù½Úµã£¬Ô¤ÖÆÌå¸ù½ÚµãÃû³Æ£º{instance.name}");
+                Debug.LogError($"æ‰¾ä¸åˆ°åä¸º {uiName} çš„æ ¹èŠ‚ç‚¹ï¼Œé¢„åˆ¶ä½“æ ¹èŠ‚ç‚¹åç§°ï¼š{instance.name}");
                 GameObject.DestroyImmediate(instance);
                 return;
             }
         }
         GameObject panel = panelTransform.gameObject;
 
-        // »ñÈ¡½Å±¾ÀàĞÍ
+        // è·å–è„šæœ¬ç±»å‹
         Type scriptType = GetTypeByName(uiName);
         if (scriptType == null)
         {
-            Debug.LogError($"ÎŞ·¨»ñÈ¡½Å±¾ÀàĞÍ {uiName}");
+            Debug.LogError($"æ— æ³•è·å–è„šæœ¬ç±»å‹ {uiName}");
             GameObject.DestroyImmediate(instance);
             return;
         }
 
-        // ÒÆ³ı¿ÉÄÜÒÑ´æÔÚµÄ¾É×é¼ş£¨±ÜÃâÖØ¸´£©
+        // ç§»é™¤å¯èƒ½å·²å­˜åœ¨çš„æ—§ç»„ä»¶ï¼ˆé¿å…é‡å¤ï¼‰
         var existing = panel.GetComponent(scriptType);
         if (existing != null) DestroyImmediate(existing);
 
-        // Ìí¼ÓĞÂ×é¼ş
+        // æ·»åŠ æ–°ç»„ä»¶
         var component = panel.AddComponent(scriptType);
 
-        // ¹ØÁªĞĞÎªÊ÷×é¼ş
+        // å…³è”è¡Œä¸ºæ ‘ç»„ä»¶
         if (isRuntime)
         {
             var btRuntime = panel.GetComponent<BTRuntimeComponent>();
@@ -276,21 +294,21 @@ public class UIStarter : EditorWindow
                 if (field != null)
                     field.SetValue(component, btRuntime);
                 else
-                    Debug.LogWarning($"½Å±¾ {uiName} ÖĞÃ»ÓĞ bTRuntimeComp ×Ö¶Î");
+                    Debug.LogWarning($"è„šæœ¬ {uiName} ä¸­æ²¡æœ‰ bTRuntimeComp å­—æ®µ");
             }
         }
 
-        // ±£´æÔ¤ÖÆÌå²¢¸²¸ÇÔ­ÎÄ¼ş
+        // ä¿å­˜é¢„åˆ¶ä½“å¹¶è¦†ç›–åŸæ–‡ä»¶
         PrefabUtility.SaveAsPrefabAssetAndConnect(instance, prefabPath, InteractionMode.UserAction);
         GameObject.DestroyImmediate(instance);
 
         AssetDatabase.Refresh();
-        Debug.Log($"³É¹¦½«½Å±¾ {uiName} ¹ÒÔØµ½Ô¤ÖÆÌå {prefabPath}");
+        Debug.Log($"æˆåŠŸå°†è„šæœ¬ {uiName} æŒ‚è½½åˆ°é¢„åˆ¶ä½“ {prefabPath}");
     }
 
     #endregion
 
-    #region ¸¨Öú·½·¨
+    #region è¾…åŠ©æ–¹æ³•
 
     private static void SetFullStretch(RectTransform rt)
     {
@@ -302,12 +320,12 @@ public class UIStarter : EditorWindow
 
     private static Type GetTypeByName(string name)
     {
-        // ÓÅÏÈÊ¹ÓÃ TypeCache ¸ü¿ì
+        // ä¼˜å…ˆä½¿ç”¨ TypeCache æ›´å¿«
         var types = TypeCache.GetTypesDerivedFrom<MonoBehaviour>();
         foreach (var t in types)
             if (t.Name == name) return t;
 
-        // »ØÍËµ½ AppDomain ²éÕÒ
+        // å›é€€åˆ° AppDomain æŸ¥æ‰¾
         return AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(a => { try { return a.GetTypes(); } catch { return Array.Empty<Type>(); } })
             .FirstOrDefault(t => t.Name == name);
@@ -325,7 +343,7 @@ public class UIStarter : EditorWindow
 
     #endregion
 
-    #region Ä£°å³£Á¿
+    #region æ¨¡æ¿å¸¸é‡
 
     private const string BTRuntimeTemplate = "public BTRuntimeComponent bTRuntimeComp;";
     private const string ScriptTemplate =

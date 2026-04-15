@@ -310,9 +310,9 @@ RectTransform:
   m_Father: {fileID: 1221685934417865999}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -1, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &7273236730694710338
 CanvasRenderer:
@@ -1763,7 +1763,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 064d0f1af7f633e45a84e5275b1712a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonTest
-  uIWindow_Bag: {fileID: 2757517819389354343}
+  uIWindow_Bag: {fileID: 0}
 --- !u!1 &3476024501030416434
 GameObject:
   m_ObjectHideFlags: 0
@@ -3293,8 +3293,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5779911823646655520}
-  - component: {fileID: 2757517819389354343}
   - component: {fileID: 8933136144681392397}
+  - component: {fileID: 8888590111796995029}
   m_Layer: 5
   m_Name: UIWindow_Bag
   m_TagString: Untagged
@@ -3326,23 +3326,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2757517819389354343
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7790237394026453470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac09dcdc3d87fb34785668fea4b50807, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIWindow_Bag
-  bTRuntimeComp: {fileID: 8933136144681392397}
-  itemPrefab: {fileID: 743144976516556639}
-  itemView: {fileID: 1868259437319365942}
-  descriptionView: {fileID: 3441165323000401439}
-  buttonGroup: {fileID: 811007998610215660}
 --- !u!114 &8933136144681392397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3356,6 +3339,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BTRuntimeComponent
   container: {fileID: 11400000, guid: a26a1a7191c56ad4d93963e8ed5616b0, type: 2}
+--- !u!114 &8888590111796995029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7790237394026453470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac09dcdc3d87fb34785668fea4b50807, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIWindow_Bag
+  bTRuntimeComp: {fileID: 8933136144681392397}
+  itemPrefab: {fileID: 0}
+  itemView: {fileID: 0}
+  descriptionView: {fileID: 0}
+  buttonGroup: {fileID: 0}
 --- !u!1 &8220130991464868546
 GameObject:
   m_ObjectHideFlags: 0
@@ -4001,11 +4001,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24f0e36cfd3aa434490b4487dd05ee2c, type: 3}
---- !u!1 &743144976516556639 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1728503152158310461, guid: 24f0e36cfd3aa434490b4487dd05ee2c, type: 3}
-  m_PrefabInstance: {fileID: 2138310552620410722}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &8077768185568111772 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7905278887483247614, guid: 24f0e36cfd3aa434490b4487dd05ee2c, type: 3}
