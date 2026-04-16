@@ -1,0 +1,507 @@
+fileFormatVersion: 2
+guid: 1f633e1e15d08c24aa842e7d78d47f30
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4015883371355684288
+    second: forest-plants-revised_0
+  - first:
+      213: -2902549151344006596
+    second: forest-plants-revised_1
+  - first:
+      213: 4306266554611872845
+    second: forest-plants-revised_2
+  - first:
+      213: -5792470084393932254
+    second: forest-plants-revised_3
+  - first:
+      213: -6353653086548615568
+    second: forest-plants-revised_4
+  - first:
+      213: -3882069382349305225
+    second: forest-plants-revised_5
+  - first:
+      213: -7747936355337836551
+    second: forest-plants-revised_6
+  - first:
+      213: 7345331982248142856
+    second: forest-plants-revised_7
+  - first:
+      213: 5093284109100648669
+    second: forest-plants-revised_8
+  - first:
+      213: -9165379134267336437
+    second: forest-plants-revised_9
+  - first:
+      213: -6110469095135237098
+    second: forest-plants-revised_10
+  - first:
+      213: -7447198623904745296
+    second: forest-plants-revised_11
+  - first:
+      213: 2816612741608245941
+    second: forest-plants-revised_12
+  - first:
+      213: 3811395561678814237
+    second: forest-plants-revised_13
+  - first:
+      213: 798377312373257704
+    second: forest-plants-revised_14
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 512
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: forest-plants-revised_0
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 1617
+        width: 519
+        height: 377
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0cdbd0136a84bb730800000000000000
+      internalID: 4015883371355684288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forest-plants-revised_1
+      rect:
+        serializedVersion: 2
+        x: 798
+        y: 1487
+        width: 495
+        height: 530
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3a670bdce218b7d0800000000000000
+      internalID: -2902549151344006596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forest-plants-revised_2
+      rect:
+        serializedVersion: 2
+        x: 1647
+        y: 1578
+        width: 265
+        height: 435
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4439c7ad9ee2cb30800000000000000
+      internalID: 4306266554611872845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forest-plants-revised_3
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 1100
+        width: 487
+        height: 452
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22a6f97e5230d9fa0800000000000000
+      internalID: -5792470084393932254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forest-plants-revised_4
+      rect:
+        serializedVersion: 2
+        x: 1018
+        y: 1354
+        width: 17
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07e943e4e2a43d7a0800000000000000
+      internalID: -6353653086548615568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forest-plants-revised_5
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 1143
+        width: 490
+        height: 239
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77a46aff67e102ac0800000000000000
+      internalID: -3882069382349305225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forest-plants-revised_6
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 1249
+        width: 57
+        height: 83
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f7e0c56fecc97490800000000000000
+      internalID: -7747936355337836551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forest-plants-revised_7
+      rect:
+        serializedVersion: 2
+        x: 1048
+        y: 1314
+        width: 24
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8086737458cdfe560800000000000000
+      internalID: 7345331982248142856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forest-plants-revised_8
+      rect:
+        serializedVersion: 2
+        x: 967
+        y: 1245
+        width: 29
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd8061f69eafea640800000000000000
+      internalID: 5093284109100648669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forest-plants-revised_9
+      rect:
+        serializedVersion: 2
+        x: 1061
+        y: 1247
+        width: 23
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b09d736dc380ec080800000000000000
+      internalID: -9165379134267336437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forest-plants-revised_10
+      rect:
+        serializedVersion: 2
+        x: 879
+        y: 1085
+        width: 310
+        height: 311
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61c267d8bb0433ba0800000000000000
+      internalID: -6110469095135237098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forest-plants-revised_11
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 587
+        width: 655
+        height: 406
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b8316afe4c36a890800000000000000
+      internalID: -7447198623904745296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forest-plants-revised_12
+      rect:
+        serializedVersion: 2
+        x: 1511
+        y: 462
+        width: 684
+        height: 524
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ba066d8d5e961720800000000000000
+      internalID: 2816612741608245941
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forest-plants-revised_13
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 151
+        width: 524
+        height: 270
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1cbd58d11cc4e430800000000000000
+      internalID: 3811395561678814237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forest-plants-revised_14
+      rect:
+        serializedVersion: 2
+        x: 925
+        y: 123
+        width: 473
+        height: 358
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e53db48fe7641b00800000000000000
+      internalID: 798377312373257704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 09a6ed9d337e60d40ae26d8a0c2b09c3
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      forest-plants-revised_0: 4015883371355684288
+      forest-plants-revised_1: -2902549151344006596
+      forest-plants-revised_10: -6110469095135237098
+      forest-plants-revised_11: -7447198623904745296
+      forest-plants-revised_12: 2816612741608245941
+      forest-plants-revised_13: 3811395561678814237
+      forest-plants-revised_14: 798377312373257704
+      forest-plants-revised_2: 4306266554611872845
+      forest-plants-revised_3: -5792470084393932254
+      forest-plants-revised_4: -6353653086548615568
+      forest-plants-revised_5: -3882069382349305225
+      forest-plants-revised_6: -7747936355337836551
+      forest-plants-revised_7: 7345331982248142856
+      forest-plants-revised_8: 5093284109100648669
+      forest-plants-revised_9: -9165379134267336437
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
