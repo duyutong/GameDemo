@@ -1,139 +1,52 @@
 fileFormatVersion: 2
-guid: f0e4f20a3f3caf14ab7f3a14ba0b7d6a
+guid: 357eed812f11e934dbddbc90be7f8d1b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4374905888859964502
-    second: 4b98f2f4552bb443af2d45fb24972297_0
+      213: -3875396560644587094
+    second: forest-plants 1_0
   - first:
-      213: -813137857081488328
-    second: 4b98f2f4552bb443af2d45fb24972297_1
+      213: 7297664099888229750
+    second: forest-plants 1_1
   - first:
-      213: -8126846888962337519
-    second: 4b98f2f4552bb443af2d45fb24972297_2
+      213: -6685716473474799311
+    second: forest-plants 1_2
   - first:
-      213: -4504803987762455615
-    second: 4b98f2f4552bb443af2d45fb24972297_3
+      213: -4854823664572534731
+    second: forest-plants 1_3
   - first:
-      213: -2025954454567512763
-    second: 4b98f2f4552bb443af2d45fb24972297_4
+      213: -7943570886636873614
+    second: forest-plants 1_4
   - first:
-      213: 4767153489474041340
-    second: 4b98f2f4552bb443af2d45fb24972297_5
+      213: 6618406163085026948
+    second: forest-plants 1_5
   - first:
-      213: 8984762327492785207
-    second: 4b98f2f4552bb443af2d45fb24972297_6
+      213: -8535750923534064683
+    second: forest-plants 1_6
   - first:
-      213: -3226186287342435968
-    second: 4b98f2f4552bb443af2d45fb24972297_7
+      213: -2799256906940949071
+    second: forest-plants 1_7
   - first:
-      213: -458799472280142573
-    second: 4b98f2f4552bb443af2d45fb24972297_8
+      213: -766877803523660437
+    second: forest-plants 1_8
   - first:
-      213: -5159722071483790381
-    second: 4b98f2f4552bb443af2d45fb24972297_9
+      213: 1917309137224344968
+    second: forest-plants 1_9
   - first:
-      213: 711461617408309698
-    second: 4b98f2f4552bb443af2d45fb24972297_10
+      213: -5358057779014239760
+    second: forest-plants 1_10
   - first:
-      213: 2273703703350704220
-    second: 4b98f2f4552bb443af2d45fb24972297_11
+      213: 3403370017690053574
+    second: forest-plants 1_11
   - first:
-      213: 6104597176337770480
-    second: 4b98f2f4552bb443af2d45fb24972297_12
+      213: -308847898119042620
+    second: forest-plants 1_12
   - first:
-      213: 2483660348921325403
-    second: 4b98f2f4552bb443af2d45fb24972297_13
+      213: 701788937244722675
+    second: forest-plants 1_13
   - first:
-      213: -1067130370095679530
-    second: 4b98f2f4552bb443af2d45fb24972297_14
-  - first:
-      213: -3533344496250336933
-    second: 4b98f2f4552bb443af2d45fb24972297_15
-  - first:
-      213: 947182367585730785
-    second: 4b98f2f4552bb443af2d45fb24972297_16
-  - first:
-      213: -6791863824481301376
-    second: 4b98f2f4552bb443af2d45fb24972297_17
-  - first:
-      213: 4956942891437767409
-    second: 4b98f2f4552bb443af2d45fb24972297_18
-  - first:
-      213: -770864355845993050
-    second: 4b98f2f4552bb443af2d45fb24972297_19
-  - first:
-      213: 7114549671509158460
-    second: 4b98f2f4552bb443af2d45fb24972297_20
-  - first:
-      213: 6000375329376919522
-    second: 4b98f2f4552bb443af2d45fb24972297_21
-  - first:
-      213: -6950734069205400934
-    second: 4b98f2f4552bb443af2d45fb24972297_22
-  - first:
-      213: -6663970178261534144
-    second: 4b98f2f4552bb443af2d45fb24972297_23
-  - first:
-      213: 5707377228703966784
-    second: 4b98f2f4552bb443af2d45fb24972297_24
-  - first:
-      213: -6267882119363021349
-    second: 4b98f2f4552bb443af2d45fb24972297_25
-  - first:
-      213: -1999170793871896853
-    second: 4b98f2f4552bb443af2d45fb24972297_26
-  - first:
-      213: 5739386097534816782
-    second: 4b98f2f4552bb443af2d45fb24972297_27
-  - first:
-      213: 7394991768772281172
-    second: 4b98f2f4552bb443af2d45fb24972297_28
-  - first:
-      213: -8767786556876787015
-    second: 4b98f2f4552bb443af2d45fb24972297_29
-  - first:
-      213: -4156729774415084673
-    second: 4b98f2f4552bb443af2d45fb24972297_30
-  - first:
-      213: -2177016692857306469
-    second: 4b98f2f4552bb443af2d45fb24972297_31
-  - first:
-      213: 1628046482942471312
-    second: 4b98f2f4552bb443af2d45fb24972297_32
-  - first:
-      213: -6803865402562113019
-    second: 4b98f2f4552bb443af2d45fb24972297_33
-  - first:
-      213: 2826461886857304929
-    second: 4b98f2f4552bb443af2d45fb24972297_34
-  - first:
-      213: -1484730446865404948
-    second: 4b98f2f4552bb443af2d45fb24972297_35
-  - first:
-      213: -1672955329025023577
-    second: 4b98f2f4552bb443af2d45fb24972297_36
-  - first:
-      213: 1672664945508779647
-    second: 4b98f2f4552bb443af2d45fb24972297_37
-  - first:
-      213: 1733058423582418147
-    second: 4b98f2f4552bb443af2d45fb24972297_38
-  - first:
-      213: 3080956967781574238
-    second: 4b98f2f4552bb443af2d45fb24972297_39
-  - first:
-      213: 4810993878427490804
-    second: 4b98f2f4552bb443af2d45fb24972297_40
-  - first:
-      213: -1373052192169520783
-    second: 4b98f2f4552bb443af2d45fb24972297_41
-  - first:
-      213: 4030696361559617953
-    second: 4b98f2f4552bb443af2d45fb24972297_42
-  - first:
-      213: 2383447663121028395
-    second: 4b98f2f4552bb443af2d45fb24972297_43
+      213: 5894980042043364791
+    second: forest-plants 1_14
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -229,331 +142,331 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: forest-plants_0
+      name: forest-plants 1_0
       rect:
         serializedVersion: 2
         x: 109
-        y: 1642
+        y: 1617
         width: 519
-        height: 352
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        height: 377
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 65443470ab9c6bc30800000000000000
-      internalID: 4374905888859964502
+      spriteID: aa1420f5c53d73ac0800000000000000
+      internalID: -3875396560644587094
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-plants_2
+      name: forest-plants 1_1
       rect:
         serializedVersion: 2
-        x: 1506
-        y: 1603
-        width: 536
-        height: 439
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 798
+        y: 1487
+        width: 495
+        height: 530
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cf53dd957d4582240800000000000000
-      internalID: 4767153489474041340
+      spriteID: 67d65fb85d2864560800000000000000
+      internalID: 7297664099888229750
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-plants_3
+      name: forest-plants 1_2
+      rect:
+        serializedVersion: 2
+        x: 1647
+        y: 1578
+        width: 265
+        height: 435
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 139ae813a409733a0800000000000000
+      internalID: -6685716473474799311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forest-plants 1_3
       rect:
         serializedVersion: 2
         x: 102
-        y: 1083
+        y: 1100
         width: 487
-        height: 428
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        height: 452
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e02d0644f3566af40800000000000000
-      internalID: 5739386097534816782
+      spriteID: 5307ef9599330acb0800000000000000
+      internalID: -4854823664572534731
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-plants_4
+      name: forest-plants 1_4
       rect:
         serializedVersion: 2
-        x: 779
-        y: 1044
-        width: 495
-        height: 515
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 1018
+        y: 1354
+        width: 17
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4530c9655d940a660800000000000000
-      internalID: 7394991768772281172
+      spriteID: 278dfdd8d54c2c190800000000000000
+      internalID: -7943570886636873614
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-plants_5
+      name: forest-plants 1_5
       rect:
         serializedVersion: 2
-        x: 1430
-        y: 1081
-        width: 265
-        height: 416
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 1500
+        y: 1143
+        width: 490
+        height: 239
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9b2f9ea8490925680800000000000000
-      internalID: -8767786556876787015
+      spriteID: 48660f9e65d49db50800000000000000
+      internalID: 6618406163085026948
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-plants_6
+      name: forest-plants 1_6
       rect:
         serializedVersion: 2
-        x: 1786
-        y: 953
-        width: 393
-        height: 635
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 1000
+        y: 1249
+        width: 57
+        height: 83
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f7303b02b445056c0800000000000000
-      internalID: -4156729774415084673
+      spriteID: 5d32a8762cbea8980800000000000000
+      internalID: -8535750923534064683
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-plants_7
+      name: forest-plants 1_7
       rect:
         serializedVersion: 2
-        x: 84
-        y: 609
-        width: 590
-        height: 376
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 1048
+        y: 1314
+        width: 24
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b9205282adea9c1e0800000000000000
-      internalID: -2177016692857306469
+      spriteID: 1bdd9ba9caa0729d0800000000000000
+      internalID: -2799256906940949071
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-plants_8
+      name: forest-plants 1_8
       rect:
         serializedVersion: 2
-        x: 755
-        y: 559
-        width: 688
-        height: 428
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 967
+        y: 1245
+        width: 29
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 09c2c9586abf79610800000000000000
-      internalID: 1628046482942471312
+      spriteID: b6527d663b08b55f0800000000000000
+      internalID: -766877803523660437
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-plants_10
+      name: forest-plants 1_9
       rect:
         serializedVersion: 2
-        x: 1744
-        y: 644
-        width: 469
-        height: 202
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 1061
+        y: 1247
+        width: 23
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3e4e0a0447f0d0810800000000000000
-      internalID: 1733058423582418147
+      spriteID: 8852ed08086ab9a10800000000000000
+      internalID: 1917309137224344968
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-plants_11
+      name: forest-plants 1_10
       rect:
         serializedVersion: 2
-        x: 93
-        y: 58
-        width: 593
-        height: 498
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 879
+        y: 1085
+        width: 315
+        height: 305
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4f9df34517514c240800000000000000
-      internalID: 4810993878427490804
+      spriteID: 0f976d396da54a5b0800000000000000
+      internalID: -5358057779014239760
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-plants_12
+      name: forest-plants 1_11
       rect:
         serializedVersion: 2
-        x: 778
-        y: 147
-        width: 475
-        height: 251
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 162
+        y: 587
+        width: 655
+        height: 406
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1711aa35e40f1fce0800000000000000
-      internalID: -1373052192169520783
+      spriteID: 6cb61afcff23b3f20800000000000000
+      internalID: 3403370017690053574
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-plants_13
+      name: forest-plants 1_12
       rect:
         serializedVersion: 2
-        x: 1305
-        y: 157
-        width: 420
-        height: 333
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 1511
+        y: 462
+        width: 684
+        height: 524
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1a1783c3cf8efe730800000000000000
-      internalID: 4030696361559617953
+      spriteID: 4c90df61970c6bbf0800000000000000
+      internalID: -308847898119042620
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-plants_14
+      name: forest-plants 1_13
       rect:
         serializedVersion: 2
-        x: 1848
-        y: 78
-        width: 355
-        height: 507
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 160
+        y: 151
+        width: 524
+        height: 270
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b2550158505b31120800000000000000
-      internalID: 2383447663121028395
+      spriteID: 3f545c7f1514db900800000000000000
+      internalID: 701788937244722675
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-plants_1
+      name: forest-plants 1_14
       rect:
         serializedVersion: 2
-        x: 780
-        y: 1619
-        width: 592
-        height: 419
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 925
+        y: 123
+        width: 473
+        height: 358
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 15a67832020aa6e44894ba052cbdccdf
-      internalID: -1408873541
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forest-plants_9
-      rect:
-        serializedVersion: 2
-        x: 1443
-        y: 647
-        width: 273
-        height: 288
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 99f9cafc0ee64e84e8400fee2cbe752f
-      internalID: 1446240993
+      spriteID: 7b513048d1d2fc150800000000000000
+      internalID: 5894980042043364791
       vertices: []
       indices: 
       edges: []
@@ -562,7 +475,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 78a209ee4efa7a7448f8ec7dbe433a11
+    spriteID: d586d08eea8624d4291fec63f04b9fd4
     internalID: 0
     vertices: []
     indices: 
@@ -570,58 +483,23 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceOnImport
-        value: False
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
-      4b98f2f4552bb443af2d45fb24972297_1: -813137857081488328
-      4b98f2f4552bb443af2d45fb24972297_10: 711461617408309698
-      4b98f2f4552bb443af2d45fb24972297_11: 2273703703350704220
-      4b98f2f4552bb443af2d45fb24972297_12: 6104597176337770480
-      4b98f2f4552bb443af2d45fb24972297_13: 2483660348921325403
-      4b98f2f4552bb443af2d45fb24972297_14: -1067130370095679530
-      4b98f2f4552bb443af2d45fb24972297_15: -3533344496250336933
-      4b98f2f4552bb443af2d45fb24972297_16: 947182367585730785
-      4b98f2f4552bb443af2d45fb24972297_17: -6791863824481301376
-      4b98f2f4552bb443af2d45fb24972297_18: 4956942891437767409
-      4b98f2f4552bb443af2d45fb24972297_19: -770864355845993050
-      4b98f2f4552bb443af2d45fb24972297_2: -8126846888962337519
-      4b98f2f4552bb443af2d45fb24972297_20: 7114549671509158460
-      4b98f2f4552bb443af2d45fb24972297_21: 6000375329376919522
-      4b98f2f4552bb443af2d45fb24972297_22: -6950734069205400934
-      4b98f2f4552bb443af2d45fb24972297_23: -6663970178261534144
-      4b98f2f4552bb443af2d45fb24972297_24: 5707377228703966784
-      4b98f2f4552bb443af2d45fb24972297_25: -6267882119363021349
-      4b98f2f4552bb443af2d45fb24972297_26: -1999170793871896853
-      4b98f2f4552bb443af2d45fb24972297_3: -4504803987762455615
-      4b98f2f4552bb443af2d45fb24972297_33: -6803865402562113019
-      4b98f2f4552bb443af2d45fb24972297_34: 2826461886857304929
-      4b98f2f4552bb443af2d45fb24972297_35: -1484730446865404948
-      4b98f2f4552bb443af2d45fb24972297_36: -1672955329025023577
-      4b98f2f4552bb443af2d45fb24972297_37: 1672664945508779647
-      4b98f2f4552bb443af2d45fb24972297_39: 3080956967781574238
-      4b98f2f4552bb443af2d45fb24972297_4: -2025954454567512763
-      4b98f2f4552bb443af2d45fb24972297_6: 8984762327492785207
-      4b98f2f4552bb443af2d45fb24972297_7: -3226186287342435968
-      4b98f2f4552bb443af2d45fb24972297_8: -458799472280142573
-      4b98f2f4552bb443af2d45fb24972297_9: -5159722071483790381
-      forest-plants_0: 4374905888859964502
-      forest-plants_1: -1408873541
-      forest-plants_10: 1733058423582418147
-      forest-plants_11: 4810993878427490804
-      forest-plants_12: -1373052192169520783
-      forest-plants_13: 4030696361559617953
-      forest-plants_14: 2383447663121028395
-      forest-plants_2: 4767153489474041340
-      forest-plants_3: 5739386097534816782
-      forest-plants_4: 7394991768772281172
-      forest-plants_5: -8767786556876787015
-      forest-plants_6: -4156729774415084673
-      forest-plants_7: -2177016692857306469
-      forest-plants_8: 1628046482942471312
-      forest-plants_9: 1446240993
+      forest-plants 1_0: -3875396560644587094
+      forest-plants 1_1: 7297664099888229750
+      forest-plants 1_10: -5358057779014239760
+      forest-plants 1_11: 3403370017690053574
+      forest-plants 1_12: -308847898119042620
+      forest-plants 1_13: 701788937244722675
+      forest-plants 1_14: 5894980042043364791
+      forest-plants 1_2: -6685716473474799311
+      forest-plants 1_3: -4854823664572534731
+      forest-plants 1_4: -7943570886636873614
+      forest-plants 1_5: 6618406163085026948
+      forest-plants 1_6: -8535750923534064683
+      forest-plants 1_7: -2799256906940949071
+      forest-plants 1_8: -766877803523660437
+      forest-plants 1_9: 1917309137224344968
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
