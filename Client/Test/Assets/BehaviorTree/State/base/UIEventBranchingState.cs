@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -17,6 +18,19 @@ public class UIEventBranchingState : BehaviorTreeBaseState
     public bool checkDown;
     public bool checkClick;
     public bool checkUp;
+
+    public Camera UICamera
+    {
+        get
+        {
+            if (runtime != null)
+            {
+                if (GameFramework.UIMgr == null) return null;
+                return GameFramework.UIMgr.UICamera;
+            }
+            return null;
+        }
+    }
 
     private PointerEventData eventData;
     private bool isInitFinish;
@@ -61,8 +75,8 @@ public class UIEventBranchingState : BehaviorTreeBaseState
         if (bTTargetObject == null) return;
         if (bTTargetObject.target == null) return;
 
-        GameObject go = bTTargetObject.target as GameObject;
-        if(go == null) return;
+        GameObject go = bTTargetObject.target.GameObject();
+        if (go == null) return;
 
         var rectTrans = go.GetComponent<RectTransform>();
         if (rectTrans == null) return;

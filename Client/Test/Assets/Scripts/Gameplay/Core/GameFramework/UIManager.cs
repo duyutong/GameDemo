@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class UIManager
 {
@@ -15,7 +16,18 @@ public class UIManager
         uiRoot.transform.SetParent(parent, false);
         UICanvas = uiRoot.GetComponentInChildren<Canvas>();
         UICamera = uiRoot.GetComponentInChildren<Camera>();
-        MainCanvas = UICanvas.transform;
+        MainCanvas = UICanvas.transform.Find("MainCanvas");
+
+        var uiCameraData = UICamera.GetUniversalAdditionalCameraData();
+        uiCameraData.renderType = CameraRenderType.Overlay;
+
+        var mainCamera = Camera.main;
+        var mainCameraData = mainCamera.GetUniversalAdditionalCameraData();
+        if (!mainCameraData.cameraStack.Contains(UICamera))
+        {
+            mainCameraData.cameraStack.Add(UICamera);
+            Debug.Log($"{UICamera.name} 已成功添加到 {mainCamera.name} 的摄像机堆叠中。");
+        }
     }
     public void OpenWindow<T>(Action<T> onDone = null) where T : UIWindowComponentBase
     {
