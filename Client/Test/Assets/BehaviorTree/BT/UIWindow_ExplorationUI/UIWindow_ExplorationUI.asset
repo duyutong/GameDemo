@@ -1,0 +1,104 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e72bb62fccd446148ad9fc3191eea09a, type: 3}
+  m_Name: UIWindow_ExplorationUI
+  m_EditorClassIdentifier: Assembly-CSharp::BTContainer
+  nodeDatas:
+  - nodeName: UIHoverBranching
+    guid: adeba9d1-d373-4aad-92dd-36ac040dd332
+    lastNodes: []
+    output:
+    - fromPortName: pointerEnter
+      toPortName: enter
+      nodeId: f34cbed9-d4a6-4dff-a4d0-b5535e0908b8
+    - fromPortName: pointerExit
+      toPortName: enter
+      nodeId: ad7418a5-b92d-41b9-8952-70d618cda584
+    - fromPortName: idel
+      toPortName: enter
+      nodeId: afeb6b53-0472-4370-bc23-bb6cc2b2245e
+    nodePos: {x: 258, y: 414}
+    typeName: Deco_UIHoverBranching
+    stateName: UIHoverBranchingState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"pointerEnter","nodeId":"f34cbed9-d4a6-4dff-a4d0-b5535e0908b8","toPortName":"enter","value":null},{"fromPortName":"pointerExit","nodeId":"ad7418a5-b92d-41b9-8952-70d618cda584","toPortName":"enter","value":null},{"fromPortName":"idel","nodeId":"afeb6b53-0472-4370-bc23-bb6cc2b2245e","toPortName":"enter","value":null}],"enter":false,"hover":false,"idel":false,"pointerEnter":false,"pointerExit":false,"state":0,"targetObj":{"localPath":"main\/left\/LeftBarGroup\/Notebook-Button","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
+  - nodeName: ScaleAnima
+    guid: f34cbed9-d4a6-4dff-a4d0-b5535e0908b8
+    lastNodes:
+    - adeba9d1-d373-4aad-92dd-36ac040dd332
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: afeb6b53-0472-4370-bc23-bb6cc2b2245e
+    nodePos: {x: 514, y: 376}
+    typeName: Behav_ScaleAnima
+    stateName: ScaleAnimaState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"afeb6b53-0472-4370-bc23-bb6cc2b2245e","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[{"inTangent":2.5,"inWeight":0,"leftTangentMode":1,"outTangent":2.5,"outWeight":0.333333343,"rightTangentMode":1,"time":0,"value":1,"weightedMode":0},{"inTangent":2.5,"inWeight":0.333333343,"leftTangentMode":1,"outTangent":2.5,"outWeight":0,"rightTangentMode":1,"time":0.2,"value":1.5,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[{"inTangent":2.5,"inWeight":0,"outTangent":2.5,"outWeight":0.333333343,"tangentMode":35,"time":0,"value":1,"weightedMode":0},{"inTangent":2.5,"inWeight":0.333333343,"outTangent":2.5,"outWeight":0,"tangentMode":35,"time":0.2,"value":1.5,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8}},"enter":false,"exit":false,"state":0,"target":{"localPath":"main\/left\/LeftBarGroup\/Notebook-Button\/Notebook-Icon","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
+  - nodeName: ScaleAnima
+    guid: ad7418a5-b92d-41b9-8952-70d618cda584
+    lastNodes:
+    - adeba9d1-d373-4aad-92dd-36ac040dd332
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: afeb6b53-0472-4370-bc23-bb6cc2b2245e
+    nodePos: {x: 514, y: 453}
+    typeName: Behav_ScaleAnima
+    stateName: ScaleAnimaState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"afeb6b53-0472-4370-bc23-bb6cc2b2245e","toPortName":"enter","value":null}],"animaCurve":{"animaCurveData":{"keys":[{"inTangent":-2.5,"inWeight":0,"leftTangentMode":1,"outTangent":-2.5,"outWeight":0.333333343,"rightTangentMode":1,"time":0,"value":1.5,"weightedMode":0},{"inTangent":-2.5,"inWeight":0.333333343,"leftTangentMode":1,"outTangent":-2.5,"outWeight":0,"rightTangentMode":1,"time":0.2,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8},"curve":{"keys":[{"inTangent":-2.5,"inWeight":0,"outTangent":-2.5,"outWeight":0.333333343,"tangentMode":35,"time":0,"value":1.5,"weightedMode":0},{"inTangent":-2.5,"inWeight":0.333333343,"outTangent":-2.5,"outWeight":0,"tangentMode":35,"time":0.2,"value":1,"weightedMode":0}],"postWrapMode":8,"preWrapMode":8}},"enter":false,"exit":false,"state":0,"target":{"localPath":"main\/left\/LeftBarGroup\/Notebook-Button\/Notebook-Icon","pathType":0,"scenePath":"","selfPath":"self","target":null}}'
+  - nodeName: LogicGate
+    guid: afeb6b53-0472-4370-bc23-bb6cc2b2245e
+    lastNodes:
+    - adeba9d1-d373-4aad-92dd-36ac040dd332
+    - f34cbed9-d4a6-4dff-a4d0-b5535e0908b8
+    - ad7418a5-b92d-41b9-8952-70d618cda584
+    output:
+    - fromPortName: exit
+      toPortName: enter
+      nodeId: 94dd64f6-2619-4b9b-958c-0657c2f1520f
+    nodePos: {x: 772, y: 486}
+    typeName: Deco_LogicGate
+    stateName: LogicGateState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[{"fromPortName":"exit","nodeId":"94dd64f6-2619-4b9b-958c-0657c2f1520f","toPortName":"enter","value":null}],"enter":false,"exit":false,"logicType":1,"state":0}'
+  - nodeName: Reset
+    guid: 94dd64f6-2619-4b9b-958c-0657c2f1520f
+    lastNodes:
+    - afeb6b53-0472-4370-bc23-bb6cc2b2245e
+    output: []
+    nodePos: {x: 975, y: 486}
+    typeName: Deco_Reset
+    stateName: ResetState
+    stateParams: '{"hideFlags":0,"name":"","interruptTag":"","interruptible":false,"output":[],"enter":false,"state":0}'
+  edgeDatas:
+  - outPortNode: adeba9d1-d373-4aad-92dd-36ac040dd332
+    intputPortNode: f34cbed9-d4a6-4dff-a4d0-b5535e0908b8
+    outPortName: pointerEnter
+    intputPortName: enter
+  - outPortNode: adeba9d1-d373-4aad-92dd-36ac040dd332
+    intputPortNode: ad7418a5-b92d-41b9-8952-70d618cda584
+    outPortName: pointerExit
+    intputPortName: enter
+  - outPortNode: adeba9d1-d373-4aad-92dd-36ac040dd332
+    intputPortNode: afeb6b53-0472-4370-bc23-bb6cc2b2245e
+    outPortName: idel
+    intputPortName: enter
+  - outPortNode: f34cbed9-d4a6-4dff-a4d0-b5535e0908b8
+    intputPortNode: afeb6b53-0472-4370-bc23-bb6cc2b2245e
+    outPortName: exit
+    intputPortName: enter
+  - outPortNode: ad7418a5-b92d-41b9-8952-70d618cda584
+    intputPortNode: afeb6b53-0472-4370-bc23-bb6cc2b2245e
+    outPortName: exit
+    intputPortName: enter
+  - outPortNode: afeb6b53-0472-4370-bc23-bb6cc2b2245e
+    intputPortNode: 94dd64f6-2619-4b9b-958c-0657c2f1520f
+    outPortName: exit
+    intputPortName: enter

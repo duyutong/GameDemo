@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -14,10 +14,9 @@ public class UIDragBranchingState : UIEventBranchingState
     public System.Boolean beginDrag;
     public System.Boolean drag;
     public System.Boolean endDrag;
-    public System.Boolean enter;
     public System.Boolean idel;
+    public System.Boolean enter;
     public BTTargetObject targetObj;
-    public BTTargetObject uiCameraObj;
 
     public override BTStateObject stateObj
     {
@@ -26,7 +25,6 @@ public class UIDragBranchingState : UIEventBranchingState
             if (_stateObj == null)
             {
                 _stateObj = ScriptableObject.CreateInstance<UIDragBranchingStateObj>();
-
                 _stateObj.state = state;
                 _stateObj.output = output;
                 _stateObj.interruptible = interruptible;
@@ -35,12 +33,10 @@ public class UIDragBranchingState : UIEventBranchingState
                 _stateObj.beginDrag = beginDrag;
                 _stateObj.drag = drag;
                 _stateObj.endDrag = endDrag;
+                _stateObj.idel = idel;
                 _stateObj.enter = enter;
                 _stateObj.targetObj = targetObj;
-                _stateObj.uiCameraObj = uiCameraObj;
-                _stateObj.idel = idel;
             }
-
             return _stateObj;
         }
     }
@@ -56,15 +52,31 @@ public class UIDragBranchingState : UIEventBranchingState
             JsonUtility.FromJsonOverwrite(json, _stateObj);
 
             output = _stateObj.output;
+            interruptible = _stateObj.interruptible;
+            interruptTag = _stateObj.interruptTag;
 
             beginDrag = _stateObj.beginDrag;
             drag = _stateObj.drag;
             endDrag = _stateObj.endDrag;
+            idel = _stateObj.idel;
             enter = _stateObj.enter;
             targetObj = _stateObj.targetObj;
-            uiCameraObj = _stateObj.uiCameraObj;
-            idel = _stateObj.idel;
         }
+    }
+    protected override ESetFieldValueResult SetFieldValue(string fieldName, object value)
+    {
+        if (StringComparer.Ordinal.Equals(fieldName, default)) return ESetFieldValueResult.Succ;
+
+        else if (StringComparer.Ordinal.Equals(fieldName, "beginDrag") && value is System.Boolean beginDragValue) beginDrag = beginDragValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "drag") && value is System.Boolean dragValue) drag = dragValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "endDrag") && value is System.Boolean endDragValue) endDrag = endDragValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "idel") && value is System.Boolean idelValue) idel = idelValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "enter") && value is System.Boolean enterValue) enter = enterValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "targetObj") && value is BTTargetObject targetObjValue) targetObj = targetObjValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "pointerEventData") && value is PointerEventData PointerEventDataValue) pointerEventData = PointerEventDataValue;
+        else return ESetFieldValueResult.Fail;
+
+        return ESetFieldValueResult.Succ;
     }
     public override void Save()
     {
@@ -76,22 +88,19 @@ public class UIDragBranchingState : UIEventBranchingState
         beginDrag = _stateObj.beginDrag;
         drag = _stateObj.drag;
         endDrag = _stateObj.endDrag;
+        idel = _stateObj.idel;
         enter = _stateObj.enter;
         targetObj = _stateObj.targetObj;
-        uiCameraObj = _stateObj.uiCameraObj;
-        idel = _stateObj.idel;
     }
     #endregion
 
     private RectTransform rectTransform;
-    private Camera uiCamera;
     private bool isInitFinish;
     public override void OnEnter()
     {
         base.OnEnter();
 
         if (rectTransform == null && targetObj != null) rectTransform = targetObj.target.GetComponent<RectTransform>();
-        if (uiCamera == null && uiCameraObj != null) uiCamera = uiCameraObj.target.GetComponent<Camera>();
 
         if (runtime != null && !isInitFinish)
         {
@@ -186,9 +195,8 @@ public class UIDragBranchingStateObj : BTStateObject
     public System.Boolean beginDrag;
     public System.Boolean drag;
     public System.Boolean endDrag;
-    public System.Boolean enter;
     public System.Boolean idel;
+    public System.Boolean enter;
     public BTTargetObject targetObj;
-    public BTTargetObject uiCameraObj;
 }
 #endregion

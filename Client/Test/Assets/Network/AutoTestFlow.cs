@@ -52,5 +52,7 @@ public class AutoTestFlow : MonoBehaviour
     {
         GamePlayApi gamePlayApi = ApiManager.GetWebSoketApi<GamePlayApi>();
         gamePlayApi.SendWebSocketMessage<string>(NetworkEventPaths.GamePlay_StartGame, null);
+
+        GameFramework.UIMgr.OpenWindow<UIWindow_ExplorationUI>();
     }
 }

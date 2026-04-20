@@ -25,6 +25,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 23f66b64a6a5a044689a072a5b6b31d8
+    m_Address: Assets/AddressableAssets/Prefabs/UI/UIWindow_RaceSelection/UIWindow_RaceSelection.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 24f0e36cfd3aa434490b4487dd05ee2c
     m_Address: Assets/AddressableAssets/Prefabs/UI/UIWindow_Bag/UIItem_Bag_Item.prefab
     m_ReadOnly: 0
@@ -72,6 +77,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a26a1a7191c56ad4d93963e8ed5616b0
     m_Address: Assets/BehaviorTree/BT/uiwindow_bag.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b2c5884d227661049869bfe84bfd4bb5
+    m_Address: Assets/AddressableAssets/Prefabs/UI/UIWindow_ExplorationUI/UIWindow_ExplorationUI.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

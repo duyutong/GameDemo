@@ -112,7 +112,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5313582826538225038}
   - component: {fileID: 1601846881361508697}
-  - component: {fileID: 5196267197733534924}
   - component: {fileID: 9199196760741230187}
   - component: {fileID: 7690220101544884151}
   m_Layer: 0
@@ -146,7 +145,7 @@ Camera:
   m_GameObject: {fileID: 5528411155053998668}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 4
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -172,7 +171,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 23.653784
+  orthographic size: 23
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -188,14 +187,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &5196267197733534924
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5528411155053998668}
-  m_Enabled: 1
 --- !u!114 &9199196760741230187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,7 +202,7 @@ MonoBehaviour:
   m_RenderShadows: 1
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
-  m_CameraType: 0
+  m_CameraType: 1
   m_Cameras: []
   m_RendererIndex: -1
   m_VolumeLayerMask:
@@ -224,7 +215,7 @@ MonoBehaviour:
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
-  m_ClearDepth: 1
+  m_ClearDepth: 0
   m_AllowXRRendering: 1
   m_AllowHDROutput: 1
   m_UseScreenCoordOverride: 0

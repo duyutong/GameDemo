@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -17,7 +17,6 @@ public class UIHoverBranchingState : UIEventBranchingState
     public System.Boolean idel;
     public System.Boolean enter;
     public BTTargetObject targetObj;
-    public BTTargetObject uiCameraObj;
 
     public override BTStateObject stateObj
     {
@@ -26,7 +25,6 @@ public class UIHoverBranchingState : UIEventBranchingState
             if (_stateObj == null)
             {
                 _stateObj = ScriptableObject.CreateInstance<UIHoverBranchingStateObj>();
-
                 _stateObj.state = state;
                 _stateObj.output = output;
                 _stateObj.interruptible = interruptible;
@@ -38,9 +36,7 @@ public class UIHoverBranchingState : UIEventBranchingState
                 _stateObj.idel = idel;
                 _stateObj.enter = enter;
                 _stateObj.targetObj = targetObj;
-                _stateObj.uiCameraObj = uiCameraObj;
             }
-
             return _stateObj;
         }
     }
@@ -56,6 +52,8 @@ public class UIHoverBranchingState : UIEventBranchingState
             JsonUtility.FromJsonOverwrite(json, _stateObj);
 
             output = _stateObj.output;
+            interruptible = _stateObj.interruptible;
+            interruptTag = _stateObj.interruptTag;
 
             pointerEnter = _stateObj.pointerEnter;
             hover = _stateObj.hover;
@@ -63,8 +61,22 @@ public class UIHoverBranchingState : UIEventBranchingState
             idel = _stateObj.idel;
             enter = _stateObj.enter;
             targetObj = _stateObj.targetObj;
-            uiCameraObj = _stateObj.uiCameraObj;
         }
+    }
+    protected override ESetFieldValueResult SetFieldValue(string fieldName, object value)
+    {
+        if (StringComparer.Ordinal.Equals(fieldName, default)) return ESetFieldValueResult.Succ;
+
+        else if (StringComparer.Ordinal.Equals(fieldName, "pointerEnter") && value is System.Boolean pointerEnterValue) pointerEnter = pointerEnterValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "hover") && value is System.Boolean hoverValue) hover = hoverValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "pointerExit") && value is System.Boolean pointerExitValue) pointerExit = pointerExitValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "idel") && value is System.Boolean idelValue) idel = idelValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "enter") && value is System.Boolean enterValue) enter = enterValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "targetObj") && value is BTTargetObject targetObjValue) targetObj = targetObjValue;
+        else if (StringComparer.Ordinal.Equals(fieldName, "pointerEventData") && value is PointerEventData PointerEventDataValue) pointerEventData = PointerEventDataValue;
+        else return ESetFieldValueResult.Fail;
+
+        return ESetFieldValueResult.Succ;
     }
     public override void Save()
     {
@@ -79,20 +91,16 @@ public class UIHoverBranchingState : UIEventBranchingState
         idel = _stateObj.idel;
         enter = _stateObj.enter;
         targetObj = _stateObj.targetObj;
-        uiCameraObj = _stateObj.uiCameraObj;
     }
     #endregion
 
     private RectTransform rectTransform;
-    private Camera uiCamera;
     private bool isInitFinish;
 
     public override void OnEnter()
     {
         base.OnEnter();
         if (rectTransform == null && targetObj != null) rectTransform = targetObj.target.GetComponent<RectTransform>();
-        if (uiCamera == null && uiCameraObj != null) uiCamera = uiCameraObj.target.GetComponent<Camera>();
-
         if (runtime != null && !isInitFinish)
         {
             isInitFinish = true;
@@ -104,7 +112,7 @@ public class UIHoverBranchingState : UIEventBranchingState
             trigger.AddTriggerEventListener(EventTriggerType.PointerUp, OnMyPointerEnter);//鼠标弹起的时候默认再次进入范围
         }
 
-        bool isOver = IsMouseOverUIElement(rectTransform, uiCamera);
+        bool isOver = IsMouseOverUIElement(rectTransform, UICamera);
         if (isOver)
         {
             pointerExit = false;
@@ -117,7 +125,7 @@ public class UIHoverBranchingState : UIEventBranchingState
     public override void OnRefresh()
     {
         base.OnRefresh();
-        bool isOver = IsMouseOverUIElement(rectTransform, uiCamera);
+        bool isOver = IsMouseOverUIElement(rectTransform, UICamera);
         if (!isOver && pointerExit)
         {
             pointerExit = false;
@@ -178,5 +186,4 @@ public class UIHoverBranchingStateObj : BTStateObject
     public System.Boolean idel;
     public System.Boolean enter;
     public BTTargetObject targetObj;
-    public BTTargetObject uiCameraObj;
 }
