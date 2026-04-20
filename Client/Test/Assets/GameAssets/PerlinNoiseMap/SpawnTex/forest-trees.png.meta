@@ -121,10 +121,10 @@ TextureImporter:
       name: forest-trees_0
       rect:
         serializedVersion: 2
-        x: 154
-        y: 946
-        width: 962
-        height: 1413
+        x: 158
+        y: 978
+        width: 963
+        height: 1482
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,10 +143,10 @@ TextureImporter:
       name: forest-trees_1
       rect:
         serializedVersion: 2
-        x: 1251
-        y: 999
-        width: 1026
-        height: 1163
+        x: 1236
+        y: 976
+        width: 1031
+        height: 1217
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -168,7 +168,7 @@ TextureImporter:
         x: 2406
         y: 932
         width: 742
-        height: 1443
+        height: 1480
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -188,9 +188,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 337
-        y: 167
+        y: 100
         width: 712
-        height: 658
+        height: 725
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -210,9 +210,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1159
-        y: 226
+        y: 198
         width: 513
-        height: 550
+        height: 578
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -232,9 +232,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1781
-        y: 212
+        y: 185
         width: 522
-        height: 426
+        height: 453
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -254,9 +254,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 2399
-        y: 238
+        y: 197
         width: 550
-        height: 379
+        height: 420
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
