@@ -236,6 +236,51 @@ public static class EditorUtilityExtensions
         return fileName;
     }
     /// <summary>
+    /// 从 source 中提取被 start 和 end 包裹的内容（包含标记之间的内容，不包含标记本身）。
+    /// </summary>
+    /// <param name="start">起始标记字符串（例如 &lt;tag&gt;）</param>
+    /// <param name="end">结束标记字符串（例如 &lt;/tag&gt;）</param>
+    /// <param name="source">待搜索的原始字符串</param>
+    /// <returns>
+    /// 返回 start 和 end 之间的内容：
+    /// - 若匹配成功：返回去除首尾空行后的中间内容（不包含 start 和 end 本身）
+    /// - 若未匹配或参数为空：返回空字符串
+    /// </returns>
+    /// <remarks>
+    /// 特性：
+    /// 1. 自动对 start 和 end 做 Regex 转义，避免特殊字符影响匹配
+    /// 2. 使用非贪婪匹配 (.*?)，只匹配最近的一对 start/end
+    /// 3. 支持跨行匹配（Singleline 模式）
+    /// 4. 会自动去除提取内容前后的空行和纯空白行
+    /// </remarks>
+    public static string ExtractInnerContent(string start, string end, string source)
+    {
+        if (string.IsNullOrEmpty(start) || string.IsNullOrEmpty(end) || string.IsNullOrEmpty(source))
+            return "";
+
+        string escStart = Regex.Escape(start);
+        string escEnd = Regex.Escape(end);
+
+        // 匹配 start 和 end 之间的所有内容，允许换行
+        string pattern = $@"{escStart}(.*?){escEnd}";
+
+        var match = Regex.Match(source, pattern, RegexOptions.Singleline);
+        if (!match.Success) return "";
+
+        // 取出内容
+        string content = match.Groups[1].Value;
+
+        // 去掉开头和结尾的空行 / 空白
+        var lines = content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+
+        var trimmedLines = lines.SkipWhile(l => string.IsNullOrWhiteSpace(l))
+                                .Reverse()
+                                .SkipWhile(l => string.IsNullOrWhiteSpace(l))
+                                .Reverse();
+
+        return string.Join("\n", trimmedLines);
+    }
+    /// <summary>
     /// 从 source 中提取被 start 和 end 包裹的内容（包含标记），
     /// 并替换 target 中对应的内容。
     /// </summary>
@@ -378,6 +423,34 @@ public static class EditorUtilityExtensions
         elementType = null;
         return false;
     }
+    /// <summary>
+    /// 根据传入的 PersistentData 手动构建一个带有持久化监听的 UnityEvent。
+    /// </summary>
+    /// <param name="persistentData">
+    /// 持久化事件数据，包含目标组件类型（assemblyTypeName）、目标对象（target）以及方法名（methodName）
+    /// </param>
+    /// <param name="index">插入到持久化调用列表中的索引位置（默认插入到第 0 位）</param>
+    /// <returns>
+    /// 返回构建完成的 UnityEvent：
+    /// - 成功：返回包含一个 PersistentCall 的 UnityEvent
+    /// - 失败（如找不到目标组件）：返回 null
+    /// </returns>
+    /// <remarks>
+    /// 实现说明：
+    /// 1. 该方法通过反射直接访问 UnityEvent 内部结构（UnityEventBase -> PersistentCallGroup -> PersistentCall）
+    /// 2. 手动创建 PersistentCall，并写入 m_Target、m_MethodName、m_TargetAssemblyTypeName 等私有字段
+    /// 3. 最终插入到 m_Calls 列表中，从而构建出一个“持久化事件”
+    ///
+    /// 注意事项：
+    /// - 该实现依赖 Unity 内部私有字段（如 m_PersistentCalls、m_Calls），属于非公开 API，存在版本兼容风险
+    /// - 代码较为底层且绕弯，不易维护，也不具备良好的可读性
+    /// - 若 Unity 内部实现发生变化，此方法可能失效
+    ///
+    /// 强烈建议：
+    /// - 优先使用 Unity 官方提供的编辑器工具方法：
+    ///   UnityEditor.Events.UnityEventTools.AddPersistentListener(...)
+    /// - 该 API 更安全、直观，并且兼容性更好
+    /// </remarks>
     public static UnityEvent IntegrateEventInfo(PersistentData persistentData, int index = 0)
     {
         UnityEvent targetEvent = new UnityEvent();

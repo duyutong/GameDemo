@@ -1763,7 +1763,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 064d0f1af7f633e45a84e5275b1712a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonTest
-  uIWindow_Bag: {fileID: 0}
+  uIWindow_Bag: {fileID: 8888590111796995029}
 --- !u!1 &3476024501030416434
 GameObject:
   m_ObjectHideFlags: 0

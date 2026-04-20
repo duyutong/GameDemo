@@ -59,10 +59,11 @@ public class BTTargetEvent
             PersistentData persistentData = persistentDatas[index];
             BTTargetObject btTargetObject = persistentData.btTargetObject;
             if (btTargetObject == null) continue;
+           
             btTargetObject.runtime = runtime;
             btTargetObject.SetObejctByPath();
             persistentData.target = btTargetObject.target;
-            IntegrateEventInfo(index);
+            IntegrateEventInfo(persistentData);
         }
     }
     public void SerializeSelf()
@@ -82,11 +83,8 @@ public class BTTargetEvent
         targetEvent?.RemoveAllListeners();
         targetEvent = null;
     }
-    private void IntegrateEventInfo(int index)
+    private void IntegrateEventInfo(PersistentData data)
     {
-        var data = persistentDatas[index];
-        if (data.target == null) return;
-
         var targetComponent = data.target.GameObject().GetComponent(data.assemblyTypeName);
         if (targetComponent == null) return;
 
@@ -96,11 +94,12 @@ public class BTTargetEvent
 
         if (Delegate.CreateDelegate(typeof(UnityAction), targetComponent, method) is UnityAction action)
         {
-#if UNITY_EDITOR
-            UnityEventTools.AddPersistentListener(targetEvent, action);
-#else
             targetEvent.AddListener(action);
-#endif
+//#if UNITY_EDITOR
+//            UnityEventTools.AddPersistentListener(targetEvent, action);
+//#else
+//            targetEvent.AddListener(action);
+//#endif
         }
     }
     private PersistentData ExtractEventInfo(int index)

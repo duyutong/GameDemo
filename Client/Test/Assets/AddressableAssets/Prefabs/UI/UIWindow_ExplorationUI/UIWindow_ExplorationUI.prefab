@@ -805,6 +805,7 @@ GameObject:
   - component: {fileID: 3819160432704529194}
   - component: {fileID: 8513372776440523063}
   - component: {fileID: 5184513396220671968}
+  - component: {fileID: 7920121202494310793}
   m_Layer: 0
   m_Name: Bag-Base
   m_TagString: Untagged
@@ -926,6 +927,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7920121202494310793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2692485908373786028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b34bf415b772db43b0423e9570dd8fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BTRuntimeComponent
+  container: {fileID: 11400000, guid: 9be8b47e588ff994b8b38ce3420204d3, type: 2}
 --- !u!1 &2793991927540272023
 GameObject:
   m_ObjectHideFlags: 0
@@ -1455,7 +1469,7 @@ GameObject:
   - component: {fileID: 3571579432129146248}
   - component: {fileID: 5130765081627707694}
   m_Layer: 0
-  m_Name: Bag-Icon
+  m_Name: icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1782,6 +1796,7 @@ GameObject:
   - component: {fileID: 703778811231620447}
   - component: {fileID: 7294838726162940897}
   - component: {fileID: 6756343599498557159}
+  - component: {fileID: 4508056649648695841}
   m_Layer: 0
   m_Name: Notebook-Button
   m_TagString: Untagged
@@ -1903,6 +1918,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4508056649648695841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6042384885366151647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b34bf415b772db43b0423e9570dd8fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BTRuntimeComponent
+  container: {fileID: 11400000, guid: 9be8b47e588ff994b8b38ce3420204d3, type: 2}
 --- !u!1 &6140402942261956123
 GameObject:
   m_ObjectHideFlags: 0
@@ -2028,7 +2056,7 @@ GameObject:
   - component: {fileID: 2872439860568389773}
   - component: {fileID: 5507669459547579687}
   m_Layer: 0
-  m_Name: Notebook-Icon
+  m_Name: icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2242,7 +2270,7 @@ GameObject:
   - component: {fileID: 4790294366489894951}
   - component: {fileID: 7616753824864628323}
   m_Layer: 0
-  m_Name: Setting-Icon
+  m_Name: icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2678,6 +2706,7 @@ GameObject:
   - component: {fileID: 7397860508997186438}
   - component: {fileID: 8737775459894469013}
   - component: {fileID: 541490095779660317}
+  - component: {fileID: 2598182635303882834}
   m_Layer: 0
   m_Name: Setting-Base
   m_TagString: Untagged
@@ -2799,3 +2828,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2598182635303882834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9198742977055765303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b34bf415b772db43b0423e9570dd8fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BTRuntimeComponent
+  container: {fileID: 11400000, guid: 9be8b47e588ff994b8b38ce3420204d3, type: 2}

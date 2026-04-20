@@ -246,7 +246,7 @@ public static class GraphSaveUtility
         fileStream.Close();
 
         AssetDatabase.Refresh();
-        Debug.Log("状态脚本生成完毕 " + className);
+        Debug.Log("状态脚本更新完毕 " + className);
     }
     public static string MergeAutoContext(string exitStr, string tempStr)
     {
