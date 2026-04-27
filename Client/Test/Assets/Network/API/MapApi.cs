@@ -22,11 +22,6 @@ namespace Network.API
                 }
             });
         }
-
-        internal void MapGenerate(object onMapGenerate)
-        {
-            throw new NotImplementedException();
-        }
         #endregion HttpFuncStr
     }
 }
