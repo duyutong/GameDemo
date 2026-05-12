@@ -109,7 +109,7 @@
                     wind = windSample * 2 -1;
                 }
                 // =========================
-                // 函数风
+                // 函数风,基于时间和随机相位，叠加主波和细节波
                 // =========================
                 float mainWave = sin(_Time.y * _Speed + rand * 6.28);
                 float detailWave = sin(_Time.y * (_Speed * 2.0) + pos.y * _Frequency + rand * 10.0);

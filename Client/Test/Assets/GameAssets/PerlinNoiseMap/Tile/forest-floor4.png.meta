@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e0e7464ba4ddb754e80dfc96f2e8149c
+guid: 44f418d2912419448991961ca508c32a
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -103,7 +103,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: forest-floor4 1_0
+      name: forest-floor4_0
       rect:
         serializedVersion: 2
         x: 384
@@ -116,16 +116,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: aa1df39ed4c6be6419ac5fdc1743b197
-      internalID: -1608455685
+      spriteID: c90c77281af878250800000000000000
+      internalID: 5946879756807422108
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-floor4 1_1
+      name: forest-floor4_1
       rect:
         serializedVersion: 2
         x: 512
@@ -138,16 +138,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 7b403ce0ba05808479f0d049afa3ce26
-      internalID: -1789887887
+      spriteID: 39032952857b0bf40800000000000000
+      internalID: 5742291114112725139
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-floor4 1_2
+      name: forest-floor4_2
       rect:
         serializedVersion: 2
         x: 384
@@ -162,14 +162,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1aafff7eba850a34ebef55c1c1c53518
-      internalID: 1925097004
+      spriteID: 52c4db4ee2ce9f643a651b93d18a8d66
+      internalID: 1374441149
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-floor4 1_3
+      name: forest-floor4_3
       rect:
         serializedVersion: 2
         x: 512
@@ -184,14 +184,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d5f3ab2f68d3c194a94387321fd7d2a2
-      internalID: -2037905948
+      spriteID: 1d5ac12404d99054099080e3ed5470e0
+      internalID: -54151477
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-floor4 1_4
+      name: forest-floor4_4
       rect:
         serializedVersion: 2
         x: 768
@@ -206,14 +206,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bbe34da448ff08e4e8972338b959ace1
-      internalID: -966788250
+      spriteID: 5091c012188b1a14d9aec59751f75287
+      internalID: 1038999724
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-floor4 1_5
+      name: forest-floor4_5
       rect:
         serializedVersion: 2
         x: 896
@@ -228,14 +228,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7ba7d637d46086f42ac307bd31e58f1a
-      internalID: -1740292241
+      spriteID: 08a41bc98cf4ecb46b638ebeb96ba451
+      internalID: 801016861
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-floor4 1_6
+      name: forest-floor4_6
       rect:
         serializedVersion: 2
         x: 768
@@ -250,14 +250,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cf4124f672d3fe246aeef8e1b2bc41a5
-      internalID: 1441429406
+      spriteID: 19fa05960cf5c124eb361f5687e6207f
+      internalID: 730973027
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest-floor4 1_7
+      name: forest-floor4_7
       rect:
         serializedVersion: 2
         x: 896
@@ -272,8 +272,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0f6c5297345426d4fb7961793673c056
-      internalID: 985484971
+      spriteID: 09dccc5845817334db984dbaa3a251b9
+      internalID: 664194383
       vertices: []
       indices: 
       edges: []
@@ -291,19 +291,17 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries:
-      - key: SpriteEditor.SliceOnImport
-        value: False
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      forest-floor4 1_0: -1608455685
-      forest-floor4 1_1: -1789887887
-      forest-floor4 1_2: 1925097004
-      forest-floor4 1_3: -2037905948
-      forest-floor4 1_4: -966788250
-      forest-floor4 1_5: -1740292241
-      forest-floor4 1_6: 1441429406
-      forest-floor4 1_7: 985484971
+      forest-floor4_0: 5946879756807422108
+      forest-floor4_1: 5742291114112725139
+      forest-floor4_2: 1374441149
+      forest-floor4_3: -54151477
+      forest-floor4_4: 1038999724
+      forest-floor4_5: 801016861
+      forest-floor4_6: 730973027
+      forest-floor4_7: 664194383
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

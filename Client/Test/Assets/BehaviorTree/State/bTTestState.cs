@@ -12,14 +12,14 @@ using UnityEngine.EventSystems;
 public class bTTestState : BehaviorTreeBaseState
 {
     #region AutoContext
-    
-public System.Boolean port2;
-public System.Boolean port1;
-public System.Boolean port3;
 
-    public override BTStateObject stateObj 
+    public System.Boolean port2;
+    public System.Boolean port1;
+    public System.Boolean port3;
+
+    public override BTStateObject stateObj
     {
-         get 
+        get
         {
             if (_stateObj == null)
             {
@@ -28,10 +28,10 @@ public System.Boolean port3;
                 _stateObj.output = output;
                 _stateObj.interruptible = interruptible;
                 _stateObj.interruptTag = interruptTag;
-                
-_stateObj.port2 = port2;
-_stateObj.port1 = port1;
-_stateObj.port3 = port3;
+
+                _stateObj.port2 = port2;
+                _stateObj.port1 = port1;
+                _stateObj.port3 = port3;
             }
             return _stateObj;
         }
@@ -50,19 +50,19 @@ _stateObj.port3 = port3;
             output = _stateObj.output;
             interruptible = _stateObj.interruptible;
             interruptTag = _stateObj.interruptTag;
-            
-port2 = _stateObj.port2;
-port1 = _stateObj.port1;
-port3 = _stateObj.port3;
+
+            port2 = _stateObj.port2;
+            port1 = _stateObj.port1;
+            port3 = _stateObj.port3;
         }
     }
-     protected override ESetFieldValueResult SetFieldValue(string fieldName, object value)
+    protected override ESetFieldValueResult SetFieldValue(string fieldName, object value)
     {
         if (StringComparer.Ordinal.Equals(fieldName, default)) return ESetFieldValueResult.Succ;
-        
-else if (StringComparer.Ordinal.Equals(fieldName, "port2") && value is System.Boolean port2Value) port2 = port2Value;
-else if (StringComparer.Ordinal.Equals(fieldName, "port1") && value is System.Boolean port1Value) port1 = port1Value;
-else if (StringComparer.Ordinal.Equals(fieldName, "port3") && value is System.Boolean port3Value) port3 = port3Value;
+
+        else if (StringComparer.Ordinal.Equals(fieldName, "port2") && value is System.Boolean port2Value) port2 = port2Value;
+        else if (StringComparer.Ordinal.Equals(fieldName, "port1") && value is System.Boolean port1Value) port1 = port1Value;
+        else if (StringComparer.Ordinal.Equals(fieldName, "port3") && value is System.Boolean port3Value) port3 = port3Value;
         else if (StringComparer.Ordinal.Equals(fieldName, "pointerEventData") && value is PointerEventData PointerEventDataValue) pointerEventData = PointerEventDataValue;
         else return ESetFieldValueResult.Fail;
 
@@ -74,10 +74,10 @@ else if (StringComparer.Ordinal.Equals(fieldName, "port3") && value is System.Bo
         output = _stateObj.output;
         interruptible = _stateObj.interruptible;
         interruptTag = _stateObj.interruptTag;
-        
-port2 = _stateObj.port2;
-port1 = _stateObj.port1;
-port3 = _stateObj.port3;
+
+        port2 = _stateObj.port2;
+        port1 = _stateObj.port1;
+        port3 = _stateObj.port3;
     }
     #endregion
 
@@ -91,9 +91,9 @@ port3 = _stateObj.port3;
 public class bTTestStateObj : BTStateObject
 {
     public EBTState state;
-    
-public System.Boolean port2;
-public System.Boolean port1;
-public System.Boolean port3;
+
+    public System.Boolean port2;
+    public System.Boolean port1;
+    public System.Boolean port3;
 }
 #endregion

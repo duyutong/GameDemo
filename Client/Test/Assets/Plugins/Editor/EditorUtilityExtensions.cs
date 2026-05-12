@@ -281,8 +281,7 @@ public static class EditorUtilityExtensions
         return string.Join("\n", trimmedLines);
     }
     /// <summary>
-    /// 从 source 中提取被 start 和 end 包裹的内容（包含标记），
-    /// 并替换 target 中对应的内容。
+    /// 从 source 中提取被 start 和 end 包裹的内容（包含标记）， 并替换 target 中对应的内容。
     /// </summary>
     /// <param name="start">起始标记</param>
     /// <param name="end">结束标记</param>

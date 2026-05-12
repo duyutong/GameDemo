@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/UDPWorkspace.unity
     guid: e077842ab661cb643be30c6bea884647
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/2DMovement_NetTest.unity
     guid: b670c28f68d71334089629ea97429a0c
   m_configObjects:
